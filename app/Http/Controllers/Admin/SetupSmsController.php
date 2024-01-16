@@ -62,20 +62,21 @@ class SetupSmsController extends Controller
     {
         $request->validate(['mobile' => 'required']);
         $general = BasicSettings::first(['sms_verification', 'sms_config','sms_api','site_name']);
-       try{
-        if ($general->sms_verification == 1) {
-            $gateway = $general->sms_config->name;
-            $sendSms = new SendSms;
-            $message = shortCodeReplacer("{{name}}", 'Admin', $general->sms_api);
-            $message = shortCodeReplacer("{{message}}", 'This is a test sms', $message);
-            $sendSms->$gateway($request->mobile,$general->sitename,$message,$general->sms_config);
-            return back()->with(['success' => ['You should receive a test sms at ' . $request->mobile . ' shortly.']]);
-        }else{
-            return back()->with(['error' => ['Sms notification system is off!.']]);
+        
+        try{
+            if ($general->sms_verification == 1) {
+                $gateway = $general->sms_config->name;
+                $sendSms = new SendSms;
+                $message = shortCodeReplacer("{{name}}", 'Admin', $general->sms_api);
+                $message = shortCodeReplacer("{{message}}", 'This is a test sms', $message);
+                $sendSms->$gateway($request->mobile,$general->sitename,$message,$general->sms_config);
+                return back()->with(['success' => ['You should receive a test sms at ' . $request->mobile . ' shortly.']]);
+            }else{
+                return back()->with(['error' => ['Sms notification system is off!.']]);
+            }
+        }catch(Exception $e){
+            return back()->with(['error' => [$e->getMessage()]]);
         }
-       }catch(Exception $e){
-        return back()->with(['error' => [$e->getMessage()]]);
-       }
 
     }
 }

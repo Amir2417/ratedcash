@@ -35,7 +35,7 @@ Route::name('user.')->group(function(){
     Route::get('register',[UserRegisterController::class,"showRegistrationForm"])->name('register');
     Route::post('register',[UserRegisterController::class,"register"])->name('register.submit');
     Route::post('send/verify-code',[UserRegisterController::class,"sendVerifyCode"])->name('send.code');
-    Route::get('email/verify/{token}',[AuthorizationController::class,"showMailFormBeforRegister"])->name('email.verify');
+    Route::get('sms/verify/{token}',[UserRegisterController::class,"smsVerify"])->name('sms.verify');
     Route::post('verify/code/{token}',[UserRegisterController::class,"verifyCode"])->name('verify.code');
     Route::get('resend/code',[UserRegisterController::class,"resendCode"])->name('resend.code');
     Route::get('register/kyc',[UserRegisterController::class,"registerKyc"])->name('register.kyc');

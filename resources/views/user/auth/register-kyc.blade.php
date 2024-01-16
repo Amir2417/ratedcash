@@ -1,6 +1,8 @@
 @extends('user.layouts.user_auth')
 
 @php
+    $allCountries = get_all_countries() ?? [];
+    $dialCode = getDialCode();
     $type =  Illuminate\Support\Str::slug(App\Constants\GlobalConst::USEFUL_LINKS);
     $policies = App\Models\Admin\SetupPage::orderBy('id')->where('type', $type)->where('slug',"terms-and-conditions")->where('status',1)->first();
 @endphp
@@ -40,14 +42,24 @@
                         ])
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 form-group">
-                        <select name="country" class="form--control country-select select2-basic" > </select>
+                        <select name="country" class="form--control select2-auto-tokenize country-select" data-old="{{ old('country') }}">
+                            @foreach ($allCountries as $country)
+                                @if ($dialCode == $country->mobile_code)
+                                <option  value="{{ $country->name }}"
+                                    {{ getDialCode() ==  $country->mobile_code?'selected':''}}
+                                    data-data-mobile-code="{{ $country->mobile_code }}"
+                                    >{{ $country->name }}</option>
+                                @endif
+                            @endforeach
+
+                        </select>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 form-group">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text copytext">@</span>
                             </div>
-                            <input type="email" name="email" class="form--control" placeholder="Email" value="{{ old('email',@$email) }}" readonly>
+                            <input type="email" name="email" class="form--control" placeholder="Email" required>
 
                         </div>
                     </div>
@@ -68,9 +80,11 @@
                     </div>
                     <div class="col-xl-12 col-lg-12 form-group">
                         <div class="input-group">
-                            <div class="input-group-text phone-code">+</div>
-                            <input class="phone-code" type="hidden" name="phone_code" value="" />
-                            <input type="text" class="form--control" placeholder="Enter Phone ..." name="phone" value="">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text copytext">+{{ getDialCode() }}</span>
+                            </div>
+                            <input class="phone-code" type="hidden" name="phone_code" value="{{ getDialCode() }}" />
+                            <input type="number" name="phone" class="form--control" placeholder="Enter Number" value="{{ old('mobile',@$mobile) }}" readonly>
                         </div>
                     </div>
 
@@ -135,16 +149,17 @@
 
 @push('script')
 <script>
-      getAllCountries("{{ setRoute('global.countries') }}");
-        $(document).ready(function(){
-            $("select[name=country]").on('change',function(){
-                var phoneCode = $("select[name=country] :selected").attr("data-mobile-code");
-                placePhoneCode(phoneCode);
-            });
-            countrySelect(".country-select",$(".country-select").siblings(".select2"));
-
-
+      $(document).ready(function(){
+        $("select[name=country]").change(function(){
+            var phoneCode = $("select[name=country] :selected").attr("data-mobile-code");
+            placePhoneCode(phoneCode);
         });
+
+        setTimeout(() => {
+            var phoneCodeOnload = $("select[name=country] :selected").attr("data-mobile-code");
+            placePhoneCode(phoneCodeOnload);
+        }, 400);
+    });
 </script>
 
 @endpush

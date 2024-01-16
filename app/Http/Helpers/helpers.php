@@ -16,6 +16,7 @@ use App\Models\UserNotification;
 use App\Constants\AdminRoleConst;
 use App\Constants\ExtensionConst;
 use App\Http\Helpers\Api\Helpers;
+use App\Models\Admin\SmsTemplate;
 use App\Models\TransactionCharge;
 use App\Models\UserAuthorization;
 use App\Models\UserSupportTicket;
@@ -42,8 +43,8 @@ use function PHPUnit\Framework\returnSelf;
 use App\Models\Merchants\MerchantNotification;
 use App\Providers\Admin\BasicSettingsProvider;
 use Illuminate\Validation\ValidationException;
-use App\Models\Merchants\MerchantAuthorization;
 
+use App\Models\Merchants\MerchantAuthorization;
 use Pusher\PushNotifications\PushNotifications;
 use App\Notifications\User\Auth\SendAuthorizationCode;
 use App\Notifications\Merchant\Auth\SendAuthorizationCode as AuthSendAuthorizationCode;
@@ -2228,6 +2229,7 @@ function sendSmsNotAuthUser($mobile, $type, $shortCodes = [])
     $smsTemplate = SmsTemplate::where('act', $type)->where('sms_status', 1)->first();
     $gateway = $general->sms_config->name;
     $sendSms = new SendSms;
+    
     if ($general->sms_notification == 1 && $smsTemplate) {
         $template = $smsTemplate->sms_body;
         foreach ($shortCodes as $code => $value) {
@@ -2238,3 +2240,5 @@ function sendSmsNotAuthUser($mobile, $type, $shortCodes = [])
         $sendSms->$gateway($mobile,$general->site_name,$message,$general->sms_config);
     }
 }
+
+

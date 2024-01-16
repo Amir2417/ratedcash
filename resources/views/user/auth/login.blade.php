@@ -28,9 +28,9 @@
                     <div class="col-xl-12 col-lg-12 form-group">
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text copytext">{{ __("Email") }}</span>
+                                <span class="input-group-text copytext">+{{ getDialCode() }}</span>
                             </div>
-                             <input type="email" name="credentials" class="form--control" placeholder="Enter Email" required value="{{old('credentials')}}">
+                             <input type="number" name="credentials" class="form--control" placeholder="Enter Mobile Number" required value="{{old('credentials')}}">
                         </div>
                     </div>
                     <div class="col-lg-12 form-group" id="show_hide_password">

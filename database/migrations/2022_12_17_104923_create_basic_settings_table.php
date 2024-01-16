@@ -28,6 +28,7 @@ return new class extends Migration
             $table->boolean('email_verification')->default(false);
             $table->boolean('sms_verification')->default(false);
             $table->boolean('email_notification')->default(false);
+            $table->boolean('sms_notification')->default(false);
             $table->boolean('push_notification')->default(false);
             $table->boolean('kyc_verification')->default(false);
             $table->string('site_logo_dark',255)->nullable();

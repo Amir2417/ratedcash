@@ -145,26 +145,6 @@
                         </div>
                         <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 form-group">
                             @include('admin.components.form.switcher',[
-                                'label'         => 'Email Verification',
-                                'name'          => 'email_verification',
-                                'value'         => old('email_verification',$basic_settings->email_verification),
-                                'options'       => ['Activated' => 1,'Deactivated' => 0],
-                                'onload'        => true,
-                                'permission'    => "admin.web.settings.basic.settings.activation.update",
-                            ])
-                        </div>
-                        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 form-group">
-                            @include('admin.components.form.switcher',[
-                                'label'         => 'Email Notification',
-                                'name'          => 'email_notification',
-                                'value'         => old('email_notification',$basic_settings->email_notification),
-                                'options'       => ['Activated' => 1,'Deactivated' => 0],
-                                'onload'        => true,
-                                'permission'    => "admin.web.settings.basic.settings.activation.update",
-                            ])
-                        </div>
-                        {{-- <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 form-group">
-                            @include('admin.components.form.switcher',[
                                 'label'         => 'SMS Verification',
                                 'name'          => 'sms_verification',
                                 'value'         => old('sms_verification',$basic_settings->sms_verification),
@@ -172,8 +152,8 @@
                                 'onload'        => true,
                                 'permission'    => "admin.web.settings.basic.settings.activation.update",
                             ])
-                        </div> --}}
-                        {{-- <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 form-group">
+                        </div>
+                        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 form-group">
                             @include('admin.components.form.switcher',[
                                 'label'         => 'SMS Notification',
                                 'name'          => 'sms_notification',
@@ -182,7 +162,8 @@
                                 'onload'        => true,
                                 'permission'    => "admin.web.settings.basic.settings.activation.update",
                             ])
-                        </div> --}}
+                        </div>
+                        
                         <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 form-group">
                             @include('admin.components.form.switcher',[
                                 'label'         => 'Push Notification',
