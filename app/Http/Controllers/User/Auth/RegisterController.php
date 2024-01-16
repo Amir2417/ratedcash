@@ -124,7 +124,7 @@ class RegisterController extends Controller
         
             DB::commit();
         }catch(Exception $e) {
-            dd($e->getMessage());
+            
             DB::rollBack();
             return back()->with(['error' => [ $e->getMessage()]]);
         };
@@ -171,12 +171,15 @@ class RegisterController extends Controller
         return redirect()->route("user.register.kyc")->with(['success' => ['Otp successfully verified']]);
     }
     public function resendCode(){
-        $email = session()->get('register_email');
-        $resend = UserAuthorization::where("email",$email)->first();
+        $mobile = session()->get('register_mobile');
+        if( !$mobile){
+            return redirect()->route('user.register')->with(['error' => [ "Your Session is expired, please try again"]]);
+        }
+        $resend = UserAuthorization::where("mobile",$mobile)->first();
         if( $resend){
             if(Carbon::now() <= $resend->created_at->addMinutes(GlobalConst::USER_VERIFY_RESEND_TIME_MINUTE)) {
                 throw ValidationException::withMessages([
-                    'code'      => __('You can resend verification code after').' '.Carbon::now()->diffInSeconds($resend->created_at->addMinutes(GlobalConst::USER_PASS_RESEND_TIME_MINUTE)). ' '. __('seconds'),
+                    'code'      => 'You can resend verification code after '.Carbon::now()->diffInSeconds($resend->created_at->addMinutes(GlobalConst::USER_VERIFY_RESEND_TIME_MINUTE)). ' seconds',
                 ]);
             }
         }
@@ -184,27 +187,29 @@ class RegisterController extends Controller
         $code = generate_random_code();
         $data = [
             'user_id'       =>  0,
-            'email'         => $email,
+            'mobile'         => $mobile,
             'code'          => $code,
             'token'         => generate_unique_string("user_authorizations","token",200),
             'created_at'    => now(),
         ];
         DB::beginTransaction();
         try{
-            $oldToken = UserAuthorization::where("email",$email)->get();
+            $oldToken = UserAuthorization::where("mobile",$mobile)->get();
             if($oldToken){
                 foreach($oldToken as $token){
                     $token->delete();
                 }
             }
             DB::table("user_authorizations")->insert($data);
-            Notification::route("mail",$email)->notify(new SendVerifyCode($email, $code));
+            sendSmsNotAuthUser($mobile, 'SVER_CODE', [
+                'code' => $code
+            ]);
             DB::commit();
         }catch(Exception $e) {
             DB::rollBack();
-            return back()->with(['error' => [__('Something went wrong! Please try again.')]]);
+            return back()->with(['error' => ['Something went worng! Please try again']]);
         }
-        return redirect()->route('user.email.verify',$data['token'])->with(['success' => [__('Verification code resend success')]]);
+        return redirect()->route('user.sms.verify',$data['token'])->with(['success' => ['Verification code resend success!']]);
     }
     public function registerKyc(Request $request){
         $mobile =   session()->get('register_mobile');

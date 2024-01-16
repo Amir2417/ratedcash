@@ -198,5 +198,160 @@ class ForgotPasswordController extends Controller
         return redirect()->route('user.login')->with(['success' => [__('Password reset success. Please login with new password.')]]);
     }
 
+    //==================================recovery password by mobile start==========================================
+    public function smsForgotForm()
+    {
+        $page_title = "Forgot Password";
+        return view('user.auth.sms-password.forgot',compact('page_title'));
+    }
+
+    public function sendForgotCode(Request $request)
+    {
+        $request->validate([
+            'mobile'   => "required|max:100",
+        ]);
+        $column = "mobile";
+        if(check_email($request->mobile)) $column = "email";
+        $user = User::where($column,$request->mobile)->first();
+        if(!$user) {
+            throw ValidationException::withMessages([
+                'mobile'       => "User doesn't exists.",
+            ]);
+        }
+
+        $token = generate_unique_string("user_password_resets","token",80);
+        $code = generate_random_code();
+
+        try{
+            UserPasswordReset::where("user_id",$user->id)->delete();
+            $password_reset = UserPasswordReset::create([
+                'user_id'       => $user->id,
+                'mobile'       => $request->mobile,
+                'token'         => $token,
+                'code'          => $code,
+            ]);
+            sendSms($user, 'PASS_RESET_CODE', [
+                'code' => $code
+            ]);
+        }catch(Exception $e) {
+            return back()->with(['error' => [$e->getMessage()]]);
+        }
+        return redirect()->route('user.password.verify.code',$token)->with(['success' => ['Verification code sent to your phone number.']]);
+    }
+    public function smsVerifyCodeForm($token)
+    {
+        $page_title = "Verify SMS";
+        $password_reset = UserPasswordReset::where("token",$token)->first();
+        if(!$password_reset) return redirect()->route('user.password.forgot.mobile')->with(['error' => ['Password Reset Token Expired']]);
+        $resend_time = 0;
+        if(Carbon::now() <= $password_reset->created_at->addMinutes(GlobalConst::USER_PASS_RESEND_TIME_MINUTE)) {
+            $resend_time = Carbon::now()->diffInSeconds($password_reset->created_at->addMinutes(GlobalConst::USER_PASS_RESEND_TIME_MINUTE));
+        }
+        $user_mobile = $password_reset->user->full_mobile ?? "";
+        return view('user.auth.sms-password.verify',compact('page_title','token','user_mobile','resend_time'));
+    }
+    public function smsResendCode($token)
+    {
+        $password_reset = UserPasswordReset::where('token',$token)->first();
+        if(!$password_reset) return back()->with(['error' => ['Request token is invalid']]);
+        if(Carbon::now() <= $password_reset->created_at->addMinutes(GlobalConst::USER_PASS_RESEND_TIME_MINUTE)) {
+            throw ValidationException::withMessages([
+                'code'      => 'You can resend verification code after '.Carbon::now()->diffInSeconds($password_reset->created_at->addMinutes(GlobalConst::USER_PASS_RESEND_TIME_MINUTE)). ' seconds',
+            ]);
+        }
+
+        DB::beginTransaction();
+        try{
+            $code = generate_random_code();
+            $update_data = [
+                'user_id'       => $password_reset->user->id,
+                'mobile'       => $password_reset->user->mobile,
+                'token'         => $token,
+                'code'          => $code,
+            ];
+            DB::table('user_password_resets')->where('token',$token)->update($update_data);
+            sendSms($password_reset->user, 'PASS_RESET_CODE', [
+                'code' => $code
+            ]);
+            DB::commit();
+        }catch(Exception $e) {
+            DB::rollback();
+            return back()->with(['error' => [$e->getMessage()]]);
+        }
+        return redirect()->route('user.password.verify.code',$token)->with(['success' => ['Verification code resend success!']]);
+    }
+    public function smsVerifyCode(Request $request,$token){
+        $request->merge(['token' => $token]);
+        $validated = Validator::make($request->all(),[
+            'token'         => "required|string|exists:user_password_resets,token",
+            'code'      => "required|array",
+            'code.*'    => "required|numeric",
+        ])->validate();
+        $code = $request->code;
+        $code = implode("",$code);
+
+        $basic_settings = BasicSettingsProvider::get();
+        $otp_exp_seconds = $basic_settings->otp_exp_seconds ?? 0;
+
+        $password_reset = UserPasswordReset::where("token",$token)->first();
+        if(!$password_reset){
+            return back()->with(['error' => ['Invalid request']]);
+        }
+        if( $password_reset){
+            if(Carbon::now() >= $password_reset->created_at->addSeconds($otp_exp_seconds)) {
+                foreach(UserPasswordReset::get() as $item) {
+                    if(Carbon::now() >= $item->created_at->addSeconds($otp_exp_seconds)) {
+                        $item->delete();
+                    }
+                }
+                return redirect()->route('user.password.forgot.mobile')->with(['error' => ['Session expired. Please try again.']]);
+            }
+        }
+        if($password_reset->code != $code) {
+            throw ValidationException::withMessages([
+                'code'      => "Verification Otp is Invalid",
+            ]);
+        }
+        return redirect()->route('user.password.forgot.reset',$token)->with(['success' => ['Sms code verified successfully']]);
+    }
+
+    public function showResetPasswordForm($token){
+        $page_title = "Reset Password";
+        return view('user.auth.sms-password.reset',compact('page_title','token'));
+    }
+    public function resetPasswordPost(Request $request,$token) {
+        $basic_settings = BasicSettingsProvider::get();
+        $passowrd_rule = "required|string|min:6|confirmed";
+        if($basic_settings->secure_password) {
+            $passowrd_rule = ["required",Password::min(8)->letters()->mixedCase()->numbers()->symbols()->uncompromised(),"confirmed"];
+        }
+
+        $request->merge(['token' => $token]);
+        $validated = Validator::make($request->all(),[
+            'token'         => "required|string|exists:user_password_resets,token",
+            'password'      => $passowrd_rule,
+        ])->validate();
+
+        $password_reset = UserPasswordReset::where("token",$token)->first();
+        if(!$password_reset) {
+            throw ValidationException::withMessages([
+                'password'      => "Invalid Request. Please try again.",
+            ]);
+        }
+
+        try{
+            $password_reset->user->update([
+                'password'      => Hash::make($validated['password']),
+            ]);
+            $password_reset->delete();
+        }catch(Exception $e) {
+            return back()->with(['error' => ['Something went wrong! Please try again.']]);
+        }
+
+        return redirect()->route('user.login')->with(['success' => ['Password reset success. Please login with new password.']]);
+    }
+    //==================================recovery password by mobile end============================================
+
+
 
 }

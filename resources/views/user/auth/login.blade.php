@@ -39,7 +39,7 @@
                     </div>
                     <div class="col-lg-12 form-group">
                         <div class="forgot-item">
-                            <label><a href="{{ setRoute('user.password.forgot') }}">{{ __("Forgot Password?") }}</a></label>
+                            <label><a href="{{ setRoute('user.password.forgot.mobile') }}">{{ __("Forgot Password?") }}</a></label>
                         </div>
                     </div>
                     <div class="col-lg-12 form-group text-center">

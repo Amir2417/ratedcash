@@ -51,6 +51,19 @@ Route::name('user.')->group(function(){
         Route::post('forgot/reset/{token}','resetPassword')->name('reset');
 
     });
+
+     // recovery password by mobile
+     Route::controller(UserForgotPasswordController::class)->prefix("password")->name("password.")->group(function(){
+        Route::get('forgot/sms','smsForgotForm')->name('forgot.mobile');
+        Route::post('send/forgot/code','sendForgotCode')->name('send.code');
+        Route::get('forgot/verify/code/{token}','smsVerifyCodeForm')->name('verify.code');
+        Route::get('resend/code/{token}','smsResendCode')->name('resend.code');
+        Route::post('verify/code/{token}','smsVerifyCode')->name('verify.code.post');
+        Route::get('reset/form/{token}','showResetPasswordForm')->name('forgot.reset');
+        Route::post('reset/{token}','resetPasswordPost')->name('reset.submit');
+
+    });
+    
     Route::controller(AuthorizationController::class)->prefix("authorize")->name('authorize.')->middleware("auth")->group(function(){
         Route::get('mail/{token}','showMailFrom')->name('mail');
         Route::post('mail/verify/{token}','mailVerify')->name('mail.verify');
