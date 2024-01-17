@@ -73,45 +73,72 @@ class RegisterController extends Controller
             $agree = '';
         }
         $validator = Validator::make($request->all(),[
-            'email'         => 'required|email',
+            'mobile'         => 'required',
+            'mobile_code'         => 'required',
             'agree'         =>  $agree,
 
         ]);
         $validated = $validator->validate();
 
-        $field_name = "username";
-        if(check_email($validated['email'])) {
-            $field_name = "email";
+        if(mobileUniqueCheck((int) $validated['mobile']) == false){
+            return back()->with(['error' => ['The Mobile Number Already Exist!']]);
         }
 
-        $exist = Merchant::where($field_name,$validated['email'])->first();
-        if( $exist) return back()->with(['error' => [__('Merchant already  exists, please try with another email')]]);
+        $mobile = $validated['mobile_code'].$validated['mobile'];
+        $field_name = "mobile";
+        if(check_email($validated['mobile'])) {
+            $field_name = "email";
+        }
+        $exist = Merchant::where($field_name,$validated['mobile'])->first();
+        if( $exist) return back()->with(['error' => ['Merchant already  exists, please try with another mobile number']]);
+         //if verification is off from admin panel
+         if( $basic_settings->sms_verification == false){
+            Session::put('register_mobile',$validated['mobile']);
+            return redirect()->route("merchant.register.kyc")->with(['success' => ['Please fillup required field for registration']]);
+
+        }
         $code = generate_random_code();
         $data = [
-            'merchant_id'       =>  0,
-            'email'         => $validated['email'],
+            'merchant_id'   => 0,
+            'mobile'        => $validated['mobile'],
             'code'          => $code,
             'token'         => generate_unique_string("merchant_authorizations","token",200),
             'created_at'    => now(),
         ];
+        
         DB::beginTransaction();
         try{
-            if($basic_settings->email_verification == false){
-                Session::put('register_email',$validated['email']);
-                return redirect()->route("merchant.register.kyc");
+            $oldToken = MerchantAuthorization::where("mobile",$mobile)->get();
+            if($oldToken){
+                foreach($oldToken as $token){
+                    $token->delete();
+                }
             }
             DB::table("merchant_authorizations")->insert($data);
-            Session::put('register_email',$validated['email']);
-            if($basic_settings->email_notification == true && $basic_settings->email_verification == true){
-                Notification::route("mail",$validated['email'])->notify(new SendVerifyCode($validated['email'], $code));
-            }
+            Session::put('register_mobile',$validated['mobile']);
+          //send sms
+        sendSmsNotAuthUser($mobile, 'SVER_CODE', [
+            'code' => $code
+        ]);
             DB::commit();
         }catch(Exception $e) {
             DB::rollBack();
-            return back()->with(['error' => [__("Something went wrong! Please try again.")]]);
+            return back()->with(['error' => [ $e->getMessage()]]);
         };
-        return redirect()->route('merchant.email.verify',$data['token'])->with(['success' => [__('Verification code sended to your email address.')]]);
+        return redirect()->route('merchant.sms.verify',$data['token'])->with(['success' => ['Verification code send to your mobile number successfully!']]);
     }
+    /**
+     * Method for sms verify page
+     */
+    public function smsVerify($token)
+    {
+        $page_title = "Mobile Verification";
+        $data = MerchantAuthorization::where('token',$token)->first();
+        return view('merchant.auth.authorize.verify-sms',compact("page_title","data","token"));
+    }
+    /**
+     * Method for verify code
+     */
     public function verifyCode(Request $request,$token){
         $request->merge(['token' => $token]);
         $request->validate([
@@ -124,20 +151,23 @@ class RegisterController extends Controller
         $otp_exp_sec = BasicSettingsProvider::get()->otp_exp_seconds ?? GlobalConst::DEFAULT_TOKEN_EXP_SEC;
         $auth_column = MerchantAuthorization::where("token",$request->token)->where("code",$code)->first();
         if(!$auth_column){
-            return back()->with(['error' => [__('Verification code does not match')]]);
+            return back()->with(['error' => ['Verification code does not match']]);
         }
         if($auth_column->created_at->addSeconds($otp_exp_sec) < now()) {
             $auth_column->delete();
-            return redirect()->route('merchant.register')->with(['error' => [__('Session expired. Please try again')]]);
+            return redirect()->route('merchant.register')->with(['error' => ['Session expired. Please try again']]);
         }
         try{
             $auth_column->delete();
         }catch(Exception $e) {
-            return redirect()->route('merchant.register')->with(['error' => [__("Something went wrong! Please try again.")]]);
+            return redirect()->route('merchant.register')->with(['error' => ['Something went wrong! Please try again']]);
         }
-
-        return redirect()->route("merchant.register.kyc")->with(['success' => [__('Otp successfully verified')]]);
+       
+        return redirect()->route("merchant.register.kyc")->with(['success' => ['Otp successfully verified']]);
     }
+    /**
+     * Method for resend code
+     */
     public function resendCode(Request $request){
         $email = session()->get('register_email');
         $resend = MerchantAuthorization::where("email",$email)->first();
@@ -175,8 +205,8 @@ class RegisterController extends Controller
         return redirect()->route('merchant.email.verify',$data['token'])->with(['success' => [__('Verification code resend success')]]);
     }
     public function registerKyc(Request $request){
-        $email =   session()->get('register_email');
-        if($email == null){
+        $mobile =   session()->get('register_mobile');
+        if($mobile == null){
             return redirect()->route('merchant.register');
         }
         $user_kyc = SetupKyc::merchantKyc()->first();
@@ -189,7 +219,7 @@ class RegisterController extends Controller
         }
         $page_title = __("Merchant Registration KYC");
         return view('merchant.auth.register-kyc',compact(
-            'page_title','email','kyc_fields'
+            'page_title','mobile','kyc_fields'
 
         ));
     }
@@ -203,6 +233,7 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
+        
         $basic_settings             = $this->basic_settings;
         $validated = $this->validator($request->all())->validate();
         if($basic_settings->kyc_verification == true){
@@ -226,11 +257,16 @@ class RegisterController extends Controller
                 'phone'     => __('Phone number is already exists'),
             ]);
         }
+        if(Merchant::where('email',$validated['email'])->exists()) {
+            throw ValidationException::withMessages([
+                'email'     => 'Email address is already exists',
+            ]);
+        }
 
         $validated['full_mobile']       = $complete_phone;
         $validated = Arr::except($validated,['agree','phone_code','phone']);
-        $validated['email_verified']    = true;
-        $validated['sms_verified']      = ($basic_settings->sms_verification == true) ? false : true;
+        $validated['email_verified']    = ($basic_settings->email_verification == true) ? false : true;
+        $validated['sms_verified']      = true;
         $validated['kyc_verified']      = ($basic_settings->kyc_verification == true) ? false : true;
         $validated['password']          = Hash::make($validated['password']);
         $validated['username']          = make_username($validated['firstname'],$validated['lastname']);
@@ -267,7 +303,7 @@ class RegisterController extends Controller
 
 
        }
-       $request->session()->forget('register_info');
+       $request->session()->forget('register_mobile');
         $this->guard()->login($user);
 
         return $this->registered($request, $user);

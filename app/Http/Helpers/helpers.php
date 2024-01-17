@@ -1,6 +1,7 @@
 <?php
 
 use App\Lib\SendSms;
+use App\Models\User;
 use App\Models\UserWallet;
 use App\Models\Admin\Admin;
 use Illuminate\Support\Arr;
@@ -22,6 +23,7 @@ use App\Models\UserAuthorization;
 use App\Models\UserSupportTicket;
 use Illuminate\Http\UploadedFile;
 use App\Models\Admin\AdminHasRole;
+use App\Models\Merchants\Merchant;
 use Illuminate\Support\Facades\DB;
 use App\Models\Admin\BasicSettings;
 use App\Models\Admin\ModuleSetting;
@@ -41,9 +43,9 @@ use App\Models\Merchants\MerchantWallet;
 use App\Providers\Admin\CurrencyProvider;
 use function PHPUnit\Framework\returnSelf;
 use App\Models\Merchants\MerchantNotification;
+
 use App\Providers\Admin\BasicSettingsProvider;
 use Illuminate\Validation\ValidationException;
-
 use App\Models\Merchants\MerchantAuthorization;
 use Pusher\PushNotifications\PushNotifications;
 use App\Notifications\User\Auth\SendAuthorizationCode;
@@ -2238,6 +2240,17 @@ function sendSmsNotAuthUser($mobile, $type, $shortCodes = [])
         $message = shortCodeReplacer("{{message}}", $template, $general->sms_api);
         $message = shortCodeReplacer("{{name}}", "User", $message);
         $sendSms->$gateway($mobile,$general->site_name,$message,$general->sms_config);
+    }
+}
+
+function mobileUniqueCheck($mobile){
+    $user = User::where('mobile', $mobile)->get();
+    $merchant = Merchant::where('mobile', $mobile)->get();
+
+    if($user->count() > 0 || $merchant->count() > 0){
+        return false;
+    }else{
+        return true;
     }
 }
 

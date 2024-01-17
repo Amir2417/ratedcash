@@ -88,7 +88,7 @@ Route::prefix('merchant')->name('merchant.')->group(function(){
     Route::get('register',[RegisterController::class,"showRegistrationForm"])->name('register');
     Route::post('register',[RegisterController::class,"register"])->name('register.submit');
     Route::post('send/verify-code',[RegisterController::class,"sendVerifyCode"])->name('send.code');
-    Route::get('email/verify/{token}',[MerchantAuthorizationController::class,"showSmsFromRegister"])->name('email.verify');
+    Route::get('sms/verify/{token}',[RegisterController::class,"smsVerify"])->name('sms.verify');
     Route::post('verify/code/{token}',[RegisterController::class,"verifyCode"])->name('verify.code');
     Route::get('resend/code',[RegisterController::class,"resendCode"])->name('resend.code');
     Route::get('register/kyc',[RegisterController::class,"registerKyc"])->name('register.kyc');

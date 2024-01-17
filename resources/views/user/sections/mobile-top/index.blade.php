@@ -40,14 +40,14 @@
                                 <div class="col-xl-6 col-lg-6  form-group">
                                     <label>{{ __("Mobile TopUp") }} <span class="text--base">*</span></label>
                                     <select class="form--control" name="topup_type">
-                                        @foreach ($topupType ??[] as $type)
-                                        <option value="{{ $type->id }}" data-name="{{ $type->name }}">{{ $type->name }}</option>
+                                        @foreach ($topupType['data'] ?? [] as $type)
+                                        <option value="{{ $type['biller_name'] }}" data-name="{{ $type['biller_name'] }}">{{ $type['biller_name'] }}</option>
                                         @endforeach
 
                                     </select>
                                 </div>
                                 <div class="col-xl-6 col-lg-6  form-group">
-                                    <label>Mobile Number <span class="text--base">*</span></label>
+                                    <label>{{ __("Mobile Number") }} <span class="text--base">*</span></label>
                                     <input type="number" class="form--control" name="mobile_number" placeholder="Enter Mobile Number" value="{{ old('mobile_number') }}">
 
                                 </div>

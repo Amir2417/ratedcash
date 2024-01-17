@@ -24,7 +24,9 @@ class MobileTopupController extends Controller
     public function index() {
         $page_title = __("Mobile Topup");
         $topupCharge = TransactionSetting::where('slug','mobile_topup')->where('status',1)->first();
-        $topupType = TopupCategory::active()->orderByDesc('id')->get();
+        $topupType = getBillPayCategories('airtime');
+        dd($topupType);
+        // $topupType = TopupCategory::active()->orderByDesc('id')->get();
         $transactions = Transaction::auth()->mobileTopup()->latest()->take(10)->get();
         return view('user.sections.mobile-top.index',compact("page_title",'topupCharge','transactions','topupType'));
     }
@@ -35,8 +37,9 @@ class MobileTopupController extends Controller
             'amount' => 'required|numeric|gt:0',
 
         ]);
-        $basic_setting = BasicSettings::first();
-        $user = auth()->user();
+        
+        $basic_setting  = BasicSettings::first();
+        $user           = auth()->user();
         if($basic_setting->kyc_verification){
             if( $user->kyc_verified == 0){
                 return redirect()->route('user.profile.index')->with(['error' => [__('Please submit kyc information!')]]);
@@ -46,13 +49,12 @@ class MobileTopupController extends Controller
                 return redirect()->route('user.profile.index')->with(['error' => [__('Admin rejected your kyc information, Please re-submit again')]]);
             }
         }
-        $amount = $request->amount;
-        $topUpType = $request->topup_type;
-        $topup_type = TopupCategory::where('id', $topUpType)->first();
-        $mobile_number = $request->mobile_number;
-        $user = auth()->user();
-        $topupCharge = TransactionSetting::where('slug','mobile_topup')->where('status',1)->first();
-        $userWallet = UserWallet::where('user_id',$user->id)->first();
+        $amount         = $request->amount;
+        $topup_type     = $request->topup_type;
+        $mobile_number  = $request->mobile_number;
+        $user           = auth()->user();
+        $topupCharge    = TransactionSetting::where('slug','mobile_topup')->where('status',1)->first();
+        $userWallet     = UserWallet::where('user_id',$user->id)->first();
         if(!$userWallet){
             return back()->with(['error' => [__('User Wallet not found')]]);
         }
@@ -83,7 +85,7 @@ class MobileTopupController extends Controller
                 //send notifications
                 $notifyData = [
                     'trx_id'  => $trx_id,
-                    'topup_type'  => @$topup_type->name,
+                    'topup_type'  => @$topup_type,
                     'mobile_number'  => $mobile_number,
                     'request_amount'   => $amount,
                     'charges'   => $total_charge,
@@ -104,8 +106,7 @@ class MobileTopupController extends Controller
         $authWallet = $userWallet;
         $afterCharge = ($authWallet->balance - $payable);
         $details =[
-            'topup_type_id' => $topup_type->id??'',
-            'topup_type_name' => $topup_type->name??'',
+            'topup_type_name' => $topup_type??'',
             'mobile_number' => $mobile_number,
             'topup_amount' => $amount??"",
         ];
@@ -161,7 +162,7 @@ class MobileTopupController extends Controller
 
             UserNotification::create([
                 'type'      => NotificationConst::MOBILE_TOPUP,
-                'user_id'  => $user->id,
+                'user_id'   => $user->id,
                 'message'   => $notification_content,
             ]);
 

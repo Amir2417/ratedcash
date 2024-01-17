@@ -19,37 +19,37 @@
                         alt="site-logo">
                 </a>
             </div>
-            <h5 class="title text-center">{{ __("Please enter the code") }}</h5>
-            <p class="d-block text-center">{{ __("We sent a 6 digit code here") }} <strong>+{{ $register_info->mobile_code }}{{ $register_info->mobile}}</strong></p>
-            <form class="account-form" action="{{ setRoute('merchant.verify.code') }}" method="GET">
+            <h5 class="title text-center">{{__("Please enter the code")}}</h5>
+            <p class="d-block text-center">{{__("We sent a 6 digit code here")}} <strong>+{{getDialCode()}}{{ $data->mobile }}</strong></p>
+            <form class="account-form" action="{{ setRoute('merchant.verify.code',$token) }}" method="POST">
                 @csrf
-                <div id="recaptcha-container"></div>
+
                 <div class="row ml-b-20">
                     <div class="col-lg-12 form-group">
-                        <input class="otp code1" type="text" oninput='digitValidate(this)' onkeyup='tabChange(1)'
-                            maxlength=1 required>
-                        <input class="otp code2" type="text" oninput='digitValidate(this)' onkeyup='tabChange(2)'
-                            maxlength=1 required>
-                        <input class="otp code3" type="text" oninput='digitValidate(this)' onkeyup='tabChange(3)'
-                            maxlength=1 required>
-                        <input class="otp code4" type="text" oninput='digitValidate(this)' onkeyup='tabChange(4)'
-                            maxlength=1 required>
-                        <input class="otp code5" type="text" oninput='digitValidate(this)' onkeyup='tabChange(5)'
-                            maxlength=1 required>
-                        <input class="otp code6" type="text" oninput='digitValidate(this)' onkeyup='tabChange(6)'
-                            maxlength=1 required>
+                        <input class="otp" required name="code[]"   type="text" oninput='digitValidate(this)' onkeyup='tabChange(1)'
+                        maxlength=1 >
+                        <input class="otp" required name="code[]"  type="text" oninput='digitValidate(this)' onkeyup='tabChange(2)'
+                            maxlength=1 >
+                        <input class="otp" required name="code[]"  type="text" oninput='digitValidate(this)' onkeyup='tabChange(3)'
+                            maxlength=1 >
+                        <input class="otp" required name="code[]"  type="text" oninput='digitValidate(this)' onkeyup='tabChange(4)'
+                            maxlength=1 >
+                        <input class="otp" required name="code[]"  type="text" oninput='digitValidate(this)' onkeyup='tabChange(5)'
+                            maxlength=1 >
+                        <input class="otp" required name="code[]"  type="text" oninput='digitValidate(this)' onkeyup='tabChange(6)'
+                            maxlength=1 >
+
                     </div>
 
                     <div class="col-lg-12 form-group text-end">
                         <div class="time-area">{{ __("You can resend the code after") }} <span id="time"></span></div>
                     </div>
                     <div class="col-lg-12 form-group text-center">
-                        <button type="button" onclick="verify()" class="btn--base w-100 btn-loading verifyCode">{{ __("Submit") }}</button>
+                        <button type="submit"  class="btn--base w-100 btn-loading">{{ __("Submit") }}</button>
                     </div>
                     <div class="col-lg-12 text-center">
                         <div class="account-item">
-                            <label>{{__("Already Have An Account? ")}}<a href="{{ setRoute('merchant.login') }}" class="account-control-btn">{{ __("Login
-                                Now") }}</a></label>
+                            <label>{{ __("Already Have An Account?") }} <a href="{{ setRoute('merchant.login') }}" class="account-control-btn">{{ __("Login Now") }}</a></label>
                         </div>
                     </div>
                 </div>
@@ -92,7 +92,7 @@
     }
 </script>
 <script>
-    function resetTime (second = 20) {
+    function resetTime (second = 60) {
         var coundDownSec = second;
         var countDownDate = new Date();
         countDownDate.setMinutes(countDownDate.getMinutes() + 120);
@@ -107,7 +107,7 @@
                 // alert();
                 clearInterval(x);
                 // document.getElementById("time").innerHTML = "RESEND";
-                document.querySelector(".time-area").innerHTML = "Didn't get the code? <a href='javascript:void(0)' onclick='resendOtp()' class='text--danger'>Resend</a>";
+                document.querySelector(".time-area").innerHTML = "Didn't get the code? <a href='{{ setRoute('merchant.resend.code') }}' class='text--danger'>Resend</a>";
             }
 
             second--
@@ -135,84 +135,5 @@
         }
     });
 </script>
-<script>
-    window.onload = function () {
-        render();
-    };
-    function render() {
-        // window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
-        // recaptchaVerifier.render();
-        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
-                "recaptcha-container",
-                {
-                size: "invisible",
-                callback: function(response) {
-                    submitPhoneNumberAuth();
-                }
-                }
-            );
-    }
-    function verify() {
-            var code1 = $(".code1").val();
-            var code2 = $(".code2").val();
-            var code3 = $(".code3").val();
-            var code4 = $(".code4").val();
-            var code5 = $(".code5").val();
-            var code6 = $(".code6").val()
-            if(code1 == '' || code2 == '' || code3 == '' || code4 == '' || code5 == '' || code6 == ''){
-                throwMessage('error',["Please, enter full code "]);
-                setTimeout(function () {
-                        location.reload();
-                },1000);
-                return false;
 
-            }
-            var code = code1+code2+code3+code4+code5+code6;
-            var codeToken = "{{$register_info->fibare_token}}";
-            var credential = firebase.auth.PhoneAuthProvider.credential(codeToken, code);
-            firebase.auth().signInWithCredential(credential).then((result)=>{
-                throwMessage('success',["Sms Verification Successfully"]);
-                $('.verifyCode').parents("form").submit();
-            }).catch((error)=>{
-                throwMessage('error',[error.message]);
-                setTimeout(function () {
-                        location.reload();
-                },1000);
-
-            })
-
-            // });
-        }
-    function resendOtp() {
-        var phone ="{{ $register_info->mobile }}";
-        var dial_code ="{{ $register_info->mobile_code }}";
-        var number = "+"+dial_code+phone;
-            firebase.auth().signInWithPhoneNumber(number, window.recaptchaVerifier).then(function (confirmationResult) {
-                window.confirmationResult = confirmationResult;
-                coderesult = confirmationResult;
-                var firebaseToken = coderesult.verificationId;
-
-            $.ajax({
-                headers: { "X-CSRF-Token": $("meta[name=csrf_token]").attr("content") },
-                    type:  "GET",
-                    dataType: "json",
-                    url:'{{ route("merchant.resend.code") }}',
-                    data:{'firebaseToken': firebaseToken},
-                    success: function(data){
-                        throwMessage('success',["Sms Code Resend Successfully"]);
-                        setTimeout(function(){// wait for 5 secs(2)
-                            location.reload(); // then reload the page.(3)
-                        },1000);
-
-                    }
-
-                });
-            }).catch(function (error) {
-                throwMessage('error',[error.message]);
-                setTimeout(function(){// wait for 5 secs(2)
-                            location.reload(); // then reload the page.(3)
-                },1000);
-            });
-        }
-</script>
 @endpush

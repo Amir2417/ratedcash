@@ -28,9 +28,10 @@
                     <div class="col-xl-12 col-lg-12 form-group">
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text copytext">{{ __("Email") }}</span>
+                                <span class="input-group-text copytext">+{{ getDialCode() }}</span>
                             </div>
-                            <input type="email" name="email" class="form--control  " placeholder="Enter Email Address" required value="{{ old('email') }}">
+                            <input type="hidden" name="mobile_code" class="form--control "  value="{{  getDialCode()  }}">
+                            <input type="number" name="mobile" class="form--control " placeholder="Enter Number" required value="{{ old('mobile') }}">
 
                         </div>
                         <small class="text-danger exits"></small>
@@ -45,7 +46,7 @@
                     </div>
                     @endif
                     <div class="col-lg-12 form-group text-center">
-                        <button type="submit"  class="btn--base w-100  btn-loading   ">{{ __("Continue") }}</button>
+                        <button type="submit" class="btn--base w-100  btn-loading   ">{{ __("Continue") }}</button>
                     </div>
                     <div class="col-lg-12 text-center">
                         <div class="account-item">

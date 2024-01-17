@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('merchant_authorizations', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger("merchant_id");
-            $table->string("email")->nullable();
+            $table->string("mobile")->nullable();
             $table->integer("code");
             $table->text("token")->nullable();
             $table->timestamps();
