@@ -17,10 +17,10 @@ class CurrencySeeder extends Seeder
     {
         $data = [
             'admin_id'  => 1,
-            'country'   => "United States",
-            'name'      => "United States dollar",
-            'code'      => "USD",
-            'symbol'    => "$",
+            'country'   => "Nigeria",
+            'name'      => "Nigerian naira",
+            'code'      => "NGN",
+            'symbol'    => "₦",
             'type'      => "FIAT",
             'flag'      => "seeder/currency-flug.webp",
             'rate'      => 1,

@@ -46,8 +46,9 @@ function getBillPayCategories($type){
 }
 function payBill($type,$customer,$amount){
     $credentials = VirtualCardApi::first();
-    $sk         =  $credentials->secret_key;
-    $base_url   =  $credentials->url;
+
+    $sk         =  $credentials->config->flutterwave_secret_key;
+    $base_url   =  $credentials->config->flutterwave_url;
     $data = [
         "amount"      => $amount,
         "biller_name" => $type,

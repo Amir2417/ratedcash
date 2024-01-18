@@ -35,6 +35,11 @@ class BillPayController extends Controller
         $transactions = Transaction::auth()->billPay()->latest()->take(10)->get();
         return view('user.sections.bill-pay.index',compact("page_title",'billPayCharge','transactions','billType'));
     }
+    public function fetchBillTypes(Request $request){
+        $bill_category = $request->bill_category;
+        $getBillTypes = getBillPayCategories($bill_category);
+        return response()->json($getBillTypes);
+    }
     public function payConfirm(Request $request){
         $request->validate([
             'bill_type' => 'required|string',
@@ -42,8 +47,8 @@ class BillPayController extends Controller
             'amount' => 'required|numeric|gt:0',
 
         ]);
-        $basic_setting = BasicSettings::first();
-        $user = auth()->user();
+        $basic_setting  = BasicSettings::first();
+        $user           = auth()->user();
         if($basic_setting->kyc_verification){
             if( $user->kyc_verified == 0){
                 return redirect()->route('merchant.profile.index')->with(['error' => [__('Please submit kyc information!')]]);
@@ -53,18 +58,18 @@ class BillPayController extends Controller
                 return redirect()->route('merchant.profile.index')->with(['error' => [__('Admin rejected your kyc information, Please re-submit again')]]);
             }
         }
-        $amount = $request->amount;
-        $billType = $request->bill_type;
-        $bill_type = BillPayCategory::where('id', $billType)->first();
-        $bill_number = $request->bill_number;
-        $user = auth()->user();
-        $billPayCharge = TransactionSetting::where('slug','bill_pay')->where('status',1)->first();
-        $userWallet = UserWallet::where('user_id',$user->id)->first();
+        $amount         = $request->amount;
+        $billType       = $request->bill_type;
+        $bill_type      = $request->bill_type;
+        $bill_number    = $request->bill_number;
+        $user           = auth()->user();
+        $billPayCharge  = TransactionSetting::where('slug','bill_pay')->where('status',1)->first();
+        $userWallet     = UserWallet::where('user_id',$user->id)->first();
         if(!$userWallet){
             return back()->with(['error' => [__('User wallet not found!')]]);
         }
-        $baseCurrency = Currency::default();
-        $rate = $baseCurrency->rate;
+        $baseCurrency   = Currency::default();
+        $rate           = $baseCurrency->rate;
         if(!$baseCurrency){
             return back()->with(['error' => [__('Default currency not found')]]);
         }
@@ -75,34 +80,36 @@ class BillPayController extends Controller
             return back()->with(['error' => [__("Please follow the transaction limit")]]);
         }
         //charge calculations
-        $fixedCharge = $billPayCharge->fixed_charge *  $rate;
-        $percent_charge = ($request->amount / 100) * $billPayCharge->percent_charge;
-        $total_charge = $fixedCharge + $percent_charge;
-        $payable = $total_charge + $amount;
+        $fixedCharge    = $billPayCharge->fixed_charge *  $rate;
+        $percent_charge = ($amount / 100) * $billPayCharge->percent_charge;
+        $total_charge   = $fixedCharge + $percent_charge;
+        $payable        = $total_charge + $amount;
         if($payable > $userWallet->balance ){
             return back()->with(['error' => [__('Sorry, insufficient balance')]]);
         }
         try{
-            $trx_id = 'BP'.getTrxNum();
-            $sender = $this->insertSender( $trx_id,$user,$userWallet,$amount, $bill_type, $bill_number,$payable);
-            $this->insertSenderCharges( $fixedCharge,$percent_charge, $total_charge, $amount,$user,$sender);
-            if( $this->basic_settings->email_notification == true){
-                $notifyData = [
-                    'trx_id'  => $trx_id,
-                    'bill_type'  => @$bill_type->name,
-                    'bill_number'  => $bill_number,
-                    'request_amount'   => $amount,
-                    'charges'   => $total_charge,
-                    'payable'  => $payable,
-                    'current_balance'  => getAmount($userWallet->balance, 4),
-                    'status'  => "Pending",
-                ];
-                //send notifications
-                $user = auth()->user();
-                $user->notify(new BillPayMail($user,(object)$notifyData));
+            $apiBillPay = payBill($bill_type, $bill_number,$amount);
+            if($apiBillPay['status'] == 'success'){
+                $trx_id = 'BP'.getTrxNum();
+                $sender = $this->insertSender( $trx_id,$user,$userWallet,$amount, $bill_type, $bill_number,$payable);
+                $this->insertSenderCharges( $fixedCharge,$percent_charge, $total_charge, $amount,$user,$sender);
+                if($basic_setting->sms_notification == true){
+                    sendSms($user,'BILL_PAY',[
+                        'amount'              => get_amount($amount,get_default_currency_code()),
+                        'bill_type'           => $bill_type ?? '',
+                        'bill_number'         => $bill_number,
+                        'trx'                 => $trx_id,
+                        'time'                => now()->format('Y-m-d h:i:s A'),
+                        'balance'             => get_amount($userWallet->balance,$userWallet->currency->code),
+                    ]);
+                }
+            }else{
+                return back()->with(['error' => [$apiBillPay['message']]]);
             }
+            
             return redirect()->route("user.bill.pay.index")->with(['success' => [__('Bill pay request send to admin successful')]]);
         }catch(Exception $e) {
+            
             return back()->with(['error' => [__("Something went wrong! Please try again.")]]);
         }
 
@@ -112,10 +119,9 @@ class BillPayController extends Controller
         $authWallet = $userWallet;
         $afterCharge = ($authWallet->balance - $payable);
         $details =[
-            'bill_type_id' => $bill_type->id??'',
-            'bill_type_name' => $bill_type->name??'',
+            'bill_type_name' => $bill_type ?? '',
             'bill_number' => $bill_number,
-            'bill_amount' => $amount??"",
+            'bill_amount' => $amount ?? "",
         ];
         DB::beginTransaction();
         try{

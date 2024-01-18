@@ -25,7 +25,7 @@ class MobileTopupController extends Controller
         $page_title = __("Mobile Topup");
         $topupCharge = TransactionSetting::where('slug','mobile_topup')->where('status',1)->first();
         $topupType = getBillPayCategories('airtime');
-        dd($topupType);
+        
         // $topupType = TopupCategory::active()->orderByDesc('id')->get();
         $transactions = Transaction::auth()->mobileTopup()->latest()->take(10)->get();
         return view('user.sections.mobile-top.index',compact("page_title",'topupCharge','transactions','topupType'));
@@ -79,22 +79,26 @@ class MobileTopupController extends Controller
         try{
             $trx_id = 'MP'.getTrxNum();
             $user = auth()->user();
-            $sender = $this->insertSender( $trx_id,$user,$userWallet,$amount, $topup_type, $mobile_number,$payable);
-            $this->insertSenderCharges( $fixedCharge,$percent_charge, $total_charge, $amount,$user,$sender);
-            if( $basic_setting->email_notification == true){
-                //send notifications
-                $notifyData = [
-                    'trx_id'  => $trx_id,
-                    'topup_type'  => @$topup_type,
-                    'mobile_number'  => $mobile_number,
-                    'request_amount'   => $amount,
-                    'charges'   => $total_charge,
-                    'payable'  => $payable,
-                    'current_balance'  => getAmount($userWallet->balance, 4),
-                    'status'  => "Pending",
-                ];
-                $user->notify(new TopupMail($user,(object)$notifyData));
+            $mobileTopUp = payBill($topup_type,$mobile_number,$amount);
+            
+            if($mobileTopUp['status'] == 'success'){
+                $sender = $this->insertSender( $trx_id,$user,$userWallet,$amount, $topup_type, $mobile_number,$payable);
+                $this->insertSenderCharges( $fixedCharge,$percent_charge, $total_charge, $amount,$user,$sender);
+                if( $basic_setting->sms_notification == true){
+                    //send notifications
+                    sendSms($user,'MOBILE_TOPUP',[
+                        'amount'=> get_amount($amount,get_default_language_code()),
+                        'topup_type' => $topUpType??'',
+                        'mobile_number' =>$mobile_number,
+                        'trx' => $trx_id,
+                        'time' =>  now()->format('Y-m-d h:i:s A'),
+                        'balance' => get_amount($userWallet->balance,$userWallet->currency->code),
+                    ]);
+                }
+            }else{
+                return back()->with(['error' => [$mobileTopUp['message']]]);
             }
+            
             return redirect()->route("user.mobile.topup.index")->with(['success' => [__('Mobile topup request send to admin successful successful')]]);
         }catch(Exception $e) {
             return back()->with(['error' => [__("Something went wrong! Please try again.")]]);
@@ -147,8 +151,8 @@ class MobileTopupController extends Controller
             DB::table('transaction_charges')->insert([
                 'transaction_id'    => $id,
                 'percent_charge'    => $percent_charge,
-                'fixed_charge'      =>$fixedCharge,
-                'total_charge'      =>$total_charge,
+                'fixed_charge'      => $fixedCharge,
+                'total_charge'      => $total_charge,
                 'created_at'        => now(),
             ]);
             DB::commit();

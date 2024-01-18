@@ -187,6 +187,7 @@ Route::prefix("user")->name("user.")->group(function(){
     Route::middleware('module:bill-pay')->group(function(){
         Route::controller(BillPayController::class)->prefix('bill-pay')->name('bill.pay.')->group(function(){
             Route::get('/','index')->name('index');
+            Route::post('types/fetch','fetchBillTypes')->name('types');
             Route::post('insert','payConfirm')->name('confirm');
         });
     });
