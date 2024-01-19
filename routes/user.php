@@ -183,6 +183,9 @@ Route::prefix("user")->name("user.")->group(function(){
             });
         });
     });
+    // virtual account service
+   
+
     //bill pay
     Route::middleware('module:bill-pay')->group(function(){
         Route::controller(BillPayController::class)->prefix('bill-pay')->name('bill.pay.')->group(function(){

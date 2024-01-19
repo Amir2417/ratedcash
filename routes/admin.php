@@ -44,6 +44,7 @@ use App\Http\Controllers\Admin\PushNotificationController;
 use App\Http\Controllers\Admin\SetupMobileTopupController;
 use App\Http\Controllers\Admin\AppOnboardScreensController;
 use App\Http\Controllers\Admin\PaymentGatewayCurrencyController;
+use App\Http\Controllers\Admin\VirtualAccountServiceController;
 
 // All Admin Route Is Here
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -83,6 +84,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('api/settings', 'cardApi')->name('api');
         Route::put('api/update', 'cardApiUpdate')->name('api.update');
     });
+
+    // virtual account service
+    Route::controller(VirtualAccountServiceController::class)->prefix('virtual-account-service')->name('virtual.account.service.')->group(function(){
+        Route::get('index','index')->name('index');
+        Route::put('update','update')->name('update');
+    });
+
     //PayLink Link Api
     Route::controller(GatewayApiController::class)->prefix('gateway-api')->name('gateway.api.')->group(function () {
         Route::get('', 'index')->name('index');

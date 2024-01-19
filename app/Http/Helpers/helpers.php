@@ -492,6 +492,9 @@ function files_path($slug)
         'card-api'   => [
             'path'      => 'backend/images/card-settings',
         ],
+        'virtual-account-service'   => [
+            'path'      => 'backend/images/virtual-account-service',
+        ],
         'payment-link-image'         => [
             'path'              => 'backend/images/payment-link-image',
             'width'             => 400,

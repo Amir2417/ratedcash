@@ -36,6 +36,7 @@ use Database\Seeders\Merchant\ApiCredentialsSeeder;
 use Database\Seeders\Merchant\MerchantWalletSeeder;
 use Database\Seeders\Admin\TransactionSettingSeeder;
 use Database\Seeders\Admin\MerchantConfigurationSeeder;
+use Database\Seeders\Admin\VirtualAccountServiceSeeder;
 use Database\Seeders\Fresh\ExtensionSeeder as FreshExtensionSeeder;
 use Database\Seeders\Fresh\BasicSettingsSeeder as FreshBasicSettingsSeeder;
 
@@ -72,6 +73,7 @@ class DatabaseSeeder extends Seeder
             AdminHasRoleSeeder::class,
             SetupPageSeeder::class,
             VirtualApiSeeder::class,
+            VirtualAccountServiceSeeder::class,
             SetupEmailSeeder::class,
             MerchantConfigurationSeeder::class,
             ModuleSettingSeeder::class,

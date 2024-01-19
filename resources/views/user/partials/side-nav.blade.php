@@ -115,6 +115,12 @@
                         </li>
                         @endif
                     @endif
+                    <li class="sidebar-menu-item">
+                        <a href="{{ setRoute('user.virtual.account.service.index') }}">
+                            <i class="las la-credit-card"></i>
+                            <span class="menu-title">{{ __("Virtual Account Service") }}</span>
+                        </a>
+                    </li>
                     @if(module_access('bill-pay',$module)->status)
                     <li class="sidebar-menu-item">
                         <a href="{{ setRoute('user.bill.pay.index') }}">
