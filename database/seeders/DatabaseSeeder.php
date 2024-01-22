@@ -73,7 +73,6 @@ class DatabaseSeeder extends Seeder
             AdminHasRoleSeeder::class,
             SetupPageSeeder::class,
             VirtualApiSeeder::class,
-            VirtualAccountServiceSeeder::class,
             SetupEmailSeeder::class,
             MerchantConfigurationSeeder::class,
             ModuleSettingSeeder::class,

@@ -28,9 +28,8 @@
                                 <h4 class="title">{{ __("Balance Update From Admin (".$item->user_wallet->currency->code.")") }} </h4>
                             @elseif ($item->type == payment_gateway_const()::TYPETRANSFERMONEY)
                                 @if ($item->isAuthUser())
-
                                     @if ($item->attribute == payment_gateway_const()::SEND)
-                                        <h4 class="title">{{ __("Send Money to @" . @$item->details->receiver->username." (".@$item->details->receiver->email.")") }} </h4>
+                                        <h4 class="title">{{ __("Send Money to @" . @$item->details->recipient->account_name." (".@$item->details->recipient->account_number.")") }} </h4>
                                     @elseif ($item->attribute == payment_gateway_const()::RECEIVED)
                                         <h4 class="title">{{ __("Received Money from @" .@$item->details->sender->username." (".@$item->details->sender->email.")") }} </h4>
                                     @endif

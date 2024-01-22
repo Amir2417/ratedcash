@@ -50,11 +50,6 @@
                             'icon'      => "menu-icon las la-wallet",
                         ],
                         [
-                            'title'     => "Virtual Account Service",
-                            'route'     => "admin.virtual.account.service.index",
-                            'icon'      => "menu-icon las la-wallet",
-                        ],
-                        [
                             'title'     => "PayLink Api",
                             'route'     => "admin.gateway.api.index",
                             'icon'      => "menu-icon las la-code",

@@ -2,23 +2,26 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Constants\NotificationConst;
-use App\Constants\PaymentGatewayConst;
-use App\Http\Controllers\Controller;
-use App\Models\Admin\BasicSettings;
-use App\Models\Admin\Currency;
-use App\Models\Admin\TransactionSetting;
-use App\Models\Transaction;
-use App\Models\User;
-use App\Models\UserNotification;
-use App\Models\UserWallet;
-use App\Notifications\User\SendMoney\ReceiverMail;
-use App\Notifications\User\SendMoney\SenderMail;
 use Exception;
+use App\Models\User;
+use App\Models\Receipient;
+use App\Models\UserWallet;
+use App\Models\Transaction;
+use Jenssegers\Agent\Agent;
 use Illuminate\Http\Request;
+use App\Models\Admin\Currency;
+use App\Models\UserNotification;
 use Illuminate\Support\Facades\DB;
-use App\Events\User\NotificationEvent as UserNotificationEvent;
+use App\Models\Admin\BasicSettings;
+use App\Constants\NotificationConst;
+use App\Http\Controllers\Controller;
+use App\Models\Admin\PaymentGateway;
+use App\Constants\PaymentGatewayConst;
 use App\Models\Admin\AdminNotification;
+use App\Models\Admin\TransactionSetting;
+use App\Notifications\User\SendMoney\SenderMail;
+use App\Notifications\User\SendMoney\ReceiverMail;
+use App\Events\User\NotificationEvent as UserNotificationEvent;
 
 class SendMoneyController extends Controller
 {
@@ -29,10 +32,11 @@ class SendMoneyController extends Controller
         $this->trx_id = 'SM'.getTrxNum();
     }
     public function index() {
-        $page_title = __("Send Money");
-        $sendMoneyCharge = TransactionSetting::where('slug','transfer')->where('status',1)->first();
-        $transactions = Transaction::auth()->senMoney()->latest()->take(10)->get();
-        return view('user.sections.send-money.index',compact("page_title",'sendMoneyCharge','transactions'));
+        $page_title         = __("Send Money");
+        $sendMoneyCharge    = TransactionSetting::where('slug','transfer')->where('status',1)->first();
+        $receipients        = Receipient::auth()->get();
+        $transactions       = Transaction::auth()->senMoney()->latest()->take(10)->get();
+        return view('user.sections.send-money.index',compact("page_title",'sendMoneyCharge','transactions','receipients'));
     }
     public function checkUser(Request $request){
         $email = $request->email;
@@ -47,7 +51,7 @@ class SendMoneyController extends Controller
     public function confirmed(Request $request){
         $request->validate([
             'amount' => 'required|numeric|gt:0',
-            'email' => 'required|email'
+            'recipient' => 'required'
         ]);
         $basic_setting = BasicSettings::first();
         $user = auth()->user();
@@ -73,15 +77,7 @@ class SendMoneyController extends Controller
         if(!$baseCurrency){
             return back()->with(['error' => [__('Default currency not found')]]);
         }
-        $receiver = User::where('email',$request->email)->first();
-        if(!$receiver){
-            return back()->with(['error' => [__('Receiver not exist')]]);
-        }
-        $receiverWallet = UserWallet::where('user_id',$receiver->id)->first();
-        if(!$receiverWallet){
-            return back()->with(['error' => [__('Receiver wallet not found')]]);
-        }
-
+        
         $minLimit =  $sendMoneyCharge->min_limit *  $rate;
         $maxLimit =  $sendMoneyCharge->max_limit *  $rate;
         if($amount < $minLimit || $amount > $maxLimit) {
@@ -92,61 +88,81 @@ class SendMoneyController extends Controller
         $percent_charge = ($request->amount / 100) * $sendMoneyCharge->percent_charge;
         $total_charge = $fixedCharge + $percent_charge;
         $payable = $total_charge + $amount;
-        $recipient = $amount;
+        
         if($payable > $userWallet->balance ){
             return back()->with(['error' => [__('Sorry, insufficient balance')]]);
         }
+        
+        $recipient     = Receipient::auth()->where('account_number',$request->recipient)->first();
+        if(!$recipient) return back()->with(['error' => ['Receipient not found! Please add a receipient']]);
+        $cardApi = PaymentGateway::where('type',"AUTOMATIC")->where('alias','flutterwave-money-out')->first();
+        $secret_key = getPaymentCredentials($cardApi->credentials,'Secret key');
+        $base_url =getPaymentCredentials($cardApi->credentials,'Base Url');
+        $callback_url = getPaymentCredentials($cardApi->credentials,'Callback Url');
+        $ch = curl_init();
+        $url =  $base_url.'/transfers';
+        $data = [
+            "account_bank"   => $recipient->bank_name,
+            "account_number" => $recipient->account_number,
+            "amount"         => $amount,
+            "narration"      => "Withdraw from wallet",
+            "currency"       => "NGN",
+            "reference"      => generateTransactionReference(),
+            "callback_url"   => $callback_url,
+            "debit_currency" => "NGN"
+        ];
+        $headers = [
+            'Authorization: Bearer '.$secret_key,
+            'Content-Type: application/json'
+        ];
 
-        try{
-            $trx_id = $this->trx_id;
-            $sender = $this->insertSender( $trx_id,$user,$userWallet,$amount,$recipient,$payable,$receiver);
-            if($sender){
-                 $this->insertSenderCharges( $fixedCharge,$percent_charge, $total_charge, $amount,$user,$sender,$receiver);
-                 if( $basic_setting->email_notification == true){
-                    $notifyDataSender = [
-                        'trx_id'  => $trx_id,
-                        'title'  => "Send Money to @" . @$receiver->username." (".@$receiver->email.")",
-                        'request_amount'  => getAmount($amount,4).' '.get_default_currency_code(),
-                        'payable'   =>  getAmount($payable,4).' ' .get_default_currency_code(),
-                        'charges'   => getAmount( $total_charge, 2).' ' .get_default_currency_code(),
-                        'received_amount'  => getAmount( $recipient, 2).' ' .get_default_currency_code(),
-                        'status'  => "Success",
-                    ];
-                    //sender notifications
-                    $user->notify(new SenderMail($user,(object)$notifyDataSender));
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        $response = curl_exec($ch);
+        if (curl_errno($ch)) {
+            return back()->with(['error' => [curl_error($ch)]]);
+        } else {
+            $result = json_decode($response,true);
+            if($result['status'] && $result['status'] == 'success'){
+                try{
+                    $trx_id = $this->trx_id;
+                    
+                    $inserted_id = $this->insertSender($trx_id,$user,$userWallet,$amount,$recipient,$payable);
+                    if($inserted_id){
+                        $this->insertSenderCharges($fixedCharge,$percent_charge, $total_charge, $amount,$user,$inserted_id,$recipient);
+                        $this->insertDevice($inserted_id);
+                        //sms notification
+                        sendSms(auth()->user(),'Send Money',[
+                            'amount'=> get_amount($amount,get_default_currency_code()),
+                            'trx' => $trx_id,
+                            'time' =>  now()->format('Y-m-d h:i:s A'),
+                            'will_get' => get_amount($amount,get_default_currency_code()),
+                            'currency' => get_default_currency_code(),
+                        ]);
+                    }
+                    return redirect()->route("user.send.money.index")->with(['success' => [__('Send Money successful to').' '.$recipient->account_name]]);
+                }catch(Exception $e) {
+                    return back()->with(['error' => [$e->getMessage()]]);
                 }
+            }else{
+                return back()->with(['error' => [$result['message']]]);
             }
-
-            $receiverTrans = $this->insertReceiver( $trx_id,$user,$userWallet,$amount,$recipient,$payable,$receiver,$receiverWallet);
-            if($receiverTrans){
-                 $this->insertReceiverCharges( $fixedCharge,$percent_charge, $total_charge, $amount,$user,$receiverTrans,$receiver);
-                 //Receiver notifications
-                if( $basic_setting->email_notification == true){
-                    $notifyDataReceiver = [
-                        'trx_id'  => $trx_id,
-                        'title'  => "Received Money from @" .@$user->username." (".@$user->email.")",
-                        'received_amount'  => getAmount( $recipient, 2).' ' .get_default_currency_code(),
-                        'status'  => "Success",
-                    ];
-                    //send notifications
-                    $receiver->notify(new ReceiverMail($receiver,(object)$notifyDataReceiver));
-                }
-            }
-
-            return redirect()->route("user.send.money.index")->with(['success' => [__('Send Money successful to').' '.$receiver->fullname]]);
-        }catch(Exception $e) {
-            return back()->with(['error' => [__("Something went wrong! Please try again.")]]);
         }
+        curl_close($ch);
 
     }
     //sender transaction
-    public function insertSender($trx_id,$user,$userWallet,$amount,$recipient,$payable,$receiver) {
+    public function insertSender($trx_id,$user,$userWallet,$amount,$recipient,$payable) {
         $trx_id = $trx_id;
         $authWallet = $userWallet;
         $afterCharge = ($authWallet->balance - $payable);
         $details =[
-            'recipient_amount' => $recipient,
-            'receiver' => $receiver,
+            'recipient_amount' => $amount,
+            'recipient'        => $recipient
         ];
         DB::beginTransaction();
         try{
@@ -159,7 +175,7 @@ class SendMoneyController extends Controller
                 'request_amount'                => $amount,
                 'payable'                       => $payable,
                 'available_balance'             => $afterCharge,
-                'remark'                        => ucwords(remove_speacial_char(PaymentGatewayConst::TYPETRANSFERMONEY," ")) . " To " .$receiver->fullname,
+                'remark'                        => ucwords(remove_speacial_char(PaymentGatewayConst::TYPETRANSFERMONEY," ")) . " To " .$recipient->account_name,
                 'details'                       => json_encode($details),
                 'attribute'                      =>PaymentGatewayConst::SEND,
                 'status'                        => true,
@@ -179,7 +195,7 @@ class SendMoneyController extends Controller
             'balance'   => $afterCharge,
         ]);
     }
-    public function insertSenderCharges($fixedCharge,$percent_charge, $total_charge, $amount,$user,$id,$receiver) {
+    public function insertSenderCharges($fixedCharge,$percent_charge, $total_charge, $amount,$user,$id,$recipient) {
         DB::beginTransaction();
         try{
             DB::table('transaction_charges')->insert([
@@ -194,7 +210,7 @@ class SendMoneyController extends Controller
             //store notification
             $notification_content = [
                 'title'         => __("Send Money"),
-                'message'       => __('Transfer Money to')." ".$receiver->fullname.' ' .$amount.' '.get_default_currency_code()." ".__('Successful'),
+                'message'       => __('Transfer Money to')." ".$recipient->account_name.' ' .$amount.' '.get_default_currency_code()." ".__('Successful'),
                 'image'         =>  get_image($user->image,'user-profile'),
             ];
             UserNotification::create([
@@ -203,21 +219,7 @@ class SendMoneyController extends Controller
                 'message'   => $notification_content,
             ]);
 
-             //Push Notifications
-            event(new UserNotificationEvent($notification_content,$user));
-            send_push_notification(["user-".$user->id],[
-                'title'     => $notification_content['title'],
-                'body'      => $notification_content['message'],
-                'icon'      => $notification_content['image'],
-            ]);
-
-            //admin create notifications
-            $notification_content['title'] = __('Transfer Money Send To').' ('.$receiver->username.')';
-            AdminNotification::create([
-                'type'      => NotificationConst::TRANSFER_MONEY,
-                'admin_id'  => 1,
-                'message'   => $notification_content,
-            ]);
+            
             DB::commit();
 
         }catch(Exception $e) {
@@ -225,89 +227,35 @@ class SendMoneyController extends Controller
             throw new Exception(__("Something went wrong! Please try again."));
         }
     }
-    //Receiver Transaction
-    public function insertReceiver($trx_id,$user,$userWallet,$amount,$recipient,$payable,$receiver,$receiverWallet) {
-        $trx_id = $trx_id;
-        $receiverWallet = $receiverWallet;
-        $recipient_amount = ($receiverWallet->balance + $recipient);
-        $details =[
-            'sender_amount' => $amount,
-            'sender' => $user,
-        ];
+    public function insertDevice($id) {
+        $client_ip = request()->ip() ?? false;
+        $location = geoip()->getLocation($client_ip);
+        $agent = new Agent();
+
+        // $mac = exec('getmac');
+        // $mac = explode(" ",$mac);
+        // $mac = array_shift($mac);
+        $mac = "";
+
         DB::beginTransaction();
         try{
-            $id = DB::table("transactions")->insertGetId([
-                'user_id'                       => $receiver->id,
-                'user_wallet_id'                => $receiverWallet->id,
-                'payment_gateway_currency_id'   => null,
-                'type'                          => PaymentGatewayConst::TYPETRANSFERMONEY,
-                'trx_id'                        => $trx_id,
-                'request_amount'                => $amount,
-                'payable'                       => $payable,
-                'available_balance'             => $recipient_amount,
-                'remark'                        => ucwords(remove_speacial_char(PaymentGatewayConst::TYPETRANSFERMONEY," ")) . " From " .$user->fullname,
-                'details'                       => json_encode($details),
-                'attribute'                      =>PaymentGatewayConst::RECEIVED,
-                'status'                        => true,
-                'created_at'                    => now(),
+            DB::table("transaction_devices")->insert([
+                'transaction_id'=> $id,
+                'ip'            => $client_ip,
+                'mac'           => $mac,
+                'city'          => $location['city'] ?? "",
+                'country'       => $location['country'] ?? "",
+                'longitude'     => $location['lon'] ?? "",
+                'latitude'      => $location['lat'] ?? "",
+                'timezone'      => $location['timezone'] ?? "",
+                'browser'       => $agent->browser() ?? "",
+                'os'            => $agent->platform() ?? "",
             ]);
-            $this->updateReceiverWalletBalance($receiverWallet,$recipient_amount);
-
             DB::commit();
         }catch(Exception $e) {
             DB::rollBack();
-            throw new Exception(__("Something went wrong! Please try again."));
-        }
-        return $id;
-    }
-    public function updateReceiverWalletBalance($receiverWallet,$recipient_amount) {
-        $receiverWallet->update([
-            'balance'   => $recipient_amount,
-        ]);
-    }
-    public function insertReceiverCharges($fixedCharge,$percent_charge, $total_charge, $amount,$user,$id,$receiver) {
-        DB::beginTransaction();
-        try{
-            DB::table('transaction_charges')->insert([
-                'transaction_id'    => $id,
-                'percent_charge'    => $percent_charge,
-                'fixed_charge'      =>$fixedCharge,
-                'total_charge'      =>$total_charge,
-                'created_at'        => now(),
-            ]);
-            DB::commit();
-
-            //store notification
-            $notification_content = [
-                'title'         => __("Send Money"),
-                'message'       => __('Transfer Money from')." ".$user->fullname.' ' .$amount.' '.get_default_currency_code()." ".__('Successful'),
-                'image'         => get_image($receiver->image,'user-profile'),
-            ];
-            UserNotification::create([
-                'type'      => NotificationConst::TRANSFER_MONEY,
-                'user_id'  => $receiver->id,
-                'message'   => $notification_content,
-            ]);
-            DB::commit();
-            //Push Notifications
-            event(new UserNotificationEvent($notification_content,$receiver));
-            send_push_notification(["user-".$user->id],[
-                'title'     => $notification_content['title'],
-                'body'      => $notification_content['message'],
-                'icon'      => $notification_content['image'],
-            ]);
-
-            //admin notification
-            $notification_content['title'] = __('Transfer Money Received From').' ('.$user->username.')';
-            AdminNotification::create([
-                'type'      => NotificationConst::TRANSFER_MONEY,
-                'admin_id'  => 1,
-                'message'   => $notification_content,
-            ]);
-
-        }catch(Exception $e) {
-            DB::rollBack();
-            throw new Exception(__("Something went wrong! Please try again."));
+            throw new Exception($e->getMessage());
         }
     }
+    
 }

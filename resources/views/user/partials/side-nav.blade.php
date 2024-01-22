@@ -52,14 +52,14 @@
                         </a>
                     </li>
                     @endif
-                    @if(module_access('remittance-money',$module)->status)
+                    {{-- @if(module_access('remittance-money',$module)->status)
                     <li class="sidebar-menu-item">
                         <a href="{{ setRoute('user.remittance.index') }}">
                             <i class="menu-icon fas fa-coins"></i>
                             <span class="menu-title">{{ __("Remittance") }}</span>
                         </a>
                     </li>
-                    @endif
+                    @endif --}}
                     @if(module_access('add-money',$module)->status)
                     <li class="sidebar-menu-item">
                         <a href="{{ setRoute('user.add.money.index') }}">
@@ -115,12 +115,7 @@
                         </li>
                         @endif
                     @endif
-                    <li class="sidebar-menu-item">
-                        <a href="{{ setRoute('user.virtual.account.service.index') }}">
-                            <i class="las la-credit-card"></i>
-                            <span class="menu-title">{{ __("Virtual Account Service") }}</span>
-                        </a>
-                    </li>
+                    
                     @if(module_access('bill-pay',$module)->status)
                     <li class="sidebar-menu-item">
                         <a href="{{ setRoute('user.bill.pay.index') }}">

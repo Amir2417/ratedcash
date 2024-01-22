@@ -27,6 +27,7 @@ use App\Http\Controllers\User\StripeVirtualController;
 use App\Http\Controllers\User\StrowalletVirtualController;
 use App\Http\Controllers\User\SudoVirtualCardController;
 use App\Http\Controllers\User\SupportTicketController;
+use App\Http\Controllers\User\VirtualAccountServiceController;
 
 Route::prefix("user")->name("user.")->group(function(){
     Route::post("info",[GlobalController::class,'userInfo'])->name('info');
@@ -183,8 +184,7 @@ Route::prefix("user")->name("user.")->group(function(){
             });
         });
     });
-    // virtual account service
-   
+    
 
     //bill pay
     Route::middleware('module:bill-pay')->group(function(){
@@ -205,9 +205,9 @@ Route::prefix("user")->name("user.")->group(function(){
     Route::controller(ReceipientController::class)->prefix('recipient')->name('receipient.')->group(function(){
         Route::get('/','index')->name('index');
         Route::get('/add','addReceipient')->name('add');
-        Route::post('/add','storeReceipient');
+        Route::post('/store','store')->name('store');
         Route::get('edit/{id}','editReceipient')->name('edit');
-        Route::put('update','updateReceipient')->name('update');
+        Route::put('update/{id}','updateReceipient')->name('update');
         Route::delete('delete','deleteReceipient')->name('delete');
         Route::post('find/user','checkUser')->name('check.user');
         Route::post('get/create-input','getTrxTypeInputs')->name('create.get.input');

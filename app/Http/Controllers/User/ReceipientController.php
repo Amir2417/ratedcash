@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Constants\GlobalConst;
 use Exception;
 use App\Models\User;
 use App\Models\Receipient;
@@ -10,16 +9,19 @@ use App\Models\UserWallet;
 use App\Models\Transaction;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Constants\GlobalConst;
 use App\Http\Helpers\Response;
 use App\Models\Admin\Currency;
 use App\Models\RemitanceCashPickup;
 use App\Http\Controllers\Controller;
 use App\Models\Admin\ReceiverCounty;
 use App\Models\RemitanceBankDeposit;
+use Illuminate\Support\Facades\Auth;
 use App\Constants\PaymentGatewayConst;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Admin\PaymentGatewayCurrency;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\ValidationException;
 
 class ReceipientController extends Controller
 {
@@ -35,13 +37,14 @@ class ReceipientController extends Controller
         }else{
             $receipients = Receipient::auth()->orderByDesc("id")->paginate(12);
         }
+        
 
         return view('user.sections.receipient.index',compact('page_title','receipients','token'));
     }
     public function addReceipient(){
         $page_title = __("Add Recipient");
         $receiverCountries = ReceiverCounty::active()->get();
-        $banks = RemitanceBankDeposit::active()->latest()->get();
+        $banks = getFlutterwaveBanks("NG");
         $cashPickups = RemitanceCashPickup::active()->latest()->get();
         return view('user.sections.receipient.add',compact('page_title','receiverCountries','banks','cashPickups'));
     }
@@ -67,184 +70,85 @@ class ReceipientController extends Controller
 
     }
 
-    public function storeReceipient(Request $request){
-        $user = auth()->user();
-        if($request->transaction_type == 'bank-transfer') {
-            $bankRules = 'required|string';
-        }else {
-            $bankRules = 'nullable|string';
-        }
-
-        if($request->transaction_type == 'cash-pickup') {
-            $cashPickupRules = "required|string";
-        }else {
-            $cashPickupRules = "nullable";
-        }
-        $request->validate([
-            'transaction_type'              =>'required|string',
-            'country'                      =>'required',
-            'firstname'                      =>'required|string',
-            'lastname'                      =>'required|string',
-            'email'                      =>"required|email",
-            'mobile'                      =>"required",
-            'mobile_code'                      =>'required',
-            'city'                      =>'required|string',
-            'address'                      =>'required|string',
-            'state'                      =>'required|string',
-            'zip'                      =>'required|string',
-            'bank'                      => $bankRules,
-            'cash_pickup'               => $cashPickupRules,
-
+    public function store(Request $request){
+        
+        $validator = Validator::make($request->all(), [
+            'bank_name' => 'required',
+            'account_number' => 'required|unique:receipients,account_number',
         ]);
-            $checkMobile = Receipient::where('user_id',$user->id)->where('email',$request->email)->first();
-            if($checkMobile){
-                return back()->with(['error' => [__('This recipient  already exist.')]]);
-            }
 
-            $country = ReceiverCounty::where('id',$request->country)->first();
-            if(!$country){
-                return back()->with(['error' => [__('Please select a valid country')]]);
-            }
-            $countryId = $country->id;
-
-        if($request->transaction_type == 'bank-transfer') {
-            $alias  = $request->bank;
-            $details = RemitanceBankDeposit::where('alias',$alias)->first();
-            if( !$details){
-                return back()->with(['error' => [__('Please select a valid bank')]]);
-            }
-        }elseif($request->transaction_type == 'cash-pickup'){
-            $alias  = $request->cash_pickup;
-            $details = RemitanceCashPickup::where('alias',$alias)->first();
-            if( !$details){
-                return back()->with(['error' => [__('Please select a valid cash pickup')]]);
-            }
-        }elseif($request->transaction_type == "wallet-to-wallet-transfer"){
-            $receiver = User::where('email',$request->email)->first();
-            if( !$receiver){
-                return back()->with(['error' => [__('User not found')]]);
-            }
-            $details = $receiver;
-            $alias  = $request->transaction_type;
-
+        if($validator->fails()){
+            return back()->withErrors($validator)->withInput($request->all());
         }
+        
+        $validated = $validator->validated();
+        
+        $bank_info = explode('|', $validated['bank_name']);
 
-        $in['user_id'] =  $user->id;
-        $in['country'] =   $countryId;
-        $in['type'] = $request->transaction_type;
-        $in['alias'] =   $alias;
-        $in['firstname'] = $request->firstname;
-        $in['lastname'] = $request->lastname;
-        $in['state'] = $request->state;
-        $in['email'] = $request->email;
-        $in['mobile_code'] = remove_speacial_char($request->mobile_code);
-        $in['mobile'] = remove_speacial_char($request->mobile_code) == "880"?(int)$request->mobile:$request->mobile ;
-        $in['city'] = $request->city;
-        $in['address'] = $request->address;
-        $in['zip_code'] = $request->zip;
-        $in['details'] = json_encode($details);
         try{
-            Receipient::create($in);
-            return redirect()->route('user.receipient.index')->with(['success' => [__('Receipient save successfully')]]);
+            $exist['data'] = checkBankAccount($validated['account_number'],$validated['bank_name']);
+           
+            if($exist['data']['status'] == 'success'){
+                $validated['user_id']        = Auth::id();
+                $validated['bank_name']      = $bank_info[1];
+                $validated['bank_code']      = $bank_info[0];
+                $validated['account_name']   = $exist['data']['data']['account_name'];
+                $validated['account_number'] = $exist['data']['data']['account_number'];
+                Receipient::create($validated);
+            }else{
+                $message    = $exist['data']['message'];
+                return back()->with(['error' => [$message]]);
+            }
         }catch(Exception $e) {
-            return back()->with(['error' => [__("Something went wrong! Please try again.")]]);
+            return back()->with(['error' => [$e->getMessage()]]);
         }
-
+        return redirect()->route('user.receipient.index')->with(['success' => ['Recipient Created Successful!']]);
     }
     public function editReceipient($id){
-        $page_title = __("Edit Recipient");
-        $countries = ReceiverCounty::active()->get();
-        $banks = RemitanceBankDeposit::active()->latest()->get();
-        $pickup_points = RemitanceCashPickup::active()->latest()->get();
-        $data =  Receipient::auth()->with('user','receiver_country')->where('id',$id)->first();
+        $page_title     = __("Edit Recipient");
+        $countries      = ReceiverCounty::active()->get();
+        $banks          = getFlutterwaveBanks("NG");
+        $pickup_points  = RemitanceCashPickup::active()->latest()->get();
+        $data           = Receipient::auth()->where('id',$id)->first();
 
         if( !$data){
             return back()->with(['error' => [__('Invalid request')]]);
         }
         return view('user.sections.receipient.edit',compact('page_title','countries','banks','pickup_points','data'));
     }
-    public function updateReceipient(Request $request){
-        $user = auth()->user();
-        $data =  Receipient::auth()->with('user','receiver_country')->where('id',$request->id)->first();
-        if($request->transaction_type == 'bank-transfer') {
-            $bankRules = 'required|string';
-        }else {
-            $bankRules = 'nullable|string';
-        }
-
-        if($request->transaction_type == 'cash-pickup') {
-            $cashPickupRules = "required|string";
-        }else {
-            $cashPickupRules = "nullable";
-        }
-        $request->validate([
-        'transaction_type'              =>'required|string',
-        'country'                      =>'required',
-        'firstname'                      =>'required|string',
-        'lastname'                      =>'required|string',
-        'email'                      =>"required|email",
-        'mobile'                      =>"required",
-        'mobile_code'                      =>'required',
-        'city'                      =>'required|string',
-        'address'                      =>'required|string',
-        'state'                      =>'required|string',
-        'zip'                      =>'required|string',
-        'bank'                      => $bankRules,
-        'cash_pickup'               => $cashPickupRules,
-
+    public function updateReceipient(Request $request,$id){
+        $data           = Receipient::auth()->where('id',$id)->first();
+        $validator = Validator::make($request->all(), [
+            'bank_name' => 'required',
+            'account_number' => 'required|unique:receipients,account_number',
         ]);
-        $checkMobile = Receipient::where('id','!=',$data->id)->where('user_id',$user->id)->where('email',$request->email)->first();
-        if($checkMobile){
-            return back()->with(['error' => [__('This recipient  already exist.')]]);
-        }
 
-        $country = ReceiverCounty::where('id',$request->country)->first();
-        if(!$country){
-            return back()->with(['error' => [__('Please select a valid country')]]);
+        if($validator->fails()){
+            return back()->withErrors($validator)->withInput($request->all());
         }
-        $countryId = $country->id;
-        if($request->transaction_type == 'bank-transfer') {
-            $alias  = $request->bank;
-            $details = RemitanceBankDeposit::where('alias',$alias)->first();
-            if( !$details){
-                return back()->with(['error' => [__('Please select a valid bank')]]);
-            }
-        }elseif($request->transaction_type == 'cash-pickup'){
-            $alias  = $request->cash_pickup;
-            $details = RemitanceCashPickup::where('alias',$alias)->first();
-            if( !$details){
-                return back()->with(['error' => [__('Please select a valid cash pickup')]]);
-            }
-        }elseif($request->transaction_type == "wallet-to-wallet-transfer"){
-            $receiver = User::where('email',$request->email)->first();
-            if( !$receiver){
-                return back()->with(['error' => [__('User not found')]]);
-            }
-            $details = $receiver;
-            $alias  = $request->transaction_type;
+        
+        $validated = $validator->validated();
+        
+        $bank_info = explode('|', $validated['bank_name']);
 
-        }
-
-        $in['user_id'] =  $user->id;
-        $in['country'] =   $countryId;
-        $in['type'] = $request->transaction_type;
-        $in['alias'] =   $alias;
-        $in['firstname'] = $request->firstname;
-        $in['lastname'] = $request->lastname;
-        $in['state'] = $request->state;
-        $in['email'] = $request->email;
-        $in['mobile_code'] = remove_speacial_char($request->mobile_code);
-        $in['mobile'] = remove_speacial_char($request->mobile_code) == "880"?(int)$request->mobile:$request->mobile ;
-        $in['city'] = $request->city;
-        $in['address'] = $request->address;
-        $in['zip_code'] = $request->zip;
-        $in['details'] = json_encode($details);
         try{
-            $data->fill($in)->save();
-            return redirect()->route('user.receipient.index')->with(['success' => [__('Receipient updated successfully')]]);
+            $exist['data'] = checkBankAccount($validated['account_number'],$validated['bank_name']);
+           
+            if($exist['data']['status'] == 'success'){
+                $validated['user_id']        = Auth::id();
+                $validated['bank_name']      = $bank_info[1];
+                $validated['bank_code']      = $bank_info[0];
+                $validated['account_name']   = $exist['data']['data']['account_name'];
+                $validated['account_number'] = $exist['data']['data']['account_number'];
+                $data->update($validated);
+            }else{
+                $message    = $exist['data']['message'];
+                return back()->with(['error' => [$message]]);
+            }
         }catch(Exception $e) {
-            return back()->with(['error' => [__("Something went wrong! Please try again.")]]);
+            return back()->with(['error' => [$e->getMessage()]]);
         }
+        return redirect()->route('user.receipient.index')->with(['success' => ['Recipient Created Successful!']]);
 
     }
     public function deleteReceipient(Request $request) {

@@ -1876,6 +1876,7 @@ function getFlutterwaveBanks($iso2){
     $response = curl_exec($curl);
     curl_close($curl);
     $banks = json_decode($response,true);
+   
     return $banks['data'];
 }
 function checkBankAccount($account_number,$bank_code){
@@ -1900,6 +1901,7 @@ function checkBankAccount($account_number,$bank_code){
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
     $response = curl_exec($ch);
+    
     if (curl_errno($ch)) {
         return curl_errno($ch);
     } else {

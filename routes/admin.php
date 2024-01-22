@@ -85,11 +85,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('api/update', 'cardApiUpdate')->name('api.update');
     });
 
-    // virtual account service
-    Route::controller(VirtualAccountServiceController::class)->prefix('virtual-account-service')->name('virtual.account.service.')->group(function(){
-        Route::get('index','index')->name('index');
-        Route::put('update','update')->name('update');
-    });
+   
 
     //PayLink Link Api
     Route::controller(GatewayApiController::class)->prefix('gateway-api')->name('gateway.api.')->group(function () {

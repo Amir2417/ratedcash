@@ -162,16 +162,18 @@ class AuthorizationController extends Controller
     //========================before registration======================================
     public function checkExist(Request $request){
         $validator = Validator::make($request->all(), [
-            'email'     => 'required|email',
+            'mobile_code'     => 'required',
+            'mobile'     => 'required',
         ]);
         if($validator->fails()){
             $error =  ['error'=>$validator->errors()->all()];
             return Helpers::validation($error);
         }
-        $column = "email";
-        if(check_email($request->email)) $column = "email";
-        $user = User::where($column,$request->email)->first();
-        if($user){
+        $full_mobile = remove_speacial_char($request->mobile_code).remove_speacial_char((int) $request->mobile);
+
+        $column = "mobile";
+
+        if(mobileUniqueCheck((int) $request->mobile) == false){
             $error = ['error'=>[__('User already exist, please select another email address')]];
             return Helpers::validation($error);
         }

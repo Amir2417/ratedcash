@@ -38,16 +38,13 @@
                                     </div>
                                 </div>
                                 <div class="col-xxl-6 col-xl-12 col-lg-6 form-group paste-wrapper">
-                                    <label>{{ __("Email Address") }} ({{ __("User") }})<span class="text--base">*</span></label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text copytext">{{ __("Email") }}</span>
-                                        </div>
-                                        <input type="email" name="email" class="form--control checkUser" id="username" placeholder="Enter Email" value="{{ old('email') }}" />
-                                    </div>
-                                    <button type="button" class="paste-badge scan"  data-toggle="tooltip" title="Scan QR"><i class="fas fa-camera"></i></button>
-                                    <label class="exist text-start"></label>
-
+                                    <label for="recipient">{{ __("Select Receipient") }} <span class="text-danger">*</span></label>
+                                    <select name="recipient" class="form--control select2-auto-tokenize" id="receipent_select" required data-placeholder="Select Receipient" >
+                                        <option disabled selected value="">{{ __("Select Receipient") }}</option>
+                                        @foreach ($receipients ?? [] as $data)
+                                            <option value="{{ $data->account_number }}">{{ $data->bank_name }}({{ $data->account_name }}-{{ $data->account_number }})</option>
+                                        @endforeach
+                                    </select>
                                 </div>
 
                                 <div class="col-xxl-6 col-xl-12 col-lg-6 form-group">

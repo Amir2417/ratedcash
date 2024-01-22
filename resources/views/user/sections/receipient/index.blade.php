@@ -32,20 +32,15 @@
                                 <i class="las la-arrow-up"></i>
                             </div>
                             <div class="dashboard-list-user-content">
-                                <h4 class="title">{{ @$data->fullname }} @if($data->type == "wallet-to-wallet-transfer")
-                                    <span class="text-success">( {{@$basic_settings->site_name}} {{__("Wallet")}} )</span>
-                                    @else
-                                    <span class="text-success">( {{ ucwords(str_replace('-', ' ', @$data->type))}} )</span>
-
-                                @endif </h4>
-                                <span class="sub-title text--warning">{{ @$data->email }}</span>
-
+                                <h4 class="title">{{ @$data->bank_name }}
+                                    <span class="text-success">( {{@$data->account_name}} )</span></h4>
+                                    <span class="sub-title text--warning">{{ @$data->account_number }}</span>
                             </div>
                         </div>
                     </div>
                     <div class="dashboard-list-right">
                         <div class="dashboard-list-right-btn-area">
-                            <a href="{{ setRoute('user.receipient.send.remittance',$data->id) }}" class="btn--base"><i class="fas fa-paper-plane"></i></a>
+                            {{-- <a href="{{ setRoute('user.receipient.send.remittance',$data->id) }}" class="btn--base"><i class="fas fa-paper-plane"></i></a> --}}
                             <a href="{{ setRoute('user.receipient.edit',$data->id) }}" class="btn--base"><i class="fas fa-edit"></i></a>
                             <button type="button" class="btn--base delete-btn " data-id="{{ $data->id }}" data-name="{{ $data->fullname }}"><i class="fas fa-trash"></i></button>
                         </div>
