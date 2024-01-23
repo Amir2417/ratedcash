@@ -27,6 +27,7 @@ use App\Models\Admin\SetupKyc;
 use App\Providers\Admin\BasicSettingsProvider;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -77,12 +78,12 @@ Route::controller(AddMoneyController::class)->prefix("add-money")->group(functio
 });
 
 Route::prefix('user')->group(function(){
-    //email verify before register
+    //Mobile verify before register
     Route::prefix('register')->group(function(){
         Route::post('check/exist',[AuthorizationController::class,'checkExist']);
-        Route::post('send/otp', [AuthorizationController::class,'sendEmailOtp']);
-        Route::post('verify/otp',[AuthorizationController::class,"verifyEmailOtp"]);
-        Route::post('resend/otp',[AuthorizationController::class,"resendEmailOtp"]);
+        Route::post('send/otp', [AuthorizationController::class,'sendMobileOtp']);
+        Route::post('verify/otp',[AuthorizationController::class,"verifyMobileOtp"]);
+        Route::post('resend/otp',[AuthorizationController::class,"resendMobileOtp"]);
     });
 
     Route::post('register',[LoginController::class,'register']);
@@ -96,11 +97,14 @@ Route::prefix('user')->group(function(){
     });
     //account re-verifications
     Route::middleware(['auth.api'])->group(function(){
-          Route::post('send-code', [AuthorizationController::class,'sendMailCode']);
-          Route::post('email-verify', [AuthorizationController::class,'mailVerify']);
+        Route::post('send-code', [AuthorizationController::class,'sendSmsCode']);
+        Route::post('mobiile-verify', [AuthorizationController::class,'smsVerify']);
+        Route::post('pin-setup', [AuthorizationController::class,'sendVerifyPin']);
+        Route::post('pin-verify', [AuthorizationController::class,'checkPin']);
     });
 
     Route::middleware(['auth.api','verification.guard.api'])->group(function(){
+        
         Route::get('logout', [LoginController::class,'logout']);
         Route::get('kyc', [AuthorizationController::class,'showKycFrom']);
         Route::post('kyc/submit', [AuthorizationController::class,'kycSubmit']);

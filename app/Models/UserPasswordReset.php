@@ -11,6 +11,11 @@ class UserPasswordReset extends Model
     protected $guarded = [
         'id',
     ];
+    protected $casts    = [
+        'id'            => 'integer',
+        'mobile'        => 'string',
+        
+    ];
     public function user() {
         return $this->belongsTo(User::class)->select('id','username','email','firstname','lastname');
     }

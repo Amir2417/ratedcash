@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('user_password_resets', function (Blueprint $table) {
             $table->id();
-            $table->string('email')->nullable();
+            $table->string('mobile')->nullable();
             $table->unsignedBigInteger('code')->nullable()->unique();
             $table->string('token')->unique();
             $table->unsignedBigInteger('user_id')->nullable();

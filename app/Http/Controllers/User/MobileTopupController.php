@@ -22,12 +22,11 @@ use App\Events\User\NotificationEvent as UserNotificationEvent;
 class MobileTopupController extends Controller
 {
     public function index() {
-        $page_title = __("Mobile Topup");
-        $topupCharge = TransactionSetting::where('slug','mobile_topup')->where('status',1)->first();
-        $topupType = getBillPayCategories('airtime');
+        $page_title     = __("Mobile Topup");
+        $topupCharge    = TransactionSetting::where('slug','mobile_topup')->where('status',1)->first();
+        $topupType      = getBillPayCategories('airtime');
+        $transactions   = Transaction::auth()->mobileTopup()->latest()->take(10)->get();
         
-        // $topupType = TopupCategory::active()->orderByDesc('id')->get();
-        $transactions = Transaction::auth()->mobileTopup()->latest()->take(10)->get();
         return view('user.sections.mobile-top.index',compact("page_title",'topupCharge','transactions','topupType'));
     }
     public function payConfirm(Request $request){
@@ -52,7 +51,6 @@ class MobileTopupController extends Controller
         $amount         = $request->amount;
         $topup_type     = $request->topup_type;
         $mobile_number  = $request->mobile_number;
-        $user           = auth()->user();
         $topupCharge    = TransactionSetting::where('slug','mobile_topup')->where('status',1)->first();
         $userWallet     = UserWallet::where('user_id',$user->id)->first();
         if(!$userWallet){
@@ -70,7 +68,7 @@ class MobileTopupController extends Controller
         }
         //charge calculations
         $fixedCharge = $topupCharge->fixed_charge *  $rate;
-        $percent_charge = ($request->amount / 100) * $topupCharge->percent_charge;
+        $percent_charge = ($amount / 100) * $topupCharge->percent_charge;
         $total_charge = $fixedCharge + $percent_charge;
         $payable = $total_charge + $amount;
         if($payable > $userWallet->balance ){
@@ -78,7 +76,6 @@ class MobileTopupController extends Controller
         }
         try{
             $trx_id = 'MP'.getTrxNum();
-            $user = auth()->user();
             $mobileTopUp = payBill($topup_type,$mobile_number,$amount);
             
             if($mobileTopUp['status'] == 'success'){
@@ -170,12 +167,7 @@ class MobileTopupController extends Controller
                 'message'   => $notification_content,
             ]);
 
-            event(new UserNotificationEvent($notification_content,$user));
-            send_push_notification(["user-".$user->id],[
-                'title'     => $notification_content['title'],
-                'body'      => $notification_content['message'],
-                'icon'      => $notification_content['image'],
-            ]);
+            
 
            //admin notification
            $notification_content['title'] = __("Mobile topup request send to admin successful")." ".$amount.' '.get_default_currency_code().' '.__("Successful").' ('.$user->username.')';

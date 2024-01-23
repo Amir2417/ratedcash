@@ -36,7 +36,7 @@ class LoginController extends Controller
     }
     public function login(Request $request){
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email|max:50',
+            'mobile' => 'required|max:50',
             'password' => 'required|min:6',
         ]);
 
@@ -45,7 +45,7 @@ class LoginController extends Controller
             return ApiHelpers::validation($error);
         }
 
-        $user = User::where('email',$request->email)->first();
+        $user = User::where('mobile', (int)$request->mobile)->orWhere('full_mobile',$request->mobile)->first();
         if(!$user){
             $error = ['error'=>[__("User doesn't exists.")]];
             return ApiHelpers::validation($error);
@@ -150,6 +150,7 @@ class LoginController extends Controller
             'state' => isset($data['state']) ? $data['state'] : '',
         ];
         $user->status = 1;
+        $user->pin_status = 0;
         $user->email_verified = true;
         $user->sms_verified =  ($basic_settings->sms_verification == true) ? true : true;
         $user->kyc_verified =  ($basic_settings->kyc_verification == true) ? false : true;

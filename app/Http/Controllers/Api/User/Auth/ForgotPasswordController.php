@@ -20,15 +20,17 @@ class ForgotPasswordController extends Controller
     public function sendCode(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email'   => "required|email|max:100",
+            'mobile_code'     => 'required',
+            'mobile'     => 'required',
         ]);
         if($validator->fails()){
             $error =  ['error'=>$validator->errors()->all()];
             return Helpers::validation($error);
         }
-        $column = "email";
-        if(check_email($request->email)) $column = "email";
-        $user = User::where($column,$request->email)->first();
+        $full_mobile = remove_speacial_char($request->mobile_code).remove_speacial_char($request->mobile);
+        $column = "mobile";
+        $user = User::where($column,$request->mobile)->where('full_mobile',$full_mobile)->first();
+
         if(!$user) {
             $error = ['error'=>[__("User doesn't exists.")]];
             return Helpers::error($error);
@@ -40,34 +42,40 @@ class ForgotPasswordController extends Controller
             UserPasswordReset::where("user_id",$user->id)->delete();
             $password_reset = UserPasswordReset::create([
                 'user_id'       => $user->id,
-                'email'         => $request->email,
-                'token'         => $token,
+                'mobile'        => $full_mobile,
                 'code'          => $code,
+                'token'         => $token,
+                'created_at'    => now(),
             ]);
-            $user->notify(new PasswordResetEmail($user,$password_reset));
+            sendSms($user, 'PASS_RESET_CODE', [
+                'code' => $code
+            ]);
         }catch(Exception $e) {
             $error = ['error'=>[__('Something went wrong! Please try again.')]];
             return Helpers::error($error);
         }
 
-        $message =  ['success'=>[__('Verification code sended to your email address.')]];
+        $message =  ['success'=>[__('Verification code sent to your phone')]];
         return Helpers::onlysuccess($message);
     }
 
     public function verifyCode(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
+            'mobile_code'     => 'required',
+            'mobile'     => 'required',
             'code' => 'required|numeric',
         ]);
         if($validator->fails()){
             $error =  ['error'=>$validator->errors()->all()];
             return Helpers::validation($error);
         }
+        $validated = $validator->validate();
+        $full_mobile = remove_speacial_char($validated['mobile_code']).remove_speacial_char($validated['mobile']);
         $code = $request->code;
         $basic_settings = BasicSettingsProvider::get();
         $otp_exp_seconds = $basic_settings->otp_exp_seconds ?? 0;
-        $password_reset = UserPasswordReset::where("code", $code)->where('email',$request->email)->first();
+        $password_reset = UserPasswordReset::where("mobile",$full_mobile)->where("code", $code)->first();
         if(!$password_reset) {
             $error = ['error'=>[__('Verification Otp is Invalid')]];
             return Helpers::error($error);
@@ -93,16 +101,18 @@ class ForgotPasswordController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'code' => 'required|numeric',
-            'email' => 'required|email',
+            'mobile_code'   => 'required',
+            'mobile'        => 'required',
             'password'      => $passowrd_rule,
         ]);
         if($validator->fails()){
             $error =  ['error'=>$validator->errors()->all()];
             return Helpers::validation($error);
         }
+        $validated = $validator->validate();
+        $full_mobile = remove_speacial_char($validated['mobile_code']).remove_speacial_char($validated['mobile']);
         $code = $request->code;
-        $password_reset = UserPasswordReset::where("code",$code)->where('email',$request->email)->first();
+        $password_reset = UserPasswordReset::where("mobile",$full_mobile)->first();
         if(!$password_reset) {
             $error = ['error'=>[__('Invalid request')]];
             return Helpers::error($error);

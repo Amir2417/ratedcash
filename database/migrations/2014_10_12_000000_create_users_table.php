@@ -35,6 +35,8 @@ return new class extends Migration
             $table->boolean('two_factor_verified')->default(false);
             $table->boolean('two_factor_status')->default(false);
             $table->string('two_factor_secret')->nullable();
+            $table->boolean('pin_status')->default(false);
+            $table->string('pin_code')->nullable();
             $table->string('device_id')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();

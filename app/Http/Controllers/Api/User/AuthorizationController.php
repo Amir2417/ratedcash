@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers\Api\User;
 
-use App\Constants\GlobalConst;
-use App\Http\Controllers\Controller;
-use App\Http\Helpers\Api\Helpers;
-use App\Models\Admin\SetupKyc;
-use App\Models\User;
-use App\Models\UserAuthorization;
-use App\Notifications\User\Auth\SendAuthorizationCode;
-use App\Notifications\User\Auth\SendVerifyCode;
-use App\Providers\Admin\BasicSettingsProvider;
 use Exception;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Constants\GlobalConst;
+use App\Models\Admin\SetupKyc;
 use Illuminate\Support\Carbon;
+use App\Http\Helpers\Api\Helpers;
+use App\Models\UserAuthorization;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use App\Traits\ControlDynamicInputFields;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Notification;
+use App\Providers\Admin\BasicSettingsProvider;
+use Illuminate\Validation\ValidationException;
+use App\Notifications\User\Auth\SendVerifyCode;
+use App\Notifications\User\Auth\SendAuthorizationCode;
 
 class AuthorizationController extends Controller
 {
@@ -29,9 +30,13 @@ class AuthorizationController extends Controller
     {
         $this->basic_settings = BasicSettingsProvider::get();
     }
-    public function sendMailCode()
+    public function sendSmsCode()
     {
         $user = auth()->user();
+        if($user->sms_verified == true){
+            $error = ['error'=>[__("Your Account Already Verified.")]];
+            return Helpers::error($error);
+        }
         $resend = UserAuthorization::where("user_id",$user->id)->first();
         if( $resend){
             if(Carbon::now() <= $resend->created_at->addMinutes(GlobalConst::USER_VERIFY_RESEND_TIME_MINUTE)) {
@@ -39,10 +44,11 @@ class AuthorizationController extends Controller
                 return Helpers::error($error);
             }
         }
-
+        $code =  generate_random_code();
         $data = [
             'user_id'       =>  $user->id,
-            'code'          => generate_random_code(),
+            'code'          =>  $code,
+            'mobile'        =>  $user->full_mobile,
             'token'         => generate_unique_string("user_authorizations","token",200),
             'created_at'    => now(),
         ];
@@ -52,9 +58,11 @@ class AuthorizationController extends Controller
                 UserAuthorization::where("user_id", $user->id)->delete();
             }
             DB::table("user_authorizations")->insert($data);
-            $user->notify(new SendAuthorizationCode((object) $data));
+            sendSms($user, 'SVER_CODE', [
+                'code' => $code
+            ]);
             DB::commit();
-            $message =  ['success'=>[__('Verification code sended to your email address.')]];
+            $message =  ['success'=>[__('Verification code send success')]];
             return Helpers::onlysuccess($message);
         }catch(Exception $e) {
             DB::rollBack();
@@ -62,7 +70,7 @@ class AuthorizationController extends Controller
             return Helpers::error($error);
         }
     }
-    public function mailVerify(Request $request)
+    public function smsVerify(Request $request)
     {
 
         $validator = Validator::make($request->all(), [
@@ -87,7 +95,7 @@ class AuthorizationController extends Controller
         }
         try{
             $auth_column->user->update([
-                'email_verified'    => true,
+                'sms_verified'    => true,
             ]);
             $auth_column->delete();
         }catch(Exception $e) {
@@ -181,7 +189,7 @@ class AuthorizationController extends Controller
         return Helpers::onlysuccess($message);
 
     }
-    public function sendEmailOtp(Request $request){
+    public function sendMobileOtp(Request $request){
         $basic_settings = $this->basic_settings;
         if($basic_settings->agree_policy){
             $agree = 'required';
@@ -194,7 +202,8 @@ class AuthorizationController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'email'         => 'required|email',
+            'mobile_code'   => 'required',
+            'mobile'        => 'required',
             'agree'         =>  $agree,
         ]);
         if($validator->fails()){
@@ -203,11 +212,10 @@ class AuthorizationController extends Controller
         }
         $validated = $validator->validate();
 
-        $field_name = "username";
-        if(check_email($validated['email'])) {
-            $field_name = "email";
-        }
-        $exist = User::where($field_name,$validated['email'])->active()->first();
+        $full_mobile = remove_speacial_char($validated['mobile_code']).remove_speacial_char($validated['mobile']);
+        $field_name = "mobile";
+        
+        $exist = User::where($field_name,$validated['mobile'])->where('full_mobile',$full_mobile)->active()->first();
         if( $exist){
             $message = ['error'=>[__('User already exist, please select another email address')]];
             return Helpers::error($message);
@@ -216,44 +224,48 @@ class AuthorizationController extends Controller
         $code = generate_random_code();
         $data = [
             'user_id'       =>  0,
-            'email'         => $validated['email'],
+            'mobile'         => $full_mobile,
             'code'          => $code,
             'token'         => generate_unique_string("user_authorizations","token",200),
             'created_at'    => now(),
         ];
         DB::beginTransaction();
         try{
-            $oldToken = UserAuthorization::where("email",$validated['email'])->get();
+            $oldToken = UserAuthorization::where("mobile", $full_mobile)->get();
             if($oldToken){
                 foreach($oldToken as $token){
                     $token->delete();
                 }
             }
             DB::table("user_authorizations")->insert($data);
-            if($basic_settings->email_notification == true && $basic_settings->email_verification == true){
-                Notification::route("mail",$validated['email'])->notify(new SendVerifyCode($validated['email'], $code));
-            }
+            sendSmsNotAuthUser($full_mobile, 'SVER_CODE', [
+                'code' => $code
+            ]);
             DB::commit();
         }catch(Exception $e) {
             DB::rollBack();
+            
             $message = ['error'=>[__("Something went wrong! Please try again.")]];
             return Helpers::error($message);
         };
-        $message = ['success'=>[__('Verification code sended to your email address.')]];
+        $message = ['success'=>[__('Verification code sended to your Mobile.')]];
         return Helpers::onlysuccess($message);
     }
-    public function verifyEmailOtp(Request $request){
+    public function verifyMobileOtp(Request $request){
         $validator = Validator::make($request->all(), [
-            'email'     => "required|email",
+            'mobile_code'     => 'required',
+            'mobile'     => 'required',
             'code'    => "required|max:6",
         ]);
         if($validator->fails()){
             $error =  ['error'=>$validator->errors()->all()];
             return Helpers::validation($error);
         }
+        $validated = $validator->validate();
+        $full_mobile = remove_speacial_char($validated['mobile_code']).remove_speacial_char($validated['mobile']);
         $code = $request->code;
         $otp_exp_sec = BasicSettingsProvider::get()->otp_exp_seconds ?? GlobalConst::DEFAULT_TOKEN_EXP_SEC;
-        $auth_column = UserAuthorization::where("email",$request->email)->where("code",$code)->first();
+        $auth_column = UserAuthorization::where("mobile",$full_mobile)->where("code",$code)->first();
         if(!$auth_column){
             $message = ['error'=>[__('Verification code does not match')]];
             return Helpers::error($message);
@@ -272,15 +284,18 @@ class AuthorizationController extends Controller
         $message = ['success'=>[__('Otp successfully verified')]];
         return Helpers::onlysuccess($message);
     }
-    public function resendEmailOtp(Request $request){
+    public function resendMobileOtp(Request $request){
         $validator = Validator::make($request->all(), [
-            'email'     => "required|email",
+            'mobile_code'     => 'required',
+            'mobile'     => 'required',
         ]);
         if($validator->fails()){
             $error =  ['error'=>$validator->errors()->all()];
             return Helpers::validation($error);
         }
-        $resend = UserAuthorization::where("email",$request->email)->first();
+        $validated = $validator->validate();
+        $full_mobile = remove_speacial_char($validated['mobile_code']).remove_speacial_char($validated['mobile']);
+        $resend = UserAuthorization::where("mobile", $full_mobile)->first();
         if($resend){
             if(Carbon::now() <= $resend->created_at->addMinutes(GlobalConst::USER_VERIFY_RESEND_TIME_MINUTE)) {
                 $message = ['error'=>[__("You can resend verification code after").' '.Carbon::now()->diffInSeconds($resend->created_at->addMinutes(GlobalConst::USER_VERIFY_RESEND_TIME_MINUTE)). ' '.__('seconds')]];
@@ -290,21 +305,23 @@ class AuthorizationController extends Controller
         $code = generate_random_code();
         $data = [
             'user_id'       =>  0,
-            'email'         => $request->email,
+            'mobile'         => $full_mobile,
             'code'          => $code,
             'token'         => generate_unique_string("user_authorizations","token",200),
             'created_at'    => now(),
         ];
         DB::beginTransaction();
         try{
-            $oldToken = UserAuthorization::where("email",$request->email)->get();
+            $oldToken = UserAuthorization::where("mobile", $full_mobile)->get();
             if($oldToken){
                 foreach($oldToken as $token){
                     $token->delete();
                 }
             }
             DB::table("user_authorizations")->insert($data);
-            Notification::route("mail",$request->email)->notify(new SendVerifyCode($request->email, $code));
+            sendSmsNotAuthUser($full_mobile, 'SVER_CODE', [
+                'code' => $code
+            ]);
             DB::commit();
         }catch(Exception $e) {
             DB::rollBack();
@@ -313,5 +330,41 @@ class AuthorizationController extends Controller
         }
         $message = ['success'=>[__('Verification code resend success')]];
         return Helpers::onlysuccess($message);
+    }
+    public function sendVerifyPin(Request $request){
+        
+        $request->validate([
+            'code'      => "required",
+        ]);
+        $code = $request->code;
+        try{
+            $user = auth()->user();
+            $user->pin_code = Hash::make($code);
+            $user->pin_status = true;
+            $user->update();
+
+        }catch(Exception $e) {
+            $error = ['error'=>['Something went wrong! Please try again']];
+            return Helpers::error($error);
+        }
+
+        $success = ['success'=>['Pin Successfully Setup!']];
+        return Helpers::onlySuccess($success);
+    }
+
+
+    public function checkPin(Request $request){
+        $pin = $request->pin;
+        $user = auth()->user();
+
+        if(!Hash::check($pin, $user->pin_code)){
+            $error = ['error'=>['Invalid PIN Code!']];
+            $data = ['status' => false];
+            return Helpers::error($error, $data);
+        }else{
+            $data = ['status' => true];
+            $success = ['success'=>['Valid PIN Code!']];
+            return Helpers::success($data, $success);
+        }
     }
 }

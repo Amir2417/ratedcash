@@ -105,7 +105,7 @@ class SendMoneyController extends Controller
             "account_bank"   => $recipient->bank_name,
             "account_number" => $recipient->account_number,
             "amount"         => $amount,
-            "narration"      => "Withdraw from wallet",
+            "narration"      => "Send from wallet",
             "currency"       => "NGN",
             "reference"      => generateTransactionReference(),
             "callback_url"   => $callback_url,

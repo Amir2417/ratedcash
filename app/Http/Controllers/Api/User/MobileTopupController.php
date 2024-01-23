@@ -43,7 +43,13 @@ class MobileTopupController extends Controller
                 'daily_limit' => getAmount($data->daily_limit,2),
             ];
         })->first();
-        $topupType = TopupCategory::active()->orderByDesc('id')->get();
+        $topupType      = getBillPayCategories('airtime');
+        
+        $billerNames = [];
+        foreach ($topupType['data'] as $item) {
+            $billerNames[] = (object)['biller_name' => $item['biller_name']];
+        }
+       
         $transactions = Transaction::auth()->mobileTopup()->latest()->take(5)->get()->map(function($item){
             $statusInfo = [
                 "success" =>      1,
@@ -72,7 +78,7 @@ class MobileTopupController extends Controller
             'base_curr_rate' => get_default_currency_rate(),
             'topupCharge'=> (object)$topupCharge,
             'userWallet'=>  (object)$userWallet,
-            'topupTypes'=>  $topupType,
+            'topupTypes'=>  $billerNames,
             'transactions'   => $transactions,
         ];
         $message =  ['success'=>[__('Mobile Top Up Information')]];
@@ -103,14 +109,8 @@ class MobileTopupController extends Controller
             }
         }
         $amount = $request->amount;
-        $topUpType = $request->topup_type;
-        $topup_type = TopupCategory::where('id', $topUpType)->first();
-        if(! $topup_type){
-            $error = ['error'=>[__('Invalid type')]];
-            return Helpers::error($error);
-        }
+        $topup_type = $request->topup_type;
         $mobile_number = $request->mobile_number;
-        $user = auth()->user();
         $topupCharge = TransactionSetting::where('slug','mobile_topup')->where('status',1)->first();
         $userWallet = UserWallet::where('user_id',$user->id)->first();
         if(!$userWallet){
@@ -140,24 +140,26 @@ class MobileTopupController extends Controller
         }
         try{
             $trx_id = 'MP'.getTrxNum();
-            $notifyData = [
-                'trx_id'  => $trx_id,
-                'topup_type'  => @$topup_type->name,
-                'mobile_number'  => $mobile_number,
-                'request_amount'   => $amount,
-                'charges'   => $total_charge,
-                'payable'  => $payable,
-                'current_balance'  => getAmount($userWallet->balance, 4),
-                'status'  => "Pending",
-              ];
-               //send notifications
-            $user = auth()->user();
-            $sender = $this->insertSender( $trx_id,$user,$userWallet,$amount, $topup_type, $mobile_number,$payable);
-            $this->insertSenderCharges( $fixedCharge,$percent_charge, $total_charge, $amount,$user,$sender);
-            //send notifications
-            if( $basic_setting->email_notification == true){
-                $user->notify(new TopupMail($user,(object)$notifyData));
+            $mobileTopUp = payBill($topup_type,$mobile_number,$amount);
+            if($mobileTopUp['status'] == 'success'){
+                $sender = $this->insertSender( $trx_id,$user,$userWallet,$amount, $topup_type, $mobile_number,$payable);
+                $this->insertSenderCharges( $fixedCharge,$percent_charge, $total_charge, $amount,$user,$sender);
+                if( $basic_setting->sms_notification == true){
+                    //send notifications
+                    sendSms($user,'MOBILE_TOPUP',[
+                        'amount'=> get_amount($amount,get_default_language_code()),
+                        'topup_type' => $topUpType??'',
+                        'mobile_number' =>$mobile_number,
+                        'trx' => $trx_id,
+                        'time' =>  now()->format('Y-m-d h:i:s A'),
+                        'balance' => get_amount($userWallet->balance,$userWallet->currency->code),
+                    ]);
+                } 
+            }else{
+                $error = ['error'=>[$mobileTopUp['message']]];
+                return Helpers::error($error);
             }
+            
             $message =  ['success'=>[__('Mobile topup request send to admin successful successful')]];
             return Helpers::onlysuccess($message);
         }catch(Exception $e) {
@@ -171,10 +173,9 @@ class MobileTopupController extends Controller
         $authWallet = $userWallet;
         $afterCharge = ($authWallet->balance - $payable);
         $details =[
-            'topup_type_id' => $topup_type->id??'',
-            'topup_type_name' => $topup_type->name??'',
+            'topup_type_name' => $topup_type ?? '',
             'mobile_number' => $mobile_number,
-            'topup_amount' => $amount??"",
+            'topup_amount' => $amount ?? "",
         ];
         DB::beginTransaction();
         try{
@@ -214,8 +215,8 @@ class MobileTopupController extends Controller
             DB::table('transaction_charges')->insert([
                 'transaction_id'    => $id,
                 'percent_charge'    => $percent_charge,
-                'fixed_charge'      =>$fixedCharge,
-                'total_charge'      =>$total_charge,
+                'fixed_charge'      => $fixedCharge,
+                'total_charge'      => $total_charge,
                 'created_at'        => now(),
             ]);
             DB::commit();
