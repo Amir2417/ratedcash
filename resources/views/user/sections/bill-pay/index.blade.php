@@ -40,11 +40,9 @@
                                 <div class="col-xl-6 col-lg-6  form-group">
                                     <label>{{ __("Bill Category") }} <span class="text--base">*</span></label>
                                     <select name="bill_category" class="form--control select2-basic" required data-placeholder="Bill Category">
-                                        <option value="power">{{ __("Electricity") }}</option>
-                                        <option value="internet">{{ __("Internet") }}</option>
-                                        <option value="cable">{{ __("Cable TV") }}</option>
-                                        <option value="airtime">{{ __("Airtime") }}</option>
-                                        <option value="toll">{{ __("Tolls") }}</option>
+                                        @foreach ($billCategory ?? [] as $item)
+                                            <option value="{{ $item->name }}">{{ $item->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="col-xl-6 col-lg-6  form-group">

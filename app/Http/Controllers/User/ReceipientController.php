@@ -76,7 +76,7 @@ class ReceipientController extends Controller
             'bank_name' => 'required',
             'account_number' => 'required|unique:receipients,account_number',
         ]);
-
+        
         if($validator->fails()){
             return back()->withErrors($validator)->withInput($request->all());
         }

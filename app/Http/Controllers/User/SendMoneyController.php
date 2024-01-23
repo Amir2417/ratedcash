@@ -65,7 +65,6 @@ class SendMoneyController extends Controller
             }
         }
         $amount = $request->amount;
-        $user = auth()->user();
         $sendMoneyCharge = TransactionSetting::where('slug','transfer')->where('status',1)->first();
         $userWallet = UserWallet::where('user_id',$user->id)->first();
         if(!$userWallet){
@@ -136,13 +135,13 @@ class SendMoneyController extends Controller
                         $this->insertSenderCharges($fixedCharge,$percent_charge, $total_charge, $amount,$user,$inserted_id,$recipient);
                         $this->insertDevice($inserted_id);
                         //sms notification
-                        sendSms(auth()->user(),'Send Money',[
-                            'amount'=> get_amount($amount,get_default_currency_code()),
-                            'trx' => $trx_id,
-                            'time' =>  now()->format('Y-m-d h:i:s A'),
-                            'will_get' => get_amount($amount,get_default_currency_code()),
-                            'currency' => get_default_currency_code(),
-                        ]);
+                        // sendSms(auth()->user(),'Send Money',[
+                        //     'amount'=> get_amount($amount,get_default_currency_code()),
+                        //     'trx' => $trx_id,
+                        //     'time' =>  now()->format('Y-m-d h:i:s A'),
+                        //     'will_get' => get_amount($amount,get_default_currency_code()),
+                        //     'currency' => get_default_currency_code(),
+                        // ]);
                     }
                     return redirect()->route("user.send.money.index")->with(['success' => [__('Send Money successful to').' '.$recipient->account_name]]);
                 }catch(Exception $e) {

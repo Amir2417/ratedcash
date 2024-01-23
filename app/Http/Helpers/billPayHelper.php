@@ -57,7 +57,7 @@ function payBill($type,$customer,$amount){
         "reference"   => getTrxNum(12),
         "type"        => $type
     ];
-
+    
     $headers = [
         "Authorization: Bearer ". $sk,
         'Content-Type: application/json'
@@ -77,6 +77,7 @@ function payBill($type,$customer,$amount){
     ));
     $response = curl_exec($curl);
     $result = json_decode($response,true);
+    
     curl_close($curl);
     if(isset($result['status'])){
         if($result['status'] == 'success' || $result['status'] == 'pending'){

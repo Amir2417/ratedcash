@@ -237,47 +237,49 @@ class SetupMobileTopupController extends Controller
             return back()->withErrors($validator)->withInput();
         }
         $data = Transaction::where('id',$request->id)->where('status',2)->where('type', PaymentGatewayConst::MOBILETOPUP)->first();
-        $up['status'] = 1;
+        
         try{
-           $approved = $data->fill($up)->save();
-           if( $approved){
-            //notification
-            $notification_content = [
-                'title'         => "Mobile Topup",
-                'message'       => "Your Mobile Topup request approved by admin " .getAmount($data->request_amount,2).' '.get_default_currency_code()." & Mobile Number is: ".@$data->details->mobile_number." successful.",
-                'image'         => files_asset_path('profile-default'),
-            ];
+            $approved = $data->update([
+                'status'    => 1,
+            ]);
+            if( $approved){
+                //notification
+                $notification_content = [
+                    'title'         => "Mobile Topup",
+                    'message'       => "Your Mobile Topup request approved by admin " .getAmount($data->request_amount,2).' '.get_default_currency_code()." & Mobile Number is: ".@$data->details->mobile_number." successful.",
+                    'image'         => files_asset_path('profile-default'),
+                ];
 
-            if($data->user_id != null) {
-                $notifyData = [
-                    'trx_id'  => $data->trx_id,
-                    'topup_type'  =>    @$data->details->topup_type_name,
-                    'mobile_number'  => $data->details->mobile_number,
-                    'request_amount'   => $data->request_amount,
-                    'charges'   => $data->charge->total_charge,
-                    'payable'  => $data->payable,
-                    'current_balance'  => getAmount($data->available_balance, 4),
-                    'status'  => "Success",
-                  ];
-                $user = $data->user;
-                if( $this->basic_settings->email_notification == true){
-                $user->notify(new Approved($user,(object)$notifyData));
+                if($data->user_id != null) {
+                    $notifyData = [
+                        'trx_id'  => $data->trx_id,
+                        'topup_type'  =>    @$data->details->topup_type_name,
+                        'mobile_number'  => $data->details->mobile_number,
+                        'request_amount'   => $data->request_amount,
+                        'charges'   => $data->charge->total_charge,
+                        'payable'  => $data->payable,
+                        'current_balance'  => getAmount($data->available_balance, 4),
+                        'status'  => "Success",
+                    ];
+                    $user = $data->user;
+                    if( $this->basic_settings->email_notification == true){
+                    $user->notify(new Approved($user,(object)$notifyData));
+                    }
+                    UserNotification::create([
+                        'type'      => NotificationConst::MOBILE_TOPUP,
+                        'user_id'  =>  $data->user_id,
+                        'message'   => $notification_content,
+                    ]);
+                    DB::commit();
+                }else if($data->merchant_id != null) {
+                    MerchantNotification::create([
+                        'type'      => NotificationConst::MOBILE_TOPUP,
+                        'merchant_id'  =>  $data->merchant_id,
+                        'message'   => $notification_content,
+                    ]);
+                    DB::commit();
                 }
-                UserNotification::create([
-                    'type'      => NotificationConst::MOBILE_TOPUP,
-                    'user_id'  =>  $data->user_id,
-                    'message'   => $notification_content,
-                ]);
-                DB::commit();
-            }else if($data->merchant_id != null) {
-                MerchantNotification::create([
-                    'type'      => NotificationConst::MOBILE_TOPUP,
-                    'merchant_id'  =>  $data->merchant_id,
-                    'message'   => $notification_content,
-                ]);
-                DB::commit();
             }
-           }
 
             return redirect()->back()->with(['success' => ['Mobile topup request approved successfully']]);
         }catch(Exception $e){

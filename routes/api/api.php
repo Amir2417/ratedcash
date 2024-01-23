@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\User\Auth\ForgotPasswordController;
 use App\Http\Controllers\Api\User\Auth\LoginController;
 use App\Http\Controllers\Api\User\AuthorizationController;
 use App\Http\Controllers\Api\User\BillPayController;
+use App\Http\Controllers\Api\User\DashboardController;
 use App\Http\Controllers\Api\User\MakePaymentController;
 use App\Http\Controllers\Api\User\MobileTopupController;
 use App\Http\Controllers\Api\User\MoneyOutController;
@@ -60,6 +61,9 @@ Route::get('get/basic/data', function() {
     $message =  ['success'=>[__('Basic information fetch successfully')]];
     return Helpers::success($data,$message);
 });
+
+
+
 Route::controller(AppSettingsController::class)->prefix("app-settings")->group(function(){
     Route::get('/','appSettings');
     Route::get('languages','languages');
@@ -101,6 +105,10 @@ Route::prefix('user')->group(function(){
         Route::post('mobiile-verify', [AuthorizationController::class,'smsVerify']);
         Route::post('pin-setup', [AuthorizationController::class,'sendVerifyPin']);
         Route::post('pin-verify', [AuthorizationController::class,'checkPin']);
+
+        Route::controller(DashboardController::class)->prefix("dashboard")->group(function(){
+            Route::get('index','index');
+        });
     });
 
     Route::middleware(['auth.api','verification.guard.api'])->group(function(){
@@ -244,6 +252,7 @@ Route::prefix('user')->group(function(){
             });
              //Saved Recipient
             Route::controller(RecipientController::class)->prefix('recipient')->group(function(){
+                Route::get('bank-list','bankList');
                 Route::get('list','recipientList');
                 Route::get('save/info','saveRecipientInfo');
                 Route::get('dynamic/fields','dynamicFields');

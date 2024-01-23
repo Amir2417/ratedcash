@@ -106,42 +106,42 @@
                                     ]
                                 ],
                             ],
-                            [
-                                'title'     => "Remitance",
-                                'icon'      => "menu-icon las la-calculator",
-                                'links'     => [
-                                    [
-                                        'title'     => "Receviver Countries",
-                                        'route'     => "admin.remitance.countries",
-                                    ],
-                                    [
-                                        'title'     => "Bank Deposits",
-                                        'route'     => "admin.remitance.bank.deposit.index",
-                                    ],
-                                    [
-                                        'title'     => "Cash Pickups",
-                                        'route'     => "admin.remitance.cash.pickup.index",
-                                    ],
-                                    //logs
-                                    [
-                                        'title'     => "Pending Logs",
-                                        'route'     => "admin.remitance.pending",
-                                    ],
-                                    [
-                                        'title'     => "Completed Logs",
-                                        'route'     => "admin.remitance.complete",
-                                    ],
-                                    [
-                                        'title'     => "Canceled Logs",
-                                        'route'     => "admin.remitance.canceled",
-                                    ],
-                                    [
-                                        'title'     => "All Logs",
-                                        'route'     => "admin.remitance.index",
-                                    ]
+                            // [
+                            //     'title'     => "Remitance",
+                            //     'icon'      => "menu-icon las la-calculator",
+                            //     'links'     => [
+                            //         [
+                            //             'title'     => "Receiver Countries",
+                            //             'route'     => "admin.remitance.countries",
+                            //         ],
+                            //         [
+                            //             'title'     => "Bank Deposits",
+                            //             'route'     => "admin.remitance.bank.deposit.index",
+                            //         ],
+                            //         [
+                            //             'title'     => "Cash Pickups",
+                            //             'route'     => "admin.remitance.cash.pickup.index",
+                            //         ],
+                            //         //logs
+                            //         [
+                            //             'title'     => "Pending Logs",
+                            //             'route'     => "admin.remitance.pending",
+                            //         ],
+                            //         [
+                            //             'title'     => "Completed Logs",
+                            //             'route'     => "admin.remitance.complete",
+                            //         ],
+                            //         [
+                            //             'title'     => "Canceled Logs",
+                            //             'route'     => "admin.remitance.canceled",
+                            //         ],
+                            //         [
+                            //             'title'     => "All Logs",
+                            //             'route'     => "admin.remitance.index",
+                            //         ]
 
-                                ],
-                            ],
+                            //     ],
+                            // ],
 
                              [
                                 'title'             => "Bill Pay Logs",

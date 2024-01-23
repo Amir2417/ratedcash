@@ -146,14 +146,14 @@ class MobileTopupController extends Controller
                 $this->insertSenderCharges( $fixedCharge,$percent_charge, $total_charge, $amount,$user,$sender);
                 if( $basic_setting->sms_notification == true){
                     //send notifications
-                    sendSms($user,'MOBILE_TOPUP',[
-                        'amount'=> get_amount($amount,get_default_language_code()),
-                        'topup_type' => $topUpType??'',
-                        'mobile_number' =>$mobile_number,
-                        'trx' => $trx_id,
-                        'time' =>  now()->format('Y-m-d h:i:s A'),
-                        'balance' => get_amount($userWallet->balance,$userWallet->currency->code),
-                    ]);
+                    // sendSms($user,'MOBILE_TOPUP',[
+                    //     'amount'=> get_amount($amount,get_default_language_code()),
+                    //     'topup_type' => $topUpType??'',
+                    //     'mobile_number' =>$mobile_number,
+                    //     'trx' => $trx_id,
+                    //     'time' =>  now()->format('Y-m-d h:i:s A'),
+                    //     'balance' => get_amount($userWallet->balance,$userWallet->currency->code),
+                    // ]);
                 } 
             }else{
                 $error = ['error'=>[$mobileTopUp['message']]];

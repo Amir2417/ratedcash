@@ -238,48 +238,52 @@ class SetupBillPayController extends Controller
         }
         $data = Transaction::where('id',$request->id)->where('status',2)->where('type', PaymentGatewayConst::BILLPAY)->first();
 
-        $up['status'] = 1;
         try{
-           $approved = $data->fill($up)->save();
-           if( $approved){
+            $approved = $data->update([
+                    'status'    => 1,
+            ]);
+            if( $approved){
 
-            //notification
-            $notification_content = [
-                'title'         => "Bill Pay",
-                'message'       => "Your Bill Pay request approved by admin " .getAmount($data->request_amount,2).' '.get_default_currency_code()." & Bill Number is: ".@$data->details->bill_number." successful.",
-                'image'         => files_asset_path('profile-default'),
-            ];
+                //notification
+                $notification_content = [
+                    'title'         => "Bill Pay",
+                    'message'       => "Your Bill Pay request approved by admin " .getAmount($data->request_amount,2).' '.get_default_currency_code()." & Bill Number is: ".@$data->details->bill_number." successful.",
+                    'image'         => files_asset_path('profile-default'),
+                ];
 
-            if($data->user_id != null) {
-                $notifyData = [
-                    'trx_id'  => $data->trx_id,
-                    'bill_type'  => @$data->details->bill_type_name,
-                    'bill_number'  => @$data->details->bill_number,
-                    'request_amount'   => $data->request_amount,
-                    'charges'   => $data->charge->total_charge,
-                    'payable'  => $data->payable,
-                    'current_balance'  => getAmount($data->available_balance, 4),
-                    'status'  => "Success",
-                  ];
-                $user = $data->user;
-                if( $this->basic_settings->email_notification == true){
-                $user->notify(new Approved($user,(object)$notifyData));
+                if($data->user_id != null) {
+                    $notifyData = [
+                        'trx_id'  => $data->trx_id,
+                        'bill_type'  => @$data->details->bill_type_name,
+                        'bill_number'  => @$data->details->bill_number,
+                        'request_amount'   => $data->request_amount,
+                        'charges'   => $data->charge->total_charge,
+                        'payable'  => $data->payable,
+                        'current_balance'  => getAmount($data->available_balance, 4),
+                        'status'  => "Success",
+                    ];
+                    $user = $data->user;
+                    
+                    if( $this->basic_settings->email_notification == true){
+                        $user->notify(new Approved($user,(object)$notifyData));
+                    }
+                    
+                    UserNotification::create([
+                        'type'      => NotificationConst::BILL_PAY,
+                        'user_id'  =>  $data->user_id,
+                        'message'   => $notification_content,
+                    ]);
+                    
+                    return redirect()->back()->with(['success' => ['Bill Pay request approved successfully']]);
+                }else if($data->merchant_id != null) {
+                    MerchantNotification::create([
+                        'type'      => NotificationConst::BILL_PAY,
+                        'merchant_id'  =>  $data->merchant_id,
+                        'message'   => $notification_content,
+                    ]);
+                    
                 }
-                UserNotification::create([
-                    'type'      => NotificationConst::BILL_PAY,
-                    'user_id'  =>  $data->user_id,
-                    'message'   => $notification_content,
-                ]);
-                DB::commit();
-            }else if($data->merchant_id != null) {
-                MerchantNotification::create([
-                    'type'      => NotificationConst::BILL_PAY,
-                    'merchant_id'  =>  $data->merchant_id,
-                    'message'   => $notification_content,
-                ]);
-                DB::commit();
             }
-           }
 
             return redirect()->back()->with(['success' => ['Bill Pay request approved successfully']]);
         }catch(Exception $e){

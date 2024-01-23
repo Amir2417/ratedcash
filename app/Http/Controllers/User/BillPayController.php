@@ -31,9 +31,9 @@ class BillPayController extends Controller
     public function index() {
         $page_title = __("Bill Pay");
         $billPayCharge = TransactionSetting::where('slug','bill_pay')->where('status',1)->first();
-        $billType = BillPayCategory::active()->orderByDesc('id')->get();
+        $billCategory = BillPayCategory::active()->orderBy('id')->get();
         $transactions = Transaction::auth()->billPay()->latest()->take(10)->get();
-        return view('user.sections.bill-pay.index',compact("page_title",'billPayCharge','transactions','billType'));
+        return view('user.sections.bill-pay.index',compact("page_title",'billPayCharge','transactions','billCategory'));
     }
     public function fetchBillTypes(Request $request){
         $bill_category = $request->bill_category;
@@ -41,12 +41,13 @@ class BillPayController extends Controller
         return response()->json($getBillTypes);
     }
     public function payConfirm(Request $request){
+       
         $request->validate([
             'bill_type' => 'required|string',
             'bill_number' => 'required|min:8',
             'amount' => 'required|numeric|gt:0',
-
         ]);
+        
         $basic_setting  = BasicSettings::first();
         $user           = auth()->user();
         if($basic_setting->kyc_verification){
@@ -59,10 +60,8 @@ class BillPayController extends Controller
             }
         }
         $amount         = $request->amount;
-        $billType       = $request->bill_type;
         $bill_type      = $request->bill_type;
         $bill_number    = $request->bill_number;
-        $user           = auth()->user();
         $billPayCharge  = TransactionSetting::where('slug','bill_pay')->where('status',1)->first();
         $userWallet     = UserWallet::where('user_id',$user->id)->first();
         if(!$userWallet){
@@ -93,16 +92,7 @@ class BillPayController extends Controller
                 $trx_id = 'BP'.getTrxNum();
                 $sender = $this->insertSender( $trx_id,$user,$userWallet,$amount, $bill_type, $bill_number,$payable);
                 $this->insertSenderCharges( $fixedCharge,$percent_charge, $total_charge, $amount,$user,$sender);
-                if($basic_setting->sms_notification == true){
-                    sendSms($user,'BILL_PAY',[
-                        'amount'              => get_amount($amount,get_default_currency_code()),
-                        'bill_type'           => $bill_type ?? '',
-                        'bill_number'         => $bill_number,
-                        'trx'                 => $trx_id,
-                        'time'                => now()->format('Y-m-d h:i:s A'),
-                        'balance'             => get_amount($userWallet->balance,$userWallet->currency->code),
-                    ]);
-                }
+                
             }else{
                 return back()->with(['error' => [$apiBillPay['message']]]);
             }
@@ -136,7 +126,7 @@ class BillPayController extends Controller
                 'available_balance'             => $afterCharge,
                 'remark'                        => ucwords(remove_speacial_char(PaymentGatewayConst::BILLPAY," ")) . " Request To Admin",
                 'details'                       => json_encode($details),
-                'attribute'                      =>PaymentGatewayConst::SEND,
+                'attribute'                     => PaymentGatewayConst::SEND,
                 'status'                        => 2,
                 'created_at'                    => now(),
             ]);

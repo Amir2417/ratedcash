@@ -52,7 +52,7 @@ class Approved extends Notification
         $trx_id = $this->data->trx_id;
         $date = Carbon::now();
         $dateTime = $date->format('Y-m-d h:i:s A');
-
+        
         return (new MailMessage)
                     ->greeting("Hello ".$user->fullname." !")
                     ->subject("Bill Pay For ". $data->bill_type.' ('.$data->bill_number.' )')

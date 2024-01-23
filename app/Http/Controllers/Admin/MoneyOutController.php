@@ -113,53 +113,55 @@ class MoneyOutController extends Controller
             return back()->withErrors($validator)->withInput();
         }
         $data = Transaction::where('id',$request->id)->where('status',2)->where('type', PaymentGatewayConst::TYPEMONEYOUT)->first();
-        $up['status'] = 1;
+        
         try{
-           $approved = $data->fill($up)->save();
-           if( $approved){
+            $approved = $data->update([
+                'status'    => 1,
+            ]);
+            if( $approved){
 
-            $moneyOutData= [
-                'trx_id' => $data->trx_id??'',
-                'gateway_name' => $data->currency->gateway->name??'',
-                'gateway_type' => $data->currency->gateway->type??'',
-                'amount' => $data->request_amount??0,
-                'gateway_rate' => $data->currency->rate??'',
-                'gateway_currency' => $data->currency->currency_code??'',
-                'gateway_charge' => $data->charge->total_charge??0,
-                'will_get' =>$data->payable??0,
-                'payable' =>$data->request_amount??0,
-            ];
+                $moneyOutData= [
+                    'trx_id' => $data->trx_id??'',
+                    'gateway_name' => $data->currency->gateway->name??'',
+                    'gateway_type' => $data->currency->gateway->type??'',
+                    'amount' => $data->request_amount??0,
+                    'gateway_rate' => $data->currency->rate??'',
+                    'gateway_currency' => $data->currency->currency_code??'',
+                    'gateway_charge' => $data->charge->total_charge??0,
+                    'will_get' =>$data->payable??0,
+                    'payable' =>$data->request_amount??0,
+                ];
 
-            $notification_content = [
-                'title'         => "Money Out",
-                'message'       => "Your Money Out request approved by admin " .getAmount($data->request_amount,2).' '.get_default_currency_code()." successful.",
-                'image'         => files_asset_path('profile-default'),
-            ];
-            if($data->user_id != null) {
-                $user =$data->user;
-                if( $this->basic_settings->email_notification == true){
-                $user->notify(new ApprovedByAdminMail($user,(object)$moneyOutData));
+                $notification_content = [
+                    'title'         => "Money Out",
+                    'message'       => "Your Money Out request approved by admin " .getAmount($data->request_amount,2).' '.get_default_currency_code()." successful.",
+                    'image'         => files_asset_path('profile-default'),
+                ];
+                if($data->user_id != null) {
+                    $user =$data->user;
+                    if( $this->basic_settings->email_notification == true){
+                    $user->notify(new ApprovedByAdminMail($user,(object)$moneyOutData));
+                    }
+                    UserNotification::create([
+                        'type'      => NotificationConst::MONEY_OUT,
+                        'user_id'  =>  $data->user_id,
+                        'message'   => $notification_content,
+                    ]);
+                    DB::commit();
+                }else if($data->merchant_id != null) {
+                    $user =$data->merchant;
+                    if( $this->basic_settings->email_notification == true){
+                    $user->notify(new ApprovedByAdminMail($user,(object)$moneyOutData));
+                    }
+                    MerchantNotification::create([
+                        'type'      => NotificationConst::MONEY_OUT,
+                        'merchant_id'  =>  $data->merchant_id,
+                        'message'   => $notification_content,
+                    ]);
+                    DB::commit();
                 }
-                UserNotification::create([
-                    'type'      => NotificationConst::MONEY_OUT,
-                    'user_id'  =>  $data->user_id,
-                    'message'   => $notification_content,
-                ]);
-                DB::commit();
-            }else if($data->merchant_id != null) {
-                $user =$data->merchant;
-                if( $this->basic_settings->email_notification == true){
-                $user->notify(new ApprovedByAdminMail($user,(object)$moneyOutData));
-                }
-                MerchantNotification::create([
-                    'type'      => NotificationConst::MONEY_OUT,
-                    'merchant_id'  =>  $data->merchant_id,
-                    'message'   => $notification_content,
-                ]);
-                DB::commit();
+
             }
-
-           }
 
             return redirect()->back()->with(['success' => ['Mouney Out request approved successfully']]);
         }catch(Exception $e){
