@@ -18,6 +18,7 @@
     <div class="dashboard-area mt-10">
         <div class="dashboard-header-wrapper">
             <h3 class="title">{{__(@$page_title)}}</h3>
+            <a href="{{ setRoute('user.receipient.add') }}" class="btn--base">{{ __("Add Recipient") }} <i class="fas fa-plus-circle ms-2"></i></a>
         </div>
     </div>
     <div class="row mb-30-none">
