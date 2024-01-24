@@ -19,40 +19,24 @@ class UserSeeder extends Seeder
         
         $data = [
             [
-                'firstname'         => "Test",
-                'lastname'          => "User",
+                'firstname'         => "Pastor",
+                'lastname'          => "Bright",
                 'email'             => "user@appdevs.net",
                 'username'          => "appdevs",
                 'mobile_code'       => "880",
-                'mobile'            => "1706455347",
-                'full_mobile'       => "8801706455347",
+                'mobile'            => "1333333333",
+                'full_mobile'       => "8801333333333",
                 'status'            => true,
                 'password'          => Hash::make("appdevs"),
-                'address'           => '{"country":"Bangladesh","city":"Dhaka","zip":"1230","state":"Bangladesh","address":"Dhaka,Bangladesh"}',
+                'address'           => '{"country":"Bangladesh","city":"Dhaka","zip":"1230","state":"Dhaka","address":"Dhaka, Bangladesh"}',
                 'email_verified'    => true,
                 'sms_verified'      => true,
                 'kyc_verified'      => true,
+                'pin_status'      => true,
+                'pin_code'      => Hash::make(1234),
                 'created_at'        => now(),
                 'updated_at'        => now(),
             ],
-            [
-                'firstname'         => "Test",
-                'lastname'          => "User2",
-                'email'             => "user2@appdevs.net",
-                'username'          => "testusr2",
-                'mobile_code'       => "880",
-                'mobile'            => "123456781",
-                'full_mobile'       => "880123456781",
-                'status'            => true,
-                'password'          => Hash::make("appdevs"),
-                'address'           => '{"country":"Bangladesh","city":"Dhaka","zip":"1230","state":"Bangladesh","address":"Dhaka,Bangladesh"}',
-                'email_verified'    => true,
-                'sms_verified'      => true,
-                'kyc_verified'      => true,
-                'created_at'        => now(),
-                'updated_at'        => now(),
-            ],
-
         ];
 
         User::insert($data);

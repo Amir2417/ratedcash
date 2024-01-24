@@ -18,7 +18,7 @@ class UserWalletSeeder extends Seeder
     {
         $currencies_ids = Currency::roleHasOne()->active()->get()->pluck("id")->toArray();
 
-        $user_ids = [1,2];
+        $user_ids = [1];
 
         foreach($user_ids as $user_id) {
             foreach($currencies_ids as $currency_id) {
