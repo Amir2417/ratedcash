@@ -43,7 +43,7 @@
                                     <select name="recipient" class="form--control select2-auto-tokenize" id="receipent_select" required data-placeholder="Select Receipient" >
                                         <option disabled selected value="">{{ __("Select Receipient") }}</option>
                                         @foreach ($receipients ?? [] as $data)
-                                            <option value="{{ $data->account_number }}">{{ $data->bank_name }}({{ $data->account_name }}-{{ $data->account_number }})</option>
+                                            <option value="{{ $data->account_number }}">{{ $data->account_name }}-{{ $data->account_number }}({{ $data->bank_name }})</option>
                                         @endforeach
                                     </select>
                                 </div>

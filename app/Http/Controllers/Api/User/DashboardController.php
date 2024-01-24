@@ -37,11 +37,25 @@ class DashboardController extends Controller
                                     ->where('status',1)->sum('request_amount');
 
         $this_year_bill_pay       = Transaction::auth()->billPay()
-                                    ->toBase()
-                                    ->whereDate('created_at',">=" , $this_year_start)
-                                    ->whereDate('created_at',"<=" , $this_year_end)
-                                    ->where('status',1)->sum('request_amount');
-
+                                        ->toBase()
+                                        ->whereDate('created_at',">=" , $this_year_start)
+                                        ->whereDate('created_at',"<=" , $this_year_end)
+                                        ->where('status',1)->sum('request_amount');
+        $this_month_total_trans   = Transaction::auth()
+                                        ->toBase()
+                                        ->whereDate('created_at',">=" , $this_month_start)
+                                        ->whereDate('created_at',"<=" , $this_month_end)
+                                        ->where('status',1)->sum('request_amount');
+        $this_week_total_trans   = Transaction::auth()
+                                        ->toBase()
+                                        ->whereDate('created_at',">=" , $this_week_start)
+                                        ->whereDate('created_at',"<=" , $this_week_end)
+                                        ->where('status',1)->sum('request_amount');
+        $this_year_total_trans   = Transaction::auth()
+                                        ->toBase()
+                                        ->whereDate('created_at',">=" , $this_year_start)
+                                        ->whereDate('created_at',"<=" , $this_year_end)
+                                        ->where('status',1)->sum('request_amount');
         //mobile top up
         $this_month_topup       = Transaction::auth()->mobileTopUp()
                                     ->toBase()
@@ -79,10 +93,13 @@ class DashboardController extends Controller
         $data =[
             'base_curr'                 => get_default_currency_code(),
             'this_month_bill_pay'       => $this_month_bill_pay,
+            'this_month_total_trans'    => $this_month_total_trans,
+            'this_week_total_trans'     => $this_week_total_trans,
+            'this_year_total_trans'     => $this_year_total_trans,
             'this_week_bill_pay'        => $this_week_bill_pay,
             'this_year_bill_pay'        => $this_year_bill_pay,
-            'this_month_topup'          =>  $this_month_topup,
-            'this_week_topup'           =>  $this_week_topup,
+            'this_month_topup'          => $this_month_topup,
+            'this_week_topup'           => $this_week_topup,
             'this_year_topup'           => $this_year_topup,
             'this_month_send_money'     => $this_month_send_money,
             'this_week_send_money'      => $this_week_send_money,

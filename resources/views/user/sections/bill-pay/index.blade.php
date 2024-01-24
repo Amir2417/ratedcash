@@ -47,7 +47,7 @@
                                 </div>
                                 <div class="col-xl-6 col-lg-6  form-group">
                                     <label>{{ __("Bill Type") }} <span class="text--base">*</span></label>
-                                    <select class="form--control bill-type-list" name="bill_type">
+                                    <select class="form--control select2-basic bill-type-list" name="bill_type">
                                         
                                     </select>
                                 </div>

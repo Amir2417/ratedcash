@@ -342,8 +342,7 @@
                           </div>
                           <div class="col-xl-12 col-lg-12 form-group">
                               @include('admin.components.form.input',[
-                                  'label'         => 'Amount',
-                                  'label_after'   => "<span>*</span>",
+                                  'label'         => 'Amount*',
                                   'type'          => 'number',
                                   'name'          => 'amount',
                                   'attribute'     => 'step="any"',

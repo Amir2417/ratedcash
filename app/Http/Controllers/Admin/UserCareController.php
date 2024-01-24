@@ -396,7 +396,7 @@ class UserCareController extends Controller
             'type'      => "required|string|in:add,subtract",
             'wallet'    => "required|numeric|exists:user_wallets,id",
             'amount'    => "required|numeric",
-            'remark'    => "required|string|max:200",
+            'remark'    => "nullable|string|max:200",
         ]);
 
         if($validator->fails()) {
