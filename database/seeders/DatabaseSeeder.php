@@ -15,6 +15,7 @@ use Database\Seeders\Admin\CurrencySeeder;
 use Database\Seeders\Admin\LanguageSeeder;
 use Database\Seeders\Admin\SetupKycSeeder;
 use Database\Seeders\Admin\SetupSeoSeeder;
+use Database\Seeders\User\RecipientSeeder;
 use Database\Seeders\Admin\ExtensionSeeder;
 use Database\Seeders\Admin\ReceiverCountry;
 use Database\Seeders\Admin\SetupPageSeeder;
@@ -81,6 +82,7 @@ class DatabaseSeeder extends Seeder
             //user
             UserSeeder::class,
             UserWalletSeeder::class,
+            RecipientSeeder::class,
             //merchant
             MerchantSeeder::class,
             MerchantWalletSeeder::class,
