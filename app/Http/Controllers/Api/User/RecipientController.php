@@ -347,22 +347,15 @@ class RecipientController extends Controller
             $error =  ['error'=>$validator->errors()->all()];
             return Helpers::validation($error);
         }
-        $recipient =  Receipient::auth()->with('user','receiver_country')->where('id',request()->id)->get()->map(function($item){
+        $recipient =  Receipient::auth()->where('id',request()->id)->get()->map(function($item){
             return[
                 'id' => $item->id,
-                'country' => $item->country,
-                'type' => $item->type,
-                'alias' => $item->alias,
-                'firstname' => $item->firstname,
-                'lastname' => $item->lastname,
-                'mobile_code' => $item->mobile_code,
-                'mobile' => $item->mobile,
-                'city' => $item->city,
-                'address' => $item->address,
-                'state' => $item->state,
-                'zip_code' => $item->zip_code,
-                'created_at' => $item->created_at,
-                'updated_at' => $item->updated_at,
+                'user_id' => $item->user_id,
+                'bank_code' => $item->bank_code,
+                'bank_name' => $item->bank_name,
+                'account_name' => $item->account_name,
+                'account_number' => $item->account_number,
+                
 
             ];
         })->first();
@@ -371,53 +364,13 @@ class RecipientController extends Controller
             return Helpers::error($error);
         }
         $basic_settings = BasicSettings::first();
-        $transactionType = [
-            [
-                'id'    => 1,
-                'field_name' => Str::slug(GlobalConst::TRX_BANK_TRANSFER),
-                'label_name' => "Bank Transfer",
-            ],
-            [
-                'id'    => 2,
-                'field_name' =>Str::slug(GlobalConst::TRX_WALLET_TO_WALLET_TRANSFER),
-                'label_name' => $basic_settings->site_name.' Wallet',
-            ],
+        $banks          = getFlutterwaveBanks("NG");
 
-            [
-                'id'    => 3,
-                'field_name' => Str::slug(GlobalConst::TRX_CASH_PICKUP),
-                'label_name' => "Cash Pickup",
-            ]
-         ];
-          $transaction_type = (array) $transactionType;
-
-        $receiverCountries = ReceiverCounty::active()->get()->map(function($data){
-            return[
-                'id' => $data->id,
-                'country' => $data->country,
-                'name' => $data->name,
-                'code' => $data->code,
-                'mobile_code' => $data->mobile_code,
-                'symbol' => $data->symbol,
-                'flag' => $data->flag,
-                'rate' => getAmount( $data->rate,2),
-                'status' => $data->status,
-                'created_at' => $data->created_at,
-                'updated_at' => $data->updated_at,
-
-            ];
-        });
-        $banks = RemitanceBankDeposit::active()->latest()->get();
-        $cashPickups = RemitanceCashPickup::active()->latest()->get();
+        
         $data =[
             'recipient' => (object)$recipient,
             'base_curr' => get_default_currency_code(),
-            'countryFlugPath'   => 'public/backend/images/country-flag',
-            'default_image'    => "public/backend/images/default/default.webp",
-            'transactionTypes'   => $transaction_type,
-            'receiverCountries'   => $receiverCountries,
-            'banks'   => $banks,
-            'cashPickupsPoints'   => $cashPickups,
+            'banks'     => $banks
         ];
         $message =  ['success'=>[__('Successfully get recipient')]];
         return Helpers::success($data,$message);
