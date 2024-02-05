@@ -51,53 +51,11 @@ class RecipientController extends Controller
         return Helpers::success($data,$message);
     }
     public function saveRecipientInfo(){
-        $basic_settings = BasicSettings::first();
-        $transactionType = [
-            [
-                'id'    => 1,
-                'field_name' => Str::slug(GlobalConst::TRX_BANK_TRANSFER),
-                'label_name' => "Bank Transfer",
-            ],
-            [
-                'id'    => 2,
-                'field_name' =>Str::slug(GlobalConst::TRX_WALLET_TO_WALLET_TRANSFER),
-                'label_name' => $basic_settings->site_name.' Wallet',
-            ],
-
-            [
-                'id'    => 3,
-                'field_name' => Str::slug(GlobalConst::TRX_CASH_PICKUP),
-                'label_name' => "Cash Pickup",
-            ]
-         ];
-          $transaction_type = (array) $transactionType;
-
-        $receiverCountries = ReceiverCounty::active()->get()->map(function($data){
-            return[
-                'id' => $data->id,
-                'country' => $data->country,
-                'name' => $data->name,
-                'code' => $data->code,
-                'mobile_code' => $data->mobile_code,
-                'symbol' => $data->symbol,
-                'flag' => $data->flag,
-                'rate' => getAmount( $data->rate,2),
-                'status' => $data->status,
-                'created_at' => $data->created_at,
-                'updated_at' => $data->updated_at,
-
-            ];
-        });
-        $banks = RemitanceBankDeposit::active()->latest()->get();
-        $cashPickups = RemitanceCashPickup::active()->latest()->get();
+        
+        $banks =  getFlutterwaveBanks("NG");
         $data =[
             'base_curr' => get_default_currency_code(),
-            'countryFlugPath'   => 'public/backend/images/country-flag',
-            'default_image'    => "public/backend/images/default/default.webp",
-            'transactionTypes'   => $transaction_type,
-            'receiverCountries'   => $receiverCountries,
             'banks'   => $banks,
-            'cashPickupsPoints'   => $cashPickups,
         ];
         $message =  ['success'=>[__('Save Recipient Information')]];
         return Helpers::success($data,$message);
