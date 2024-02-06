@@ -88,13 +88,13 @@ class LoginController extends Controller
         $validator = Validator::make($request->all(), [
             'firstname'     => 'required|string|max:60',
             'lastname'      => 'required|string|max:60',
-            'email'         => 'required|string|email|max:150|unique:users,email',
+            'email'         => 'nullable|string|email|max:150|unique:users,email',
             'password'      => $passowrd_rule,
             'country'       => 'required|string|max:60',
-            'city'       => 'required|string|max:20',
+            'city'       => 'nullable|string|max:20',
             'phone_code'    => 'required|string|max:20',
             'phone'         => 'required|string|max:20',
-            'zip_code'         => 'required|string|max:20',
+            'zip_code'         => 'nullable|string|max:20',
             'agree'         =>  $agree,
 
         ]);
