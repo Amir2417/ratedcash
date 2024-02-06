@@ -53,6 +53,7 @@ Route::get('get/basic/data', function() {
     $user_kyc = SetupKyc::userKyc()->first();
     $data =[
         'email_verification' => $basic_settings->email_verification,
+        'sms_verification' => $basic_settings->sms_verification,
         'kyc_verification' => $basic_settings->kyc_verification,
         'mobile_code' => getDialCode(),
         'register_kyc_fields' =>$user_kyc,
