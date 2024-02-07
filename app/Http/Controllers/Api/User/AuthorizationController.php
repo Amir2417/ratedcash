@@ -245,7 +245,7 @@ class AuthorizationController extends Controller
         }catch(Exception $e) {
             DB::rollBack();
             
-            $message = ['error'=>[__("Something went wrong! Please try again.")]];
+            $message = ['error'=>[__("You can not register using this mobile number.")]];
             return Helpers::error($message);
         };
         $message = ['success'=>[__('Verification code sended to your Mobile.')]];

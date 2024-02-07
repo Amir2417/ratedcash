@@ -2245,6 +2245,7 @@ function sendSmsNotAuthUser($mobile, $type, $shortCodes = [])
         $message = shortCodeReplacer("{{message}}", $template, $general->sms_api);
         $message = shortCodeReplacer("{{name}}", "User", $message);
         $sendSms->$gateway($mobile,$general->site_name,$message,$general->sms_config);
+        
     }
 }
 
