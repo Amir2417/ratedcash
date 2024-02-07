@@ -107,6 +107,7 @@ class VirtualcardController extends Controller
         $response = curl_exec($curl);
         curl_close($curl);
         $result = json_decode($response, true);
+        
         if (isset($result)){
             if ( $result['status'] === 'success' && array_key_exists('data', $result) ) {
                 $values = $result['data'];
@@ -168,6 +169,7 @@ class VirtualcardController extends Controller
                 }
                 return redirect()->route("user.virtual.card.index")->with(['success' => [__('Virtual Card Buy Successfully')]]);
             }else {
+                
                 return redirect()->back()->with(['error' => [__("Something went wrong! Please try again.")]]);
             }
         }
@@ -479,13 +481,13 @@ class VirtualcardController extends Controller
                 'message'   => $notification_content,
             ]);
 
-              //Push Notifications
-              event(new UserNotificationEvent($notification_content,$user));
-              send_push_notification(["user-".$user->id],[
-                  'title'     => $notification_content['title'],
-                  'body'      => $notification_content['message'],
-                  'icon'      => $notification_content['image'],
-              ]);
+            //Push Notifications
+            event(new UserNotificationEvent($notification_content,$user));
+            send_push_notification(["user-".$user->id],[
+                'title'     => $notification_content['title'],
+                'body'      => $notification_content['message'],
+                'icon'      => $notification_content['image'],
+            ]);
 
              //admin notification
              $notification_content['title'] =__('Buy card successful').' '.$masked_card.' Successful ('.$user->username.')';

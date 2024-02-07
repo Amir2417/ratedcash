@@ -24,15 +24,15 @@ class BasicSettingsSeeder extends Seeder
             'timezone'          => "Asia/Dhaka",
             'broadcast_config'  => [
                 "method" => "pusher",
-                "app_id" => "1539602",
-                "primary_key" => "39079c30de823f783dbe",
-                "secret_key" => "78b81e5e7e0357aee3df",
+                "app_id" => "1574360",
+                "primary_key" => "971ccaa6176db78407bf",
+                "secret_key" => "a30a6f1a61b97eb8225a",
                 "cluster" => "ap2"
             ],
             'push_notification_config'  => [
                 "method" => "pusher",
-                "instance_id" => "809313fc-1f5c-4d0b-90bc-1c6751b83bbd",
-                "primary_key" => "58C901DC107584D2F1B78E6077889F1C591E2BC39E9F5C00B4362EC9C642F03F"
+                "instance_id" => "fd7360fa-4df7-43b9-b1b5-5a40002250a1",
+                "primary_key" => "6EEDE8A79C61800340A87C89887AD14533A712E3AA087203423BF01569B13845"
             ],
             'kyc_verification'  => true,
             'mail_config'       => [
