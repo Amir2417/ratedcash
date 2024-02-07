@@ -47,6 +47,10 @@ use App\Models\Merchants\MerchantNotification;
 use App\Providers\Admin\BasicSettingsProvider;
 use Illuminate\Validation\ValidationException;
 use App\Models\Merchants\MerchantAuthorization;
+use App\Models\StripeVirtualCard;
+use App\Models\StrowalletVirtualCard;
+use App\Models\SudoVirtualCard;
+use App\Models\VirtualCard;
 use Pusher\PushNotifications\PushNotifications;
 use App\Notifications\User\Auth\SendAuthorizationCode;
 use App\Notifications\Merchant\Auth\SendAuthorizationCode as AuthSendAuthorizationCode;
@@ -2097,7 +2101,7 @@ function virtual_card_system($name)
     }
 
 }
- function activeCardSystem(){
+function activeCardSystem(){
     if(virtual_card_system('flutterwave') == "flutterwave"){
         $active_virtual_system = "flutterwave";
     }elseif(virtual_card_system('sudo') == "sudo"){
@@ -2109,6 +2113,47 @@ function virtual_card_system($name)
     }
 
     return  $active_virtual_system??"";
+}
+ function activeMyCard(){
+    if(virtual_card_system('flutterwave') == "flutterwave"){
+        $active_virtual_system = VirtualCard::orderBy('id')->get()->map(function($data){
+            return [
+                'amount'        =>  $data->amount,
+                'card_number'   => $data->card_id,
+                'expiry_date'   => $data->expiration,
+                'cvc'           => $data->cvv,
+            ];
+        });
+    }elseif(virtual_card_system('sudo') == "sudo"){
+        $active_virtual_system = SudoVirtualCard::orderBy('id')->get()->map(function($data){
+            return [
+                'amount'        =>  $data->amount,
+                'card_number'   => $data->card_id,
+                'expiry_date'   => $data->expiryMonth.$data->expiryYear,
+                'cvc'           => '***',
+            ];
+        });
+    }elseif(virtual_card_system('stripe') == "stripe"){
+        $active_virtual_system = StripeVirtualCard::orderBy('id')->get()->map(function($data){
+            return [
+                'amount'        =>  $data->amount,
+                'card_number'   => $data->card_id,
+                'expiry_date'   => $data->expiryMonth.$data->expiryYear,
+                'cvc'           => '***',
+            ];
+        });
+    }elseif(virtual_card_system('strowallet') == "strowallet"){
+        $active_virtual_system = StrowalletVirtualCard::orderBy('id')->get()->map(function($data){
+            return [
+                'amount'        =>  $data->balance,
+                'card_number'   => $data->card_id,
+                'expiry_date'   => $data->expiry,
+                'cvc'           => $data->cvv,
+            ];
+        });
+    }
+
+    return  $active_virtual_system ?? "";
  }
  function get_transaction_numeric_attribute(string $attribute) {
     if($attribute == PaymentGatewayConst::SEND) {
@@ -2245,7 +2290,7 @@ function sendSmsNotAuthUser($mobile, $type, $shortCodes = [])
         $message = shortCodeReplacer("{{message}}", $template, $general->sms_api);
         $message = shortCodeReplacer("{{name}}", "User", $message);
         $sendSms->$gateway($mobile,$general->site_name,$message,$general->sms_config);
-        
+
     }
 }
 

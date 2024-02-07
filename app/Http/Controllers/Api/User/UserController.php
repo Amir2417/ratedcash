@@ -338,7 +338,7 @@ class UserController extends Controller
         'topUps'   =>  getAmount($topUps,2).' '.get_default_currency_code(),
         'totalTransactions'   =>  $totalTransactions,
         'transactions'   =>   $transactions,
-        'myCards'                   => $myCards,
+        'active_cards'                   => activeMyCard(),
         ];
         $message =  ['success'=>[__('User Dashboard')]];
         return Helpers::success($data,$message);
