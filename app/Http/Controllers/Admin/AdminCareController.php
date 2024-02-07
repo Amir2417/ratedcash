@@ -410,7 +410,6 @@ class AdminCareController extends Controller
      */
     public function rolePermissionIndex()
     {
-        // dd('working');
         $page_title = "Permission Group";
         $roles = AdminRole::get();
         $permissions = AdminRolePermission::get();

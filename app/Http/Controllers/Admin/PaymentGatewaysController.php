@@ -1221,7 +1221,7 @@ class PaymentGatewaysController extends Controller
             $gateway->currencies()->delete();
             $gateway->delete();
 
-            // dd($gateway);
+           
             if($gateway->image != null) {
                 $image_link = get_files_path('payment-gateways') . "/" . $gateway->image;
                 delete_file($image_link);

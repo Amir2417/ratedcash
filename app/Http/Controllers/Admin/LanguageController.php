@@ -225,7 +225,7 @@ class LanguageController extends Controller
         }catch(Exception $e) {
             return back()->with(['error' => [$e->getMessage()]]);
         }
-        //  dd(json_encode((new LanguageImport)->toArray($validated['file'])->columnData()->getArray()['Key']));
+        
         $filter_with_database_lang = array_intersect_key($sheets,[$validated['language'] => "value"]);
 
         $get_predefine_keys = LanguageImport::getKeys();

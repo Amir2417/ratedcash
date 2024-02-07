@@ -345,9 +345,8 @@ class UserAuthenticationController extends Controller
             $preview_url = route('qrpay.pay.v1.user.payment.preview.submit',$token);
         }
 
-        // dd('working');
-
-        // return new FormRequest();
+        
+        
 
         $payment_controller = new PaymentController();
 

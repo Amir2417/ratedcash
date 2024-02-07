@@ -2381,7 +2381,7 @@ public function blogItemStore(Request $request){
     try{
         Blog::create($validated);
     }catch(Exception $e) {
-        dd($e->getMessage());
+       
 
         return back()->with(['error' => ['Something went worng! Please try again']]);
     }

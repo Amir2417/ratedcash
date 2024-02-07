@@ -64,7 +64,7 @@ trait PaypalTrait
             ]
         ]);
         
-        // dd($response);
+        
         # Temporary Data Insert
         $temp = new TemporaryData();
         $temp->type = 'payment-gateway';

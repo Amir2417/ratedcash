@@ -91,15 +91,14 @@ class MerchantController extends Controller
                 $this->createLoginLogs($user);
                 // Create wallet for user
                 foreach ($activeCurrency as $currency) {
-                    // dd($currency->code);
-                    // $walletCheck = UserWallet::where('user_id', $user->id)->where('currency_id', $currency->id)->where('currency_code', $currency->code)->count();
+                    
                     $walletCheck = UserWallet::where('user_id', $user->id)->where('currency_id', $currency->id)->count();
                     if ($walletCheck == 0) {
                         $wallet = new UserWallet();
                         $wallet->user_id = auth()->user()->id;
                         $wallet->currency_id =  $currency->id;
                         $wallet->balance = 0;
-                        // $wallet->currency_code = $currency->code;
+                       
                         $wallet->save();
                     }
                 }
