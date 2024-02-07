@@ -16,7 +16,7 @@ class BasicSettingsSeeder extends Seeder
     public function run()
     {
         $data = [
-            'site_name'         => "QRPAY",
+            'site_name'         => "RatedCash",
             'site_title'        => "Money Transfer with QR Code",
             'base_color'        => "#0C56DB",
             'web_version'       => "3.2.0",
