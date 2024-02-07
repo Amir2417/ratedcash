@@ -22,10 +22,12 @@ use App\Providers\Admin\BasicSettingsProvider;
 class UserController extends Controller
 {
     protected $api;
+    protected $card_limit;
     public function __construct()
     {
         $cardApi = VirtualCardApi::first();
         $this->api =  $cardApi;
+        $this->card_limit =  $cardApi->card_limit;
     }
     public function home(){
         $user = auth()->user();
@@ -302,7 +304,24 @@ class UserController extends Controller
             'request_money' => module_access_api('request-money'),
             'pay_link' => module_access_api('pay-link'),
         ];
-
+        $myCards = VirtualCard::where('user_id',$user->id)->latest()->limit($this->card_limit)->get()->map(function($data){
+            $statusInfo = [
+                "block" =>      0,
+                "unblock" =>     1,
+                ];
+            return[
+                'id' => $data->id,
+                'name' => $data->name,
+                'card_pan' => $data->card_pan,
+                'card_id' => $data->card_id,
+                'expiration' => $data->expiration,
+                'cvv' => $data->cvv,
+                'amount' => getAmount($data->amount,2),
+                'status' => $data->is_active,
+                'is_default' => $data->is_default,
+                'status_info' =>(object)$statusInfo ,
+            ];
+        });
         $data =[
         'base_curr'    => get_default_currency_code(),
         'module_access'    => (object)$module_access,
@@ -319,6 +338,7 @@ class UserController extends Controller
         'topUps'   =>  getAmount($topUps,2).' '.get_default_currency_code(),
         'totalTransactions'   =>  $totalTransactions,
         'transactions'   =>   $transactions,
+        'myCards'                   => $myCards,
         ];
         $message =  ['success'=>[__('User Dashboard')]];
         return Helpers::success($data,$message);

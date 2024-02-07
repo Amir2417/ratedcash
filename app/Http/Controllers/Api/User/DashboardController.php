@@ -10,14 +10,7 @@ use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
 {
-    protected $api;
-    protected $card_limit;
-    public function __construct()
-    {
-        $cardApi = VirtualCardApi::first();
-        $this->api =  $cardApi;
-        $this->card_limit =  $cardApi->card_limit;
-    }
+    
     /**
      * Method for dashboard data
      */
@@ -99,24 +92,7 @@ class DashboardController extends Controller
                                         ->whereDate('created_at',"<=" , $this_year_end)
                                         ->where('status',1)->sum('request_amount');
         $user                       = auth()->user();
-        $myCards = VirtualCard::where('user_id',$user->id)->latest()->limit($this->card_limit)->get()->map(function($data){
-            $statusInfo = [
-                "block" =>      0,
-                "unblock" =>     1,
-                ];
-            return[
-                'id' => $data->id,
-                'name' => $data->name,
-                'card_pan' => $data->card_pan,
-                'card_id' => $data->card_id,
-                'expiration' => $data->expiration,
-                'cvv' => $data->cvv,
-                'amount' => getAmount($data->amount,2),
-                'status' => $data->is_active,
-                'is_default' => $data->is_default,
-                'status_info' =>(object)$statusInfo ,
-            ];
-        });
+        
         
         $data =[
             'base_curr'                 => get_default_currency_code(),
@@ -132,7 +108,7 @@ class DashboardController extends Controller
             'this_month_send_money'     => $this_month_send_money,
             'this_week_send_money'      => $this_week_send_money,
             'this_year_send_money'      => $this_year_send_money,
-            'myCards'                   => $myCards,
+            
         ];
         $message =  ['success'=>[__('Chart Data Fetch Successfully.')]];
         return Helpers::success($data,$message);
