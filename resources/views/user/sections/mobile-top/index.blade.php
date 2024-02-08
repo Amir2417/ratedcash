@@ -39,7 +39,7 @@
                                 </div>
                                 <div class="col-xl-6 col-lg-6  form-group">
                                     <label>{{ __("Mobile TopUp") }} <span class="text--base">*</span></label>
-                                    <select class="form--control" name="topup_type">
+                                    <select class="form--control select2-basic" name="topup_type">
                                         @foreach ($topupType['data'] ?? [] as $type)
                                         <option value="{{ $type['biller_name'] }}" data-name="{{ $type['biller_name'] }}">{{ $type['biller_name'] }}</option>
                                         @endforeach

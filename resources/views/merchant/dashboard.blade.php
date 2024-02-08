@@ -82,7 +82,7 @@
             <div class="col-xxl-12 col-xl-12 col-lg-12 mb-20">
                 <div class="chart-wrapper">
                     <div class="dashboard-header-wrapper">
-                        <h4 class="title">Buy Coin Chart</h4>
+                        <h4 class="title">Withdraw Chart</h4>
                     </div>
                     <div class="chart-container">
                         <div id="chart1"  data-chart_one_data="{{ json_encode($chartData['chart_one_data']) }}" data-month_day="{{ json_encode($chartData['month_day']) }}" class="chart"></div>

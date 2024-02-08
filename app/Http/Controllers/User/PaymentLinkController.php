@@ -435,6 +435,7 @@ class PaymentLinkController extends Controller
             $this->stripeLinkInit($validated, $credentials);
             return redirect()->route('payment-link.transaction.success', $payment_link->token)->with(['success' => [__('Transaction Successful')]]);
        } catch (\Exception $e) {
+            
             return back()->with(['error' => [__("Something went wrong! Please try again.")]]);
        }
 

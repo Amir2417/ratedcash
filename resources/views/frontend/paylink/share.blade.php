@@ -155,7 +155,7 @@
                         <div class="col-xl-12 form-group">
                             <div class="preview-secure-group">
                                 <img src="{{ asset('public/frontend/images/icon/100-percent.png') }}" alt="">
-                                <p>{{ __('Securely save my inforation for 1-click checkout') }} <span>{{ __('Pay faster on') }} {{ @$payment_link->user->address->company_name }} {{ __('and everywhere Link is accepted') }}</span></p>
+                                <p>{{ __('Securely save my information for 1-click checkout') }} <span>{{ __('Pay faster on') }} {{ @$payment_link->user->address->company_name }} {{ __('and everywhere Link is accepted') }}</span></p>
                             </div>
                         </div>
                         <div class="col-xl-12 form-group pt-10">
