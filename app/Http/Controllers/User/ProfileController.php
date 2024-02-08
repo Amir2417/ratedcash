@@ -40,7 +40,7 @@ class ProfileController extends Controller
             'firstname'     => "required|string|max:60",
             'lastname'      => "required|string|max:60",
             'country'       => "required|string|max:50",
-            'email'         => "required|",
+            'email'         => "required|email",
             'state'         => "nullable|string|max:50",
             'city'          => "nullable|string|max:50",
             'zip_code'      => "nullable|string",

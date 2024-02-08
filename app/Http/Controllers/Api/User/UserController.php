@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\User;
 
 use Exception;
+use App\Models\User;
 use App\Models\UserWallet;
 use App\Models\Transaction;
 use App\Models\VirtualCard;
@@ -10,10 +11,10 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Constants\GlobalConst;
 use App\Models\VirtualCardApi;
-use App\Http\Helpers\Api\Helpers;
-use App\Http\Controllers\Controller;
-use App\Models\Admin\BasicSettings;
 use App\Models\UserNotification;
+use App\Http\Helpers\Api\Helpers;
+use App\Models\Admin\BasicSettings;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
@@ -359,8 +360,7 @@ class UserController extends Controller
             'firstname'     => "required|string|max:60",
             'lastname'      => "required|string|max:60",
             'country'       => "required|string|max:50",
-            'phone_code'    => "required|string|max:6",
-            'phone'         => "required|string|max:20|unique:users,mobile,".$user->id,
+            'email'         => "required|email",
             'state'         => "nullable|string|max:50",
             'city'          => "nullable|string|max:50",
             'zip_code'      => "nullable|string",
@@ -372,16 +372,16 @@ class UserController extends Controller
             return Helpers::validation($error);
         }
         $data = $request->all();
-        $mobileCode = remove_speacial_char($data['phone_code']);
-        $mobile = remove_speacial_char($data['phone']);
+
+        if(User::where('email',$data['email'])->exists()){
+            $error = ['error'=>[__("Email already exists!")]];
+            return Helpers::error($error);
+        }
 
         $validated['firstname']      =$data['firstname'];
         $validated['lastname']      =$data['lastname'];
-        $validated['mobile']        = $mobile;
-        $validated['mobile_code']   = $mobileCode;
-        $complete_phone             = $mobileCode.$mobile;
-
-        $validated['full_mobile']   = $complete_phone;
+        $validated['email']        = $data['email'];
+        
 
         $validated['address']       = [
             'country'   =>$data['country']??"",
