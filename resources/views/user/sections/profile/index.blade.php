@@ -47,7 +47,7 @@
                                     <div class="profile-content">
                                         <h6 class="username">{{ auth()->user()->username }}</h6>
                                         <ul class="user-info-list mt-md-2">
-                                            <li><i class="las la-envelope"></i>{{ auth()->user()->full_mobile }}</li>
+                                            <li><i class="las la-phone"></i>{{ auth()->user()->full_mobile }}</li>
                                         </ul>
                                     </div>
                                 </div>
