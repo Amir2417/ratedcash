@@ -47,7 +47,7 @@
                                     <div class="profile-content">
                                         <h6 class="username">{{ auth()->user()->username }}</h6>
                                         <ul class="user-info-list mt-md-2">
-                                            <li><i class="las la-envelope"></i>{{ auth()->user()->email }}</li>
+                                            <li><i class="las la-envelope"></i>{{ auth()->user()->full_mobile }}</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -75,13 +75,12 @@
                                         <select name="country" class="form--control select2-auto-tokenize country-select" data-placeholder="Select Country" data-old="{{ old('country',auth()->user()->address->country ?? "") }}"></select>
                                     </div>
                                     <div class="col-xl-6 col-lg-6 form-group">
-                                        <label>{{ __("Phone") }}<span>*</span></label>
-                                        <div class="input-group">
-                                            <div class="input-group-text phone-code">+{{ auth()->user()->mobile_code }}</div>
-                                            <input class="phone-code" type="hidden" name="phone_code" value="{{ auth()->user()->mobile_code }}" />
-                                            <input type="text" class="form--control" placeholder="Enter Phone ..." name="phone" value="{{ old('phone',auth()->user()->mobile) }}">
-                                        </div>
-
+                                        @include('admin.components.form.input',[
+                                            'label'         => "Email",
+                                            'name'          => "email",
+                                            'placeholder'   => "Enter Email...",
+                                            'value'         => old('address',auth()->user()->email ?? "")
+                                        ])
                                     </div>
                                     <div class="col-xl-6 col-lg-6 form-group">
                                         @include('admin.components.form.input',[

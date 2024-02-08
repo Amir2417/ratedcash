@@ -1582,10 +1582,7 @@ function slug($string)
 {
     return Illuminate\Support\Str::slug($string);
 }
-// function getSectionData($slug){
-//     $data = SiteSections::where('key', $slug)->first();
-//     return $data;
-// }
+
 //moveable
 function getDialCode()
 {
@@ -1594,7 +1591,7 @@ function getDialCode()
     $agent = new Agent();
     $mac = "";
     $data = [
-        // 'user_id'       => $user->id,
+       
         'ip'            => $client_ip,
         'mac'           => $mac,
         'city'          => $location['city'] ?? "",

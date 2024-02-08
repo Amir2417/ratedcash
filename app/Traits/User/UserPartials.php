@@ -7,7 +7,7 @@ trait UserPartials{
 		$user = $this->user();
 	    $qrCode = $user->qrCode()->first();
         $in['user_id'] = $user->id;;
-        $in['qr_code'] =  $user->email;
+        $in['qr_code'] =  $user->full_mobile;
 	    if(!$qrCode){
             UserQrCode::create($in);
 	    }else{
@@ -19,8 +19,4 @@ trait UserPartials{
 	protected function user(){
 		return userGuard()['user'];
 	}
-
-
-
-
 }

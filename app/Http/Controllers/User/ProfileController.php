@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin\SetupKyc;
+use App\Models\User;
 use App\Providers\Admin\BasicSettingsProvider;
 use Exception;
 use Illuminate\Http\Request;
@@ -39,8 +40,7 @@ class ProfileController extends Controller
             'firstname'     => "required|string|max:60",
             'lastname'      => "required|string|max:60",
             'country'       => "required|string|max:50",
-            'phone_code'    => "required|string|max:20",
-            'phone'         => "required|string|max:20",
+            'email'         => "required|",
             'state'         => "nullable|string|max:50",
             'city'          => "nullable|string|max:50",
             'zip_code'      => "nullable|string",
@@ -48,11 +48,8 @@ class ProfileController extends Controller
             'image'         => "nullable|image|mimes:jpg,png,svg,webp|max:10240",
         ])->validate();
 
-        $validated['mobile']        = remove_speacial_char($validated['phone']);
-        $validated['mobile_code']   = remove_speacial_char($validated['phone_code']);
-        $complete_phone             = $validated['mobile_code'] . $validated['mobile'];
-        $validated['full_mobile']   = $complete_phone;
-        $validated                  = Arr::except($validated,['agree','phone_code','phone']);
+        
+        $validated                  = Arr::except($validated,['agree']);
         $validated['address']       = [
             'country'   =>$validated['country'],
             'state'     => $validated['state'] ?? "",
@@ -60,6 +57,12 @@ class ProfileController extends Controller
             'zip'       => $validated['zip_code'] ?? "",
             'address'   => $validated['address'] ?? "",
         ];
+        
+        if(User::where('email',$validated['email'])->exists()){
+            throw ValidationException::withMessages([
+                'name'  => "Email already exists!",
+            ]);
+        }
 
         if($request->hasFile("image")) {
             $image = upload_file($validated['image'],'user-profile',auth()->user()->image);
