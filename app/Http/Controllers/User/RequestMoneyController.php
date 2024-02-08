@@ -95,10 +95,10 @@ class RequestMoneyController extends Controller
 
             $trx_details = [
                 'receiver_username'     => $receiver_wallet->user->username,
-                'receiver_email'        => $receiver_wallet->user->email,
+                'receiver_full_mobile'        => $receiver_wallet->user->full_mobile,
                 'receiver_fullname'     => $receiver_wallet->user->fullname,
                 'sender_username'       => $sender_wallet->user->username,
-                'sender_email'          => $sender_wallet->user->email,
+                'sender_full_mobile'          => $sender_wallet->user->full_mobile,
                 'sender_fullname'       => $sender_wallet->user->fullname,
                 'charges'               => $charges,
             ];
@@ -284,57 +284,56 @@ class RequestMoneyController extends Controller
         return $data;
     }
 
-     //manage transactions list
-     public function logLists()
-     {
-         $page_title = __("Request Money Logs");
-         $user = auth()->user();
-         $transactions = Transaction::auth()->requestMoney()->orderByDesc("id")->paginate(10);
-         return view('user.sections.request-money.logs.index',compact('page_title','transactions'));
-     }
+    //manage transactions list
+    public function logLists(){
+        $page_title = __("Request Money Logs");
+        $user = auth()->user();
+        $transactions = Transaction::auth()->requestMoney()->orderByDesc("id")->paginate(10);
+        return view('user.sections.request-money.logs.index',compact('page_title','transactions'));
+    }
 
-     public function approved(Request $request) {
-         $validated = Validator::make($request->all(),[
-             'target'        => "required|numeric",
-         ])->validate();
-         $transaction = Transaction::where('id', $validated['target'])->requestMoney()->pending()->first();
-         if(!$transaction){
-             return back()->with(['error' => [__("Something went wrong! Please try again.")]]);
-         }
-         //request sender
-         $sender = User::where('email',$transaction->details->sender_email)->first();
-         $sender_currency =  $transaction->details->charges->sender_currency;
-         $sender_wallet = UserWallet::where("user_id",$sender->id)->whereHas("currency",function($q) use ($sender_currency) {
-             $q->where("code",$sender_currency)->active();
-         })->active()->first();
-         if(!$sender_wallet) return back()->with(['error' => [__("Sender wallet isn't available with currency").' ('.$sender_currency.')']]);
-         //request receiver
-         $receiver = User::where('email',$transaction->details->receiver_email)->first();
-         $receiver_currency =  $transaction->details->charges->receiver_currency;
-         $receiver_wallet = UserWallet::where("user_id",$receiver->id)->whereHas("currency",function($q) use ($receiver_currency){
-             $q->receiver()->where("code",$receiver_currency);
-         })->first();
-         if(!$receiver_wallet) return back()->with(['error' => [__("Receiver wallet isn't available with currency").' ('.$receiver_currency.')']]);
-         //receiver wallet balance check
-         if( $transaction->payable > $receiver_wallet->balance) return back()->with(['error' => [__("Your wallet balance is insufficient")]]);
-            DB::table($sender_wallet->getTable())->where("id",$sender_wallet->id)->update([
-                'balance'           => ($sender_wallet->balance + $transaction->request_amount),
-            ]);
-            $receiver_wallet->refresh();
-            DB::table($receiver_wallet->getTable())->where("id",$receiver_wallet->id)->update([
-                'balance'           => ($receiver_wallet->balance - $transaction->payable),
-            ]);
-         //make success now both transactions
-         $data =  Transaction::where('trx_id', $transaction->trx_id)->requestMoney()->pending()->get();
-         try{
-            foreach( $data as $val){
-              $val->status = PaymentGatewayConst::STATUSSUCCESS;
-              $val->save();
-            }
-         }catch(Exception $e) {
-             return back()->with(['error' => [__("Something went wrong! Please try again.")]]);
-         }
-         return back()->with(['success' => [__('Request approved Successfully!')]]);
+    public function approved(Request $request) {
+        $validated = Validator::make($request->all(),[
+            'target'        => "required|numeric",
+        ])->validate();
+        $transaction = Transaction::where('id', $validated['target'])->requestMoney()->pending()->first();
+        if(!$transaction){
+            return back()->with(['error' => [__("Something went wrong! Please try again.")]]);
+        }
+        //request sender
+        $sender = User::where('full_mobile',$transaction->details->sender_full_mobile)->first();
+        $sender_currency =  $transaction->details->charges->sender_currency;
+        $sender_wallet = UserWallet::where("user_id",$sender->id)->whereHas("currency",function($q) use ($sender_currency) {
+            $q->where("code",$sender_currency)->active();
+        })->active()->first();
+        if(!$sender_wallet) return back()->with(['error' => [__("Sender wallet isn't available with currency").' ('.$sender_currency.')']]);
+        //request receiver
+        $receiver = User::where('full_mobile',$transaction->details->receiver_full_mobile)->first();
+        $receiver_currency =  $transaction->details->charges->receiver_currency;
+        $receiver_wallet = UserWallet::where("user_id",$receiver->id)->whereHas("currency",function($q) use ($receiver_currency){
+            $q->receiver()->where("code",$receiver_currency);
+        })->first();
+        if(!$receiver_wallet) return back()->with(['error' => [__("Receiver wallet isn't available with currency").' ('.$receiver_currency.')']]);
+        //receiver wallet balance check
+        if( $transaction->payable > $receiver_wallet->balance) return back()->with(['error' => [__("Your wallet balance is insufficient")]]);
+        DB::table($sender_wallet->getTable())->where("id",$sender_wallet->id)->update([
+            'balance'           => ($sender_wallet->balance + $transaction->request_amount),
+        ]);
+        $receiver_wallet->refresh();
+        DB::table($receiver_wallet->getTable())->where("id",$receiver_wallet->id)->update([
+            'balance'           => ($receiver_wallet->balance - $transaction->payable),
+        ]);
+        //make success now both transactions
+        $data =  Transaction::where('trx_id', $transaction->trx_id)->requestMoney()->pending()->get();
+        try{
+        foreach( $data as $val){
+            $val->status = PaymentGatewayConst::STATUSSUCCESS;
+            $val->save();
+        }
+        }catch(Exception $e) {
+            return back()->with(['error' => [__("Something went wrong! Please try again.")]]);
+        }
+        return back()->with(['success' => [__('Request approved Successfully!')]]);
      }
      public function rejected(Request $request) {
          $validated = Validator::make($request->all(),[
