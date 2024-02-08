@@ -295,6 +295,7 @@ class MoneyOutController extends Controller
         if(Auth::guard(get_auth_guard())->check()){
             $merchant = auth()->guard(get_auth_guard())->user();
         }
+        
         DB::beginTransaction();
         try{
             DB::table('transaction_charges')->insert([
