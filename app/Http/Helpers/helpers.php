@@ -1841,11 +1841,11 @@ function module_access($key,$module = null)
     if (!$module) {
         $module = ModuleSetting::query();
     }
-    return $module->where('user_type',userGuard()['type'])->where('slug',$key)->first();
+    return $module->where('slug',$key)->first();
 }
 function module_access_api($key)
 {
-    $module = ModuleSetting::where('slug',$key)->where('user_type',userGuard()['type'])->first();
+    $module = ModuleSetting::where('slug',$key)->first();
     return  $module->status;
 }
 function module_access_merchant_api($key)
