@@ -98,25 +98,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xxxl-4 col-xxl-3 col-xl-3 col-lg-6 col-md-6 col-sm-12 mb-15">
-                    <div class="dashbord-item">
-                        <div class="dashboard-content">
-                            <div class="left">
-                                <h6 class="title">{{ __("Remittance Balance") }}</h6>
-                                <div class="user-info">
-                                    <h2 class="user-count">{{ get_default_currency_symbol() }}{{ get_amount($data['total_remittance']) }}</h2>
-                                </div>
-                                <div class="user-badge">
-                                    <span class="badge badge--info">{{ __("Completed") }} {{ get_default_currency_symbol() }}{{ formatNumberInKNotation($data['completed_remittance']) }}</span>
-                                    <span class="badge badge--warning">{{ __("Pending") }} {{ get_default_currency_symbol() }}{{ formatNumberInKNotation($data['pending_remittance']) }}</span>
-                                </div>
-                            </div>
-                            <div class="right">
-                                <div class="chart" id="chart11" data-percent="{{ $data['remittance_percent'] }}"><span>{{ round($data['remittance_percent'],2) }}%</span></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
                  <div class="col-xxxl-4 col-xxl-3 col-xl-3 col-lg-6 col-md-6 col-sm-12 mb-15">
                     <div class="dashbord-item">
                         <div class="dashboard-content">
