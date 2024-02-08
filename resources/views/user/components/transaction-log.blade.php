@@ -62,9 +62,9 @@
                             @elseif ($item->type == payment_gateway_const()::REQUESTMONEY)
                                 @if ($item->isAuthUser())
                                     @if ($item->attribute == payment_gateway_const()::SEND)
-                                        <h4 class="title">{{ __("Request Money to @" . $item->details->receiver_email) }} </h4>
+                                        <h4 class="title">{{ __("Request Money to @" . $item->details->receiver_full_mobile) }} </h4>
                                     @elseif ($item->attribute == payment_gateway_const()::RECEIVED)
-                                        <h4 class="title">{{ __("Request Money from @" . $item->details->sender_email) }} </h4>
+                                        <h4 class="title">{{ __("Request Money from @" . $item->details->sender_full_mobile) }} </h4>
                                     @endif
                                 @endif
                             @elseif ($item->type == payment_gateway_const()::TYPEPAYLINK)
