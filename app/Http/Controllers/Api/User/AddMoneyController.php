@@ -227,7 +227,7 @@ class AddMoneyController extends Controller
                     $message =  ['success'=>[__('Add Money Inserted Successfully')]];
                     return Helpers::success($data,$message);
                 }elseif($temData->type == PaymentGatewayConst::SSLCOMMERZ) {
-
+                    
                     $payment_informations =[
                         'trx' =>  $temData->identifier,
                         'gateway_currency_name' =>  $payment_gateway_currency->name,
@@ -531,6 +531,7 @@ class AddMoneyController extends Controller
             return Helpers::error($message);
         }
         try{
+           
             PaymentGatewayApi::init($checkTempData)->type(PaymentGatewayConst::TYPEADDMONEY)->responseReceive('sslcommerz');
         }catch(Exception $e) {
             $message = ['error' => [__("Something went wrong! Please try again.")]];

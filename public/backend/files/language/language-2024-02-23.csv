@@ -216,7 +216,7 @@ Log in and Stay Connected,Log in and Stay Connected,Inicie sesión y manténgase
 Register for an Account Today,Register for an Account Today,Regístrese para obtener una cuenta hoy,سجل اليوم للحصول على حساب جديد,Inscrivez-vous aujourd'hui
 Reset Your Forgotten Password,Reset Your Forgotten Password,Restablecer su contraseña olvidada,إعادة تعيين كلمة المرور المنسية,Réinitialisez votre mot de passe oublié
 Developer,Developer,Desarrolladora,مطور,Développeuse
-app Name,QRPAY,QRPAY,كيو آر بي باي,QRPAY
+app Name,RatedCash,RatedCash,كيو آر بي باي,RatedCash
 please Fill Out The Field,Please Fill Out The Field,Por favor complete el campo,يُرجى ملء الحقل,Veuillez remplir le champ
 sign In,Sign In,Iniciar sesión,تسجيل الدخول,Se connecter
 rich Signin,Sign In,Iniciar sesión,تسجيل الدخول,Connexion
@@ -230,7 +230,7 @@ use Secure Instant MOney,Use Secure & Instant Money Transfer App Now,Usa la apli
 user Name Or Email Address,Username Or Email Address,Nombre de usuario o dirección de correo electrónico,اسم المستخدم أو عنوان البريد الإلكتروني,Nom d'utilisateur ou adresse e-mail
 password,Password,Contraseña,كلمة المرور,Mot de passe
 get Started,Get Started,Empezar,البدء,Commencer
-use App For Instant,Use QRPAY app for instant money transfer. Scan or Place this QRcode for receiving money in your wallet. Share this QR for instant money receiving.,Usa la aplicación QRPAY para transferencias de dinero instantáneas. Escanea o coloca este código QR para recibir dinero en tu billetera. Comparte este QR para recibir dinero instantáneo.,استخدم تطبيق QRPAY لنقل الأموال الفوري. قم بمسح أو وضع رمز الاستجابة السريعة هذا لاستقبال الأموال في محفظتك. قم بمشاركة هذا الرمز لاستقبال الأموال الفوري.,Utilisez l'application QRPAY pour un transfert d'argent instantané. Scannez ou placez ce code QR pour recevoir de l'argent dans votre portefeuille. Partagez ce code QR pour recevoir de l'argent instantanément.
+use App For Instant,Use RatedCash app for instant money transfer. Scan or Place this QRcode for receiving money in your wallet. Share this QR for instant money receiving.,Usa la aplicación RatedCash para transferencias de dinero instantáneas. Escanea o coloca este código QR para recibir dinero en tu billetera. Comparte este QR para recibir dinero instantáneo.,استخدم تطبيق RatedCash لنقل الأموال الفوري. قم بمسح أو وضع رمز الاستجابة السريعة هذا لاستقبال الأموال في محفظتك. قم بمشاركة هذا الرمز لاستقبال الأموال الفوري.,Utilisez l'application RatedCash pour un transfert d'argent instantané. Scannez ou placez ce code QR pour recevoir de l'argent dans votre portefeuille. Partagez ce code QR pour recevoir de l'argent instantanément.
 email Address,Email Address,Dirección de correo electrónico,عنوان البريد الإلكتروني,Adresse e-mail
 enter The OTPCode Send To,We sent a 6-digit code to your email,Enviamos un código de 6 dígitos a tu correo electrónico,لقد أرسلنا رمزًا مكوَّنًا من 6 أرقام إلى بريدك الإلكتروني,Nous avons envoyé un code à 6 chiffres à votre adresse e-mail
 enter The Google Auth OTPCode,Enter OTP Code From Google Authenticator,Ingresa el código OTP de Google Authenticator,أدخل رمز OTP من Google Authenticator,Entrez le code OTP de Google Authenticator
@@ -241,7 +241,7 @@ o TPVerification,Otp Verification,Verificación OTP,التحقق من مكتب �
 email Verification,Email Verification,Verificación por correo electrónico,التحقق عبر البريد الإلكتروني,Vérification par e-mail
 resend,Resend,Reenviar,إعادة الإرسال,Renvoyer
 xxx,xxx xxxx xxx,xxx xxxx xxx,xxx xxxx xxx,xxx xxxx xxx
-pay And Go,QRPAY-PAY AND GO,QRPAY-PAGAR Y GO,QRPAY-دفع وانطلق,QRPAY-PAY ET PARTIR
+pay And Go,RatedCash-PAY AND GO,RatedCash-PAGAR Y GO,RatedCash-دفع وانطلق,RatedCash-PAY ET PARTIR
 the Codeis Not Valid,The code is not valid,El código no es válido,الكود غير صالح,Le code n'est pas valide
 number,1684,1684,1684,1684
 number Plus1684,+1684 632 5468 783,+1684 632 5468 783,+1684 632 5468 783,+1684 632 5468 783
@@ -250,7 +250,7 @@ next,Next,Siguiente,التالي,Suivant
 enter Password,Enter password,Ingrese la contraseña,أدخل كلمة المرور,Entrez le mot de passe
 app Not Available,App Not Available,Aplicación no disponible,التطبيق غير متاح,L'application n'est pas disponible
 permission Denied,Permission Denied,Permiso denegado,تم رفض الإذن,Permission refusée
-app Not Available Sub Title,QRPAY is suddenly not available in the current region/country.,QRPAY no está disponible en la región/país actualmente.,QRPAY غير متاحة في الوقت الحالي في الإقليم/البلد الحالي.,QRPAY n'est soudainement pas disponible dans la région/pays actuel.
+app Not Available Sub Title,RatedCash is suddenly not available in the current region/country.,RatedCash no está disponible en la región/país actualmente.,RatedCash غير متاحة في الوقت الحالي في الإقليم/البلد الحالي.,RatedCash n'est soudainement pas disponible dans la région/pays actuel.
 please Enter Your Register,Take control of your account by resetting your password. Our password recovery page guides you through the necessary steps.,Toma el control de tu cuenta restableciendo tu contraseña. Nuestra página de recuperación de contraseñas te guiará a través de los pasos necesarios.,تولي السيطرة على حسابك من خلال إعادة تعيين كلمة المرور الخاصة بك. صفحة استرداد كلمة المرور الخاصة بنا سترشدك خلال الخطوات اللازمة.,Prenez le contrôle de votre compte en réinitialisant votre mot de passe. Notre page de récupération de mot de passe vous guide à travers les étapes nécessaires.
 continues,continues,Continúa,استمر,continue
 continuee,Continue,Continuar,متابعة,Continuer
@@ -283,8 +283,8 @@ back Part,Back Part,Partie avant,الجزء الأمامي,Partie avant
 upload Passport,Upload Passport / NID / Driving Lic. etc doc for verification,Partie arrière,الجزء الخلفي,Partie arrière
 confirm Password,Confirm Password,"Télécharger le passeport / NID / permis de conduire, etc. pour vérification",قم بتحميل جواز السفر / الهوية الوطنية / رخصة القيادة وما إلى ذلك للتحقق,"Téléchargez le passeport / la carte d'identité nationale / le permis de conduire, etc. pour vérification"
 enter Confirm Password,Enter Confirm Password,Confirmez le mot de passe,تأكيد كلمة المرور,Confirmez le mot de passe
-by Using,By using QRPAY’s you agree to our,Entrez le mot de passe de confirmation,أدخل كلمة المرور للتأكيد,Entrez à nouveau le mot de passe pour confirmation
-user Agreement,User Agreement.,"En utilisant QRPAY, vous acceptez notre Contrat d'utilisateur.",باستخدام QRPAY ، فإنك توافق على اتفاقية المستخدم لدينا.,"En utilisant QRPAY, vous acceptez notre Contrat d'utilisateur."
+by Using,By using RatedCash’s you agree to our,Entrez le mot de passe de confirmation,أدخل كلمة المرور للتأكيد,Entrez à nouveau le mot de passe pour confirmation
+user Agreement,User Agreement.,"En utilisant RatedCash, vous acceptez notre Contrat d'utilisateur.",باستخدام RatedCash ، فإنك توافق على اتفاقية المستخدم لدينا.,"En utilisant RatedCash, vous acceptez notre Contrat d'utilisateur."
 or,or,ou,أو,ou
 reset Password Details,Reset your password to get back access to your dashboard again.,Restablece tu contraseña para volver a acceder a tu panel de control.,أعد تعيين كلمة المرور الخاصة بك للوصول مرة أخرى إلى لوحة التحكم الخاصة بك.,Réinitialisez votre mot de passe pour retrouver l'accès à votre tableau de bord.
 fingerprint,Fingerprint,Huella dactilar,بصمة الإصبع,Empreinte digitale
@@ -306,7 +306,7 @@ reload,Reload,Recargar,إعادة تحميل,Recharger
 exit,Exit,Salir,خروج,Quitter
 welcome Backto,Welcome Back to,Bienvenido de nuevo a,مرحبًا مرة أخرى في,Bienvenue de retour à
 sign In With,Sign In with,Iniciar sesión con,تسجيل الدخول باستخدام,Se connecter avec
-new To App,New to QRPAY?,¿Eres nuevo en QRPAY?,هل أنت جديد في QRPAY؟,Nouveau sur QRPAY ?
+new To App,New to RatedCash?,¿Eres nuevo en RatedCash?,هل أنت جديد في RatedCash؟,Nouveau sur RatedCash ?
 enter Your Phone Number,Enter your Phone Number to Reset your account,Ingresa tu número de teléfono para restablecer tu cuenta,أدخل رقم هاتفك لإعادة تعيين حسابك,Entrez votre numéro de téléphone pour réinitialiser votre compte
 enter Phone,Enter Phone,Ingresar teléfono,أدخل الهاتف,Entrer le numéro de téléphone
 reset Password,Reset Password,Restablecer contraseña,إعادة تعيين كلمة المرور,Réinitialiser le mot de passe
@@ -314,8 +314,8 @@ new Password,New Password,Nueva contraseña,كلمة مرور جديدة,Nouveau
 enter New Password,Enter New Password,Ingresa la nueva contraseña,أدخل كلمة المرور الجديدة,Entrez le nouveau mot de passe
 congratulations,Congratulations,Felicidades,تهانينا,Félicitations
 your Password Has Been,"Your password has been reset Successfully, Sign in again now.","Tu contraseña se ha restablecido con éxito, inicia sesión de nuevo ahora.",تمت إعادة تعيين كلمة المرور بنجاح، قم بتسجيل الدخول مرة أخرى الآن.,Votre mot de passe a été réinitialisé avec succès. Connectez-vous à nouveau maintenant.
-send Money Succesfully,Your money has been send successfully. Thanks for using QRPAY,Tu dinero se ha enviado con éxito. Gracias por usar QRPAY.,تم إرسال الأموال بنجاح. شكرًا لاستخدام QRPAY.,Votre argent a été envoyé avec succès. Merci d'utiliser QRPAY.
-add Money Successfully,Your money has been add successfully. Thanks for using QRPAY,Tu dinero se ha añadido con éxito. Gracias por usar QRPAY.,تمت إضافة الأموال بنجاح. شكرًا لاستخدام QRPAY.,Votre argent a été ajouté avec succès. Merci d'utiliser QRPAY.
+send Money Succesfully,Your money has been send successfully. Thanks for using RatedCash,Tu dinero se ha enviado con éxito. Gracias por usar RatedCash.,تم إرسال الأموال بنجاح. شكرًا لاستخدام RatedCash.,Votre argent a été envoyé avec succès. Merci d'utiliser RatedCash.
+add Money Successfully,Your money has been add successfully. Thanks for using RatedCash,Tu dinero se ha añadido con éxito. Gracias por usar RatedCash.,تمت إضافة الأموال بنجاح. شكرًا لاستخدام RatedCash.,Votre argent a été ajouté avec succès. Merci d'utiliser RatedCash.
 opps,Opss!!,¡Vaya!,آسف!!,Oups !!
 value,Value,Valor,القيمة,Valeur
 something Went Wrong,"Something went wrong, Try again letter.","Algo salió mal, inténtalo de nuevo.",حدث خطأ، حاول مرة أخرى.,Quelque chose s'est mal passé. Réessayez ultérieurement.
@@ -360,22 +360,22 @@ giftcard Information,Giftcard Information,Información de la tarjeta de regalo,�
 name,Name,Nombre,الاسم,Nom
 amount Information,Amount Information,Información del monto,معلومات المبلغ,Informations sur le montant
 you Transfer,You Transfer,Usted transfiere,أنت قمت بالتحويل,Vous transférez
-your Money Has Been Save,Your money has been send Successfully. Thanks for using QRPAY,Su dinero se ha enviado con éxito. Gracias por usar QRPAY,تم إرسال أموالك بنجاح. شكرًا لاستخدامك QRPAY,Votre argent a été envoyé avec succès. Merci d'utiliser QRPAY
+your Money Has Been Save,Your money has been send Successfully. Thanks for using RatedCash,Su dinero se ha enviado con éxito. Gracias por usar RatedCash,تم إرسال أموالك بنجاح. شكرًا لاستخدامك RatedCash,Votre argent a été envoyé avec succès. Merci d'utiliser RatedCash
 sayok,Sayok M.,Sayok M.,سايوك م.,Sayok M.
 sayok Gmail,sayok@gmail.com,sayok@gmail.com,sayok@gmail.com,sayok@gmail.com
 q RAddress,QR Address,Dirección QR,عنوان QR,Adresse QR
 transfer Success,Transfer Success,Éxito de la transferencia,نجاح النقل,Transfert réussi
-yourmoney Sen Success,Your money has been send Successfully. Thanks for using QRPAY,Su dinero se ha enviado con éxito. Gracias por usar QRPAY,تم إرسال أموالك بنجاح. شكرًا لاستخدامك QRPAY,Votre argent a été envoyé avec succès. Merci d'utiliser QRPAY
-yourmoney Withdraw Success,Your money has been withdraw Successfully. Thanks for using QRPAY,Su dinero se ha retirado con éxito. Gracias por usar QRPAY,تم سحب أموالك بنجاح. شكرًا لاستخدامك QRPAY,Votre argent a été retiré avec succès. Merci d'utiliser QRPAY
-yourmoney Deposit Success,Your money has been Deposit Successfully. Thanks for using QRPAY,Su dinero se ha depositado con éxito. Gracias por usar QRPAY,تم إيداع أموالك بنجاح. شكرًا لاستخدامك QRPAY,Votre argent a été déposé avec succès. Merci d'utiliser QRPAY
-your Bill Pay Success,Your bill has been paid Successfully. Thanks for using QRPAY,Su factura se ha pagado con éxito. Gracias por usar QRPAY,تم دفع فاتورتك بنجاح. شكرًا لاستخدامك QRPAY,Votre facture a été payée avec succès. Merci d'utiliser QRPAY
-your Top Up Success,Your topup has been done Successfully. Thanks for using QRPAY,Su recarga se ha realizado con éxito. Gracias por usar QRPAY,تمت إعادة شحن رصيدك بنجاح. شكرًا لاستخدامك QRPAY,Votre recharge a été effectuée avec succès. Merci d'utiliser QRPAY
+yourmoney Sen Success,Your money has been send Successfully. Thanks for using RatedCash,Su dinero se ha enviado con éxito. Gracias por usar RatedCash,تم إرسال أموالك بنجاح. شكرًا لاستخدامك RatedCash,Votre argent a été envoyé avec succès. Merci d'utiliser RatedCash
+yourmoney Withdraw Success,Your money has been withdraw Successfully. Thanks for using RatedCash,Su dinero se ha retirado con éxito. Gracias por usar RatedCash,تم سحب أموالك بنجاح. شكرًا لاستخدامك RatedCash,Votre argent a été retiré avec succès. Merci d'utiliser RatedCash
+yourmoney Deposit Success,Your money has been Deposit Successfully. Thanks for using RatedCash,Su dinero se ha depositado con éxito. Gracias por usar RatedCash,تم إيداع أموالك بنجاح. شكرًا لاستخدامك RatedCash,Votre argent a été déposé avec succès. Merci d'utiliser RatedCash
+your Bill Pay Success,Your bill has been paid Successfully. Thanks for using RatedCash,Su factura se ha pagado con éxito. Gracias por usar RatedCash,تم دفع فاتورتك بنجاح. شكرًا لاستخدامك RatedCash,Votre facture a été payée avec succès. Merci d'utiliser RatedCash
+your Top Up Success,Your topup has been done Successfully. Thanks for using RatedCash,Su recarga se ha realizado con éxito. Gracias por usar RatedCash,تمت إعادة شحن رصيدك بنجاح. شكرًا لاستخدامك RatedCash,Votre recharge a été effectuée avec succès. Merci d'utiliser RatedCash
 backto Home,Back to Home,Volver a la página principal,العودة إلى الصفحة الرئيسية,Retour à la page d'accueil
 transfer Failed,Transfer Failed,Fallo en la transferencia,فشلت النقل,Échec du transfert
-your Moneyhas Beeen Failed,Your money has been Failed..!! Try Again! Thanks for using QRPAY,¡Su dinero no se ha transferido con éxito! ¡Inténtelo de nuevo! Gracias por usar QRPAY,أموالك فشلت..!! حاول مرة أخرى! شكرًا لاستخدامك QRPAY,Votre argent n'a pas été transféré avec succès ! Réessayez ! Merci d'utiliser QRPAY
+your Moneyhas Beeen Failed,Your money has been Failed..!! Try Again! Thanks for using RatedCash,¡Su dinero no se ha transferido con éxito! ¡Inténtelo de nuevo! Gracias por usar RatedCash,أموالك فشلت..!! حاول مرة أخرى! شكرًا لاستخدامك RatedCash,Votre argent n'a pas été transféré avec succès ! Réessayez ! Merci d'utiliser RatedCash
 try Again,Try Again,Intentar de nuevo,حاول مرة أخرى,Réessayer
 add Plus,Add +,Agregar +,إضافة +,Ajouter +
-update,QRPAY Update,Actualización de QRPAY,تحديث QRPAY,Mise à jour de QRPAY
+update,RatedCash Update,Actualización de RatedCash,تحديث RatedCash,Mise à jour de RatedCash
 update Your App Right,Update your app right now for more feature,Actualiza tu aplicación ahora mismo para obtener más funciones,قم بتحديث تطبيقك الآن للحصول على المزيد من الميزات,Mettez à jour votre application dès maintenant pour plus de fonctionnalités
 more Offer,More Offer,Más ofertas,عروض أكثر,Plus d'offres
 select Receipient,Select Receipient,Seleccionar destinatario,حدد المستلم,Sélectionner le destinataire
@@ -386,12 +386,12 @@ u SD1Equal,1 USD = 1 USD,1 USD = 1 USD,1 دولار أمريكي = 1 دولار 
 recipient Get,Recipient Get,Recibido por el destinatario,المبلغ الذي يحصل عليه المستلم,Reçu par le destinataire
 jhons Grill,Jhons Grill,Jhons Grill,Jhons Grill,Jhons Grill
 jhons Grill Gmail,jhonsgrill@gmail.comj,jhonsgrill@gmail.com,jhonsgrill@gmail.com,jhonsgrill@gmail.com
-wallet,QRPAY Wallet,Billetera QRPAY,محفظة QRPAY,Portefeuille QRPAY
+wallet,RatedCash Wallet,Billetera RatedCash,محفظة RatedCash,Portefeuille RatedCash
 select Bank,Select Bank,Seleccionar banco,حدد البنك,Sélectionner la banque
 cash Pickup,Cash Pickup,Retiro en efectivo,سحب نقدي,Retrait en espèces
 select Street,Select Street,Seleccionar calle,حدد الشارع,Sélectionner la rue
 sfrancisco,S. Francisco,S. Francisco,سان فرانسيسكو,S. Francisco
-money Receive Details,Use QRPAY app for instant money transfer. Scan or Place this QRcode for receiving money in your wallet. Share this QR for instant money receiving.,Utilice la aplicación QRPAY para transferencias de dinero instantáneas. Escanee o coloque este código QR para recibir dinero en su billetera. Comparta este código QR para recibir dinero instantáneo.,استخدم تطبيق QRPAY لنقل الأموال الفوري. قم بمسح أو وضع هذا الرمز الاستجابة السريعة لاستقبال الأموال في محفظتك. شارك هذا الرمز الاستجابة السريعة لاستقبال الأموال فورًا.,Utilisez l'application QRPAY pour des transferts d'argent instantanés. Scannez ou placez ce code QR pour recevoir de l'argent dans votre portefeuille. Partagez ce code QR pour recevoir de l'argent instantanément.
+money Receive Details,Use RatedCash app for instant money transfer. Scan or Place this QRcode for receiving money in your wallet. Share this QR for instant money receiving.,Utilice la aplicación RatedCash para transferencias de dinero instantáneas. Escanee o coloque este código QR para recibir dinero en su billetera. Comparta este código QR para recibir dinero instantáneo.,استخدم تطبيق RatedCash لنقل الأموال الفوري. قم بمسح أو وضع هذا الرمز الاستجابة السريعة لاستقبال الأموال في محفظتك. شارك هذا الرمز الاستجابة السريعة لاستقبال الأموال فورًا.,Utilisez l'application RatedCash pour des transferts d'argent instantanés. Scannez ou placez ce code QR pour recevoir de l'argent dans votre portefeuille. Partagez ce code QR pour recevoir de l'argent instantanément.
 sending Country,Sending Country,País de envío,بلد الإرسال,Pays d'envoi
 update Receipient,Update Recipient,Actualizar destinatario,تحديث المستلم,Mettre à jour le destinataire
 australia,Australia,Australia,أستراليا,Australie
@@ -427,7 +427,7 @@ electicity,Electicity,Electricidad,كهرباء,Électricité
 charge,Charge,Carga,شحن,Charge
 received Amount,Received Amount,Cantidad Recibida,المبلغ المستلم,Montant Reçu
 b N135678951,B/N135678951,N° de Factura: 135678951,B/N135678951,B/N135678951
-your Bill Has Been Paid,Your bill has been paid Successfully. Thanks for using QRPAY,Tu factura ha sido pagada con éxito. ¡Gracias por usar QRPAY!,تم دفع فاتورتك بنجاح. شكرًا لاستخدام QRPAY!,Votre facture a été payée avec succès. Merci d'utiliser QRPAY !
+your Bill Has Been Paid,Your bill has been paid Successfully. Thanks for using RatedCash,Tu factura ha sido pagada con éxito. ¡Gracias por usar RatedCash!,تم دفع فاتورتك بنجاح. شكرًا لاستخدام RatedCash!,Votre facture a été payée avec succès. Merci d'utiliser RatedCash !
 load Fee,Load Fee,Tarifa de Carga,رسوم التحميل,Frais de Chargement
 min Load,Min Load,Carga Mínima,حد أدنى للتحميل,Chargement Minimum
 max Load,Max Load,Carga Máxima,حد أقصى للتحميل,Chargement Maximum
@@ -440,7 +440,7 @@ a Tt Mobility,AT&T Mobility,AT&T Mobility,AT&T Mobility,AT&T Mobility
 plus1611,+1 611 2357 896,+1 611 2357 896,+1 611 2357 896,+1 611 2357 896
 top Up Now,Top Up Now,Recargar Ahora,قم بالشحن الآن,Recharger Maintenant
 mobile Top Up Success,Mobile Top Up Success,Recarga Móvil Exitosa,نجاح إعادة شحن الجوال,Recharge Mobile Réussie
-your Mobile Top Up,Your mobile top up has been Successfull. Thanks for using QRPAY,Tu recarga móvil se ha realizado con éxito. ¡Gracias por usar QRPAY!,تمت إعادة شحن هاتفك المحمول بنجاح. شكرًا لاستخدام QRPAY!,Votre recharge mobile a été effectuée avec succès. Merci d'utiliser QRPAY !
+your Mobile Top Up,Your mobile top up has been Successfull. Thanks for using RatedCash,Tu recarga móvil se ha realizado con éxito. ¡Gracias por usar RatedCash!,تمت إعادة شحن هاتفك المحمول بنجاح. شكرًا لاستخدام RatedCash!,Votre recharge mobile a été effectuée avec succès. Merci d'utiliser RatedCash !
 google Play,Google Play,Google Play,Google Play,Google Play
 google Play Gift Card,Google Play Gift Card,Tarjeta de Regalo Google Play,بطاقة هدايا Google Play,Carte Cadeau Google Play
 category,Category,Categoría,الفئة,Catégorie
@@ -457,7 +457,7 @@ quantity,Quantity,Cantidad,الكمية,Quantité
 giftcard Purchase,Giftcard Purchase,Compra de Tarjeta de Regalo,شراء بطاقة هدايا,Achat de Carte-Cadeau
 u SDzero,0.00 USD,0.00 USD,0.00 دولار أمريكي,0.00 USD
 sub Category,Sub Category,Subcategoría,فئة فرعية,Sous-Catégorie
-your Giff Card,Your Giftcard has been purchase Successfully. Thanks for using QRPAY,Tu Tarjeta de Regalo ha sido comprada con éxito. ¡Gracias por usar QRPAY!,تم شراء بطاقتك الهدية بنجاح. شكرًا لاستخدام QRPAY!,Votre carte-cadeau a été achetée avec succès. Merci d'utiliser QRPAY !
+your Giff Card,Your Giftcard has been purchase Successfully. Thanks for using RatedCash,Tu Tarjeta de Regalo ha sido comprada con éxito. ¡Gracias por usar RatedCash!,تم شراء بطاقتك الهدية بنجاح. شكرًا لاستخدام RatedCash!,Votre carte-cadeau a été achetée avec succès. Merci d'utiliser RatedCash !
 profile,Profile,Perfil,ملف التعريف,Profil
 my Wallet,My Wallet,Mi Billetera,محفظتي,Mon Portefeuille
 my Virtual Cards,My Virtual Cards,Mis Tarjetas Virtuales,بطاقاتي الافتراضية,Mes Cartes Virtuelles
@@ -470,7 +470,7 @@ enter Amount,Enter Amount,Comprar Nueva Tarjeta,شراء بطاقة جديدة,A
 add Fund,Add Fund,Ingresar Cantidad,أدخل المبلغ,Entrer le Montant
 buy Card,Buy Card,Agregar Fondos,إضافة الأموال,Ajouter des Fonds
 add Fund Succes,Add Fund Success,Agregar Fondos Éxito,إضافة الأموال بنجاح,Ajouter des Fonds Réussi
-your Money Added Succes,Your money has been deposit Successfully. Thanks for using QRPAY,Tu dinero ha sido depositado con éxito. ¡Gracias por usar QRPAY!,تم إيداع أموالك بنجاح. شكرًا لاستخدام QRPAY!,Votre argent a été déposé avec succès. Merci d'utiliser QRPAY !
+your Money Added Succes,Your money has been deposit Successfully. Thanks for using RatedCash,Tu dinero ha sido depositado con éxito. ¡Gracias por usar RatedCash!,تم إيداع أموالك بنجاح. شكرًا لاستخدام RatedCash!,Votre argent a été déposé avec succès. Merci d'utiliser RatedCash !
 upload Passport Nid Dri,Upload Passport / NID / Driving Lic. etc doc for verification,"Subir Pasaporte / NID / Licencia de Conducir, etc. para Verificación",قم بتحميل جواز السفر / بطاقة الهوية الوطنية / رخصة القيادة وما إلى ذلك للتحقق,"Télécharger un Passeport / NID / Permis de Conduire, etc. pour Vérification"
 update KYC,Update KYC,Actualizar KYC,تحديث KYC,Mettre à Jour le KYC
 enable2FASecurity,Enable 2FA Security,Habilitar Seguridad 2FA,تمكين الأمان 2FA,Activer la Sécurité 2FA
@@ -568,12 +568,12 @@ enter Business Name,Enter Business Name,Ingrese el nombre del negocio,أدخل �
 business Name,Business Name,Nombre del Negocio,الاسم التجاري,nom d'entreprise
 sender,Sender,remitente,مرسل,expéditeur
 welcome Back To,Welcome Back to,Bienvenido de nuevo a,مرحبًا بك في,bon retour à
-send Money Successfully,Your money has been send successfully. Thanks for using QRPAY Merchant,Enviar dinero con éxito,أرسل المال بنجاح,Envoyer de l'argent avec succès
+send Money Successfully,Your money has been send successfully. Thanks for using RatedCash Merchant,Enviar dinero con éxito,أرسل المال بنجاح,Envoyer de l'argent avec succès
 gateway Balance,Gateway Balance,equilibrio de puerta de enlace,توازن البوابة,Balance de la passerelle
 received Balance,Received Balance,Saldo recibido,تلقي التوازن,Balance reçue
-your Money Withdraw Success,Your money has been withdraw Successfully. Thanks for using QRPAY Merchant,Su dinero retira el éxito,أموالك تسحب النجاح,Votre argent retrait le succès
+your Money Withdraw Success,Your money has been withdraw Successfully. Thanks for using RatedCash Merchant,Su dinero retira el éxito,أموالك تسحب النجاح,Votre argent retrait le succès
 back To Home,Back to Home,de vuelta a casa,العودة إلى المنزل,de retour à la maison
-your Money Has Been Failed,Your money has been Failed..!! Try Again! Thanks for using QRPAY Merchant,Tu dinero ha fallado,لقد فشل أموالك,Votre argent a échoué
+your Money Has Been Failed,Your money has been Failed..!! Try Again! Thanks for using RatedCash Merchant,Tu dinero ha fallado,لقد فشل أموالك,Votre argent a échoué
 electricity,Electricity,electricidad,كهرباء,électricité
 update KYC Form,Update KYC Form,Actualizar el formulario KYC,تحديث نموذج KYC,mettre à jour le formulaire KYC
 fA Security,2FA Security,Seguridad de FA,أمن فا,sécurité de la FA
@@ -773,7 +773,7 @@ Receiver not exist,Receiver not exist,El receptor no existe,المتلقي غي�
 Receiver wallet not found,Receiver wallet not found,Billetera receptor no encontrada,لم يتم العثور على محفظة جهاز الاستقبال,Portefeuille récepteur introuvable
 Make Payment successful to,Make Payment successful to,Hacer que el pago sea exitoso a,جعل الدفع ناجحا ل,Faire du paiement réussi à
 Payment To,Payment To,Pago Para,دفع ل,Paiement à
-Make Payment to ,Make Payment to ,Hacer el pago a,إجراء الدفع إلى,Effectuer un paiement à
+Make Payment to,Make Payment to,Hacer el pago a,إجراء الدفع إلى,Effectuer un paiement à
 Payment From,Payment From,Pago de,الدفع من,Paiement de
 Make Payment From,Make Payment From,Hacer el pago de,قم بالدفع من,Effectuer le paiement de
 Merchant not found,Merchant not found,Comerciante no encontrado,التاجر لم يتم العثور عليه,Marchand non trouvé
@@ -795,7 +795,7 @@ Withdraw Money Inserted Successfully,Withdraw Money Inserted Successfully,Retira
 "Sorry, your payment information is invalid","Sorry, your payment information is invalid","Lo siento, su información de pago no es válida",آسف ، معلومات الدفع الخاصة بك غير صالحة,"Désolé, vos informations de paiement ne sont pas valides"
 "Invalid request, it is not manual gateway request","Invalid request, it is not manual gateway request","Solicitud no válida, no es una solicitud de puerta de enlace manual",طلب غير صالح ، إنه ليس طلب بوابة يدوي,"Demande non valide, ce n'est pas une demande de passerelle manuelle"
 "Invalid request, it is not automatic gateway request","Invalid request, it is not automatic gateway request","Solicitud no válida, no es una solicitud de puerta de enlace automática",طلب غير صالح ، إنه ليس طلب بوابة تلقائي,"Demande non valide, ce n'est pas une demande de passerelle automatique"
-Withdraw Request Send ,Withdraw Request Send ,Retirar solicitud de solicitud,سحب طلب إرسال,Retirer la demande d'envoi
+Withdraw Request Send,Withdraw Request Send,Retirar solicitud de solicitud,سحب طلب إرسال,Retirer la demande d'envoi
 "Sorry, This Payment Request Is Not For FlutterWave","Sorry, This Payment Request Is Not For FlutterWave","Lo siento, esta solicitud de pago no es para Flutterwave",آسف ، طلب الدفع هذا ليس ل flutterwave,"Désolé, cette demande de paiement n'est pas pour Flutterswave"
 All Bank Fetch Successfully,All Bank Fetch Successfully,Todos los bancos obtienen con éxito,جميع بنك البنك بنجاح,Toute la banque va chercher avec succès
 Payment Links,Payment Links,Enlaces de pago,روابط الدفع,Liens de paiement
@@ -844,7 +844,7 @@ Can't Request Money To Your Own,Can't Request Money To Your Own,No puedo solicit
 Your wallet isn't available with currency,Your wallet isn't available with currency,El receptor no existe o el receptor está prohibido temporalmente,محفظتك غير متوفرة بالعملة,Votre portefeuille n'est pas disponible avec la devise
 Receiver doesn't exists or Receiver is temporary banned,Receiver doesn't exists or Receiver is temporary banned,,لا يوجد جهاز الاستقبال أو أن المتلقي محظور مؤقت,Le récepteur n'existe pas ou le récepteur est interdit temporaire
 Your Wallet Balance Is Insufficient,Your Wallet Balance Is Insufficient,El equilibrio de su billetera es insuficiente,توازن محفظتك غير كافٍ,Votre équilibre de portefeuille est insuffisant
-Request Money to ,Request Money to ,Solicitar dinero a,طلب المال ل,Demander de l'argent à
+Request Money to,Request Money to,Solicitar dinero a,طلب المال ل,Demander de l'argent à
 Request Money Send To,Request Money Send To,Solicitar dinero envío a,طلب المال إرسال إلى,Demander de l'argent envoyé à
 Request Money from,Request Money from,Solicitar dinero de,طلب المال من,Demander de l'argent à
 Request Money Logs,Request Money Logs,Solicitar registros de dinero,طلب سجلات المال,Demander des journaux d'argent
@@ -984,13 +984,212 @@ customer Email,Customer Email,Correo electrónico del cliente,البريد ال�
 enter Customer Email,Enter Customer Email,Ingrese el correo electrónico del cliente,أدخل البريد الإلكتروني للعميل,Entrez le courrier électronique du client
 enter Date Of Birth,mm/day/year,mm/día/año,مم/يوم/سنة,mm / jour / an
 date Of Birth,Date Of Birth,Fecha de nacimiento,تاريخ الميلاد,Date de naissance
-enter Phone Number,Enter Phone Number ,Ingresa número telefónico,أدخل رقم الهاتف,Entrez le numéro de téléphone
-cardI d,Card Id ,Tarjeta de identificacion,بطاقة الهوية,Identifiant de carte
+enter Phone Number,Enter Phone Number,Ingresa número telefónico,أدخل رقم الهاتف,Entrez le numéro de téléphone
+cardI d,Card Id,Tarjeta de identificacion,بطاقة الهوية,Identifiant de carte
 customer Id,Customer Id,Identificación del cliente,هوية الزبون,N ° de client
 house Number,House Number,Número de casa,رقم الدار,Numéro de maison
 line1,Line 1,Línea 1,خط 1,Ligne 1
 enterLine1,Enter Line 1,Ingrese la línea 1,إدخال السطر 1,Entrez la ligne 1
-enter Select City,Enter Select City ,Ingrese Seleccionar Ciudad,أدخل مدينة تحديد,Entrez la ville sélectionnée
-please Follow The Limit,Please follow the limit ,Siga el límite,يرجى اتباع الحد الأقصى,Veuillez suivre la limite
+enter Select City,Enter Select City,Ingrese Seleccionar Ciudad,أدخل مدينة تحديد,Entrez la ville sélectionnée
+please Follow The Limit,Please follow the limit,Siga el límite,يرجى اتباع الحد الأقصى,Veuillez suivre la limite
 you Don Not Buy Card,You do not buy card,No compras tarjeta,أنت لا تشتري بطاقة,Vous n'achetez pas de carte
 address Copy To,Address copy to clipboard,Dirección de copia al portapapeles,عنوان نسخة إلى الحافظة,Adressez la copie dans le presse-papiers
+appLSignIn,Sign In,Iniciar sesión,تسجيل الدخول,Se connecter
+appLCreateAnAccount,Create an account,Crea una cuenta,إنشاء حساب,Créer un compte
+appLWelcomeBack,"Hi, Welcome Back!","¡Hola, bienvenido de nuevo!",مرحبًا ، مرحبًا بك مرة أخرى!,"Salut, bienvenue à nouveau!"
+appLSignInToYour,Sign in to your account.,Iniciar sesión en su cuenta.,تسجيل الدخول إلى حسابك.,Connectez-vous à votre compte.
+appLPhoneNumber,Phone Number,Número de teléfono,رقم التليفون,Numéro de téléphone
+appLPassword,Password,Contraseña,كلمة المرور,Mot de passe
+appLForgotPassword,Forgot Password?,¿Has olvidado tu contraseña?,هل نسيت كلمة السر؟,Mot de passe oublié?
+appLDonNotHaveAccount,Don’t have account?,¿No tienes cuenta?,ليس لديك حساب؟,Vous n'avez pas de compte?
+appLSignUp,Sign Up,Inscribirse,اشتراك,S'inscrire
+appLOrSignInWith,Or SignIn with,O firmar con,أو تسجيل الدخول مع,Ou signer avec
+appLSignInWithGoogle,SignIn with Google,Inicia sesión con Google,الدخول مع جوجل,Signine avec Google
+appLOtpAuthentication,OTP Authentication,Autenticación OTP,مصادقة OTP,Authentification OTP
+appLAnAuthentication,An authentication code has been sent to,Se ha enviado un código de autenticación a,تم إرسال رمز المصادقة إلى,Un code d'authentification a été envoyé à
+appLContinueText,Continue,Continuar,يكمل,Continuer
+appLFingerprint,Fingerprint,Huella dactilar,بصمة,Empreinte digitale
+appLPleaseLift,Please lift and rest your finger for signIn authentication,Levante y descanse el dedo para inscribir la autenticación,يرجى الرفع وراحة إصبعك لمصادقة تسجيل الدخول,Veuillez soulever et reposer votre doigt pour l'authentification des signes
+appLBySetFingerprint,"By set fingerprint, you agree to our","Por huella digital establecida, usted acepta nuestro",عن طريق تعيين بصمة ، أنت توافق على لدينا,"En définissant l'empreinte digitale, vous acceptez notre"
+appLTerms,Terms,Términos,شروط,Termes
+appLAnd,and,y,و,et
+appLConditions,Conditions,Condiciones,شروط,Conditions
+appLPasswordRecovery,Password Recovery,Recuperación de contraseña,استعادة كلمة السر,Récupération de mot de passe
+appLEnterYourPhone,Enter your Phone number to recover your password,Ingrese su número de teléfono para recuperar su contraseña,أدخل رقم هاتفك لاستعادة كلمة المرور الخاصة بك,Entrez votre numéro de téléphone pour récupérer votre mot de passe
+appLVerifyYourIdentity,Verify your identity,Verifica tu identidad,تحقق من هويتك,Vérifiez Votre Identité
+appLWeHaveJustSentACode,We have just sent a code to,Acabamos de enviar un código a,لقد أرسلنا للتو رمزًا إلى,Nous venons d'envoyer un code à
+appLRestYourPassword,Reset your password,Restablecer su contraseña,اعد ضبط كلمه السر,réinitialisez votre mot de passe
+appLRestPassword,Reset Password,Restablecer la contraseña,إعادة تعيين كلمة المرور,réinitialiser le mot de passe
+appLAtLeast8Characters,"At least 8 characters, with uppercase and lowercase letters","Al menos 8 caracteres, con letras mayúsculas y minúsculas",ما لا يقل عن 8 أحرف ، بأحرف كبيرة وصغيرة,"Au moins 8 caractères, avec des lettres majuscules et minuscules"
+appLNewPassword,New Password,Nueva contraseña,كلمة المرور الجديدة,nouveau mot de passe
+appLConfirmPassword,Confirm Password,confirmar Contraseña,تأكيد كلمة المرور,Confirmez le mot de passe
+appLGettingStarted,Getting Started,Empezando,ابدء,Commencer
+appLCreateAnAccountTo,Create an account to continue!,¡Crea una cuenta para continuar!,إنشاء حساب للمتابعة!,Créez un compte pour continuer!
+appLFullName,Full Name,Nombre completo,الاسم الكامل,Nom et prénom
+appLSpendWhileTraveling,Spend while traveling,Gastar mientras viaja,اقض أثناء السفر,Passer en voyageant
+appLSpendOrSaveDaily,Spend or save daily,Gastar o ahorrar diariamente,إنفاق أو حفظ يوميًا,Dépenser ou économiser tous les jours
+appLSendMoney,Send money,Enviar dinero,إرسال الأموال,Envoyer de l'argent
+appLVerifyIdentity,Verify Identity,Verificar la identidad,تحقق من الهوية,Vérifier l'identité
+appLWeAreRequired,We’re required by law to verify your identity before you can spend with your card or send money. Your information will be encrypted and stored securely.,La ley nos exige que verifique su identidad antes de que pueda gastar con su tarjeta o enviar dinero. Su información se cifrará y almacenará de forma segura.,نحن مطلوبون بموجب القانون للتحقق من هويتك قبل أن تتمكن من إنفاق بطاقتك أو إرسال الأموال. سيتم تشفير معلوماتك وتخزينها بشكل آمن.,Nous sommes exigés par la loi pour vérifier votre identité avant de pouvoir dépenser avec votre carte ou envoyer de l'argent. Vos informations seront cryptées et stockées en toute sécurité.
+appLCreateNewPin,Create New Pin,Crea un pin nuevo,إنشاء دبوس جديد,Créer une nouvelle épingle
+appLFirstLetsVerify,"First, let’s verify your","Primero, verifiquemos tu",أولاً ، دعنا نتحقق من,"Tout d'abord, vérifions votre"
+appLAddAPinNumber,Add a pin number to make your wallet more secure,Agregue un número de pin para que su billetera sea más segura,أضف رقم دبوس لجعل محفظتك أكثر أمانًا,Ajoutez un numéro de broche pour rendre votre portefeuille plus sécurisé
+appLGainExposure,Gain exposure to financial assets,Obtener exposición a activos financieros,اكتساب التعرض للأصول المالية,Acquérir des actifs financiers
+appLWeNeed,"We need to know this regulatory reasons. And also, we’re curious!",Necesitamos conocer estas razones regulatorias. ¡Y también tenemos curiosidad!,نحن بحاجة إلى معرفة هذه الأسباب التنظيمية. وأيضا ، نحن فضوليون!,"Nous devons connaître ces raisons réglementaires. Et aussi, nous sommes curieux!"
+appLMainReasonForUsing,Main reason for using RatedCash,Razón principal para usar CatedCash,السبب الرئيسي لاستخدام RatedCash,Raison principale de l'utilisation de Ratedcash
+appLByPressing,"By pressing sign up securely, you agree to our","Al presionar registrarse de forma segura, usted acepta nuestro",بالضغط على التسجيل بشكل آمن ، فأنت توافق على,"En appuyant sur l'inscription en toute sécurité, vous acceptez notre"
+appLTermsAndCondition,Terms & Conditions,Términos y condiciones,البنود و الظروف,termes et conditions
+appLPrivacyPolicy,Privacy policy.,Política de privacidad.,سياسة الخصوصية.,Politique de confidentialité.
+appLCountryOfResidence,Country of residence,País de residencia,بلد الإقامة,Pays de résidence
+appLTheTermsAnd,"The terms and services which apply to you, will depend on your country of residence",Los términos y servicios que se apliquen a usted dependerán de su país de residencia,الشروط والخدمات التي تنطبق عليك ، تعتمد على بلد إقامتك,Les termes et services qui s'appliquent à vous dépendront de votre pays de résidence
+appLAlreadyHaveAnAccount,Already have an account?,¿Ya tienes una cuenta?,هل لديك حساب؟,Vous avez déjà un compte?
+appLByCreatingAnAccount,"By creating an account, you agree to our Terms and Conditions","Al crear una cuenta, usted acepta nuestros términos y condiciones",من خلال إنشاء حساب ، فإنك توافق على شروطنا وأحكامنا,"En créant un compte, vous acceptez nos conditions générales"
+appLProofOfResidency,Proof of residency,Prueba de residencia,إثبات الإقامة,Preuve de résidence
+appLProveYouLive,Prove you live in,Demuestra que vives en,تثبت أنك تعيش في,Prouver que vous vivez
+appLNationality,Nationality,Nacionalidad,جنسية,Nationalité
+appLChange,Change,Cambiar,يتغير,Changement
+appLPassport,Passport,Pasaporte,جواز سفر,Passeport
+appLIdentityCard,Identity Card,Tarjeta de identificación,البطاقة الشخصية,Carte d'identité
+appLIssuedInIndonesia,Issued in Indonesia,Emitido en Indonesia,صدرت في إندونيسيا,Émis en Indonésie
+appLMyInfoDigital,My info digital document,Mi documento digital de información,وثيقة المعلومات الرقمية الخاصة بي,Mon document numérique d'informations
+appLMethodOfVerification,Method of verification,Método de verificación,طريقة التحقق,Méthode de vérification
+appLPhotoIdCard,Photo ID Card,Tarjeta de identificación con foto,بطاقة هوية الصورة,Carte d'identité
+appLPositionAll4Corners,Position all 4 corners of the page clearly,Coloque las 4 esquinas de la página claramente,ضع جميع زوايا الصفحة الأربعة بوضوح,Positionner clairement les 4 coins de la page
+appLIdCard,ID Card,Tarjeta de identificación,بطاقة التعريف,Carte d'identité
+appLSelfieWithIdCard,Selfie with ID Card,Selfie con tarjeta de identificación,صورة شخصية مع بطاقة الهوية,Selfie avec carte d'identité
+appLPleaseLookAtTheCamera,Please look at the camera and hold still,Mira la cámara y mantén quieto,يرجى إلقاء نظرة على الكاميرا والتمسك,Veuillez regarder la caméra et rester immobile
+appLSubmitSelfie,Submit selfie,Enviar selfie,تقديم صورة شخصية,Soumettre les selfies
+appLRetakeSelfie,Retake selfie,Retomar selfie,استعادة صورة شخصية,Reprendre les selfies
+appLGoodMorning,Good morning,Buen día,صباح الخير,Bonjour
+appLGold,Gold,Oro,ذهب,Or
+appLAddCurrency,Add Currency,Agregar moneda,أضف العملة,Ajouter de la monnaie
+appLTopUp,Top Up,Completar,فوق حتى,Se débarrasser de
+appLWithdraw,Withdraw,Retirar,ينسحب,Retirer
+appLTransfer,Transfer,Transferir,تحويل,Transfert
+appLTransactions,Transactions,Actas,المعاملات,Transactions
+appLSeeAll,See all,Ver todo,اظهار الكل,Voir tout
+appLHome,Home,Hogar,بيت,Maison
+appLHistory,History,Historia,تاريخ,Histoire
+appLCards,Cards,Tarjetas,البطاقات,Cartes
+appLProfile,Profile,Perfil,حساب تعريفي,Profil
+appLAmount,Amount,Cantidad,كمية,Montant
+appLSwipeTo,Swipe to,Deslizar a,انقلب إلى,Glisser vers
+appLConfirm,Confirm,Confirmar,يتأكد,Confirmer
+appLMethod,Method,Método,طريقة,Méthode
+appLTopUpAmount,Top-up Amount,Cantidad de recarga,مبلغ أعلى,Montant de recharge
+appLTotal,Total,Total,المجموع,Total
+appLTopUpSuccess,Top Up Success,Recarga el éxito,أعلى النجاح,Réussir
+appLTransferAmount,Transfer Amount,Monto de la transferencia,مبلغ التحويل,Montant du transfert
+appLHasBeenAdded,Has been added to your RatedCard Balance,Se ha agregado a su balance de tachado calificado,تمت إضافته إلى توازن بطاقة التصنيف الخاصة بك,A été ajouté à votre solde de carte nominale
+appLDone,Done,Hecho,منتهي,Fait
+appLWhereDoYou,Where do you want to transfer?,¿Dónde quieres transferir?,أين تريد نقل؟,Où voulez-vous transférer?
+appLTransferTo,Transfer to,Transferir a,حول إلى,Transférer à
+appLTransferDetail,Transfer Detail,Detalle de transferencia,تفاصيل النقل,Transfert de détails
+appLAddNote,Add Note,Añadir la nota,اضف ملاحظة,Ajouter une note
+appLRecipient,Recipient,Recipiente,متلقي,Destinataire
+appLTransferSuccess,Transfer Success,Transferir éxito,نقل النجاح,Transférer le succès
+appLTransferDate,Transfer date,Fecha de transferencia,تاريخ التحويل,Date de transfert
+appLTransactionHistory,Transaction History,Historial de transacciones,تاريخ المعاملة,Historique des transactions
+appLPrint,Print,Imprimir,مطبعة,Imprimer
+appLSearch,Search,Buscar,يبحث,Recherche
+appLToday,Today,Hoy,اليوم,Aujourd'hui
+appLMore,more,más,أكثر,plus
+appLSaveMoreMoney,Save more money up to 50% using your RatedCash debit card.,Ahorre más dinero hasta un 50% usando su tarjeta de débito con calificación.,وفر المزيد من الأموال حتى 50 ٪ باستخدام بطاقة الخصم RatedCash الخاصة بك.,Économisez plus d'argent jusqu'à 50% en utilisant votre carte de débit RatedCash.
+appLDetails,Details,Detalles,تفاصيل,Détails
+appLPaymentWith,Payment With,Pagar con,الدفع مع,Paiement avec
+appLLocation,Location,Ubicación,موقع,Emplacement
+appLWeek,week,semana,أسبوع,semaine
+appLMonth,month,mes,شهر,mois
+appLYear,year,año,سنة,année
+appLTest,test,prueba,امتحان,test
+appLThisText,This,Este,هذا,Ce
+appLMyCards,My Cards,Mis cartas,بطاقاتي,Mes cartes
+appLCardUsedFrequency,Card Used Frequency,Frecuencia utilizada con tarjeta,بطاقة تستخدم التردد,Fréquence utilisée par carte
+appLAddCard,Add card,Agregar tarjeta,إضافة بطاقة,Ajouter une carte
+appLScanYourCard,Scan your card,Escanee su tarjeta,مسح بطاقتك,Scannez votre carte
+appLSavePin,Save Pin,Guardar PIN,حفظ دبوس,Épingler
+appLEditProfile,Edit Profile,Editar perfil,تعديل الملف الشخصي,Editer le profil
+appLOverView,Overview,Descripción general,ملخص,Aperçu
+appLNetIncome,Net Income,Lngresos netos,صافي الدخل,Revenu net
+appLExpense,Expense,Gastos,مصروف,Frais
+appLGotAnyQuestions,Got any questions for RatedCash? Our CS are ready 24/7 to help!,"¿Tienes alguna pregunta para RatedCash? ¡Nuestro CS está listo las 24 horas, los 7 días de la semana para ayudar!",هل لديك أي أسئلة لـ RatedCash؟ CS لدينا جاهزة 24/7 للمساعدة!,Vous avez des questions pour Ratedcash? Nos CS sont prêts 24/7 pour aider!
+appLMyAccount,My Account,Mi cuenta,حسابي,Mon compte
+appLSaveChanges,Save changes,Guardar cambios,حفظ التغييرات,Sauvegarder les modifications
+appLSettings,Settings,Ajustes,إعدادات,Paramètres
+appLGeneral,General,General,عام,Général
+appLDarkMode,Dark Mode,Modo oscuro,الوضع المظلم,Mode sombre
+appLNotification,Notifications,Notificaciones,إشعارات,Notifications
+appLPrivacySettings,Privacy Settings,La configuración de privacidad,إعدادات الخصوصية,Paramètres de confidentialité
+appLHelpCenter,Help Center,Centro de ayuda,مركز المساعدة,Centre d'aide
+appLContactUs,Contact Us,Contáctenos,اتصل بنا,Contactez-nous
+appLFollowUs,Follow Us,Síganos,تابعنا,Suivez-nous
+appLLogOut,Log out,Cerrar sesión,تسجيل خروج,Se déconnecter
+appLCopyRight,RatedCash © 2023 v1.0,Calificación CatedCash © 2023 V1.0,RatedCash © 2023 V1.0,RatedCash © 2023 V1.0
+appLNotifications,Notifications,Notificaciones,إشعارات,Notifications
+appLFeeAlert,Fee alert,Alerta de tarifas,تنبيه الرسوم,Alerte
+appLBigExpenseAlert,Big expense alert,Alerta de gran gasto,تنبيه نفقات كبيرة,Alerte de grande dépense
+appLCreditUtilizationAlert,Credit utilization alert,Alerta de utilización de crédito,تنبيه استخدام الائتمان,Alerte d'utilisation du crédit
+appLLowBalanceAlert,˚Low balance alert,˚ Balance alerta de balance,تنبيه التوازن ˚low,Alerte d'équilibrage de l'équilibre
+appLRecurringPaidAlert,Recurring paid alert,Alerta recurrente pagada,تنبيه متكرر مدفوع الأجر,Alerte rémunérée récurrente
+appLSpendingUpdate,Spending update,Actualización de gastos,تحديث الإنفاق,Mise à jour des dépenses
+appLChatAssistant,Chat Assistant,Asistente de chat,مساعد الدردشة,Assistant de chat
+appLSaySomethings,Say Somethings,Dicen algunas cosas,قل شيئا,Dire quelque chose
+appLPleaseFillOutTheField,Please fill out the field,Por favor complete el campo,يرجى ملء الحقل,Veuillez remplir le terrain
+appLMemberGold,Member Gold,Miembro de oro,عضو الذهب,Membre
+appLLeftToSpend,left to spend,Izquierda para gastar,غادر لإنفاق,laissé à dépenser
+appLRatedCard,RatedCard,Tarta calificada,Ratedcard,Carte classée
+appLSkip,Skip,Saltar,يتخطى,Sauter
+appLJoinNotes,"You joined RatedCash on September 2023. It’s been 1 month since then and our mission is still the same, help you better manage your finance.","Te uniste a RatedCash en septiembre de 2023. Han pasado 1 mes desde entonces y nuestra misión sigue siendo la misma, te ayuda a administrar mejor tus finanzas.",لقد انضممت إلى RatedCash في سبتمبر 2023. لقد مر شهر واحد منذ ذلك الحين وما زالت مهمتنا كما هي ، تساعدك على إدارة التمويل بشكل أفضل.,"Vous avez rejoint Ratedcash en septembre 2023. Cela fait 1 mois depuis et notre mission est toujours la même, vous aide à mieux gérer votre finance."
+appLAdd,Add,Agregar,يضيف,Ajouter
+appLCvvHint,3-digit CVV,CVV de 3 dígitos,3 أرقام CVV,CVV à 3 chiffres
+appLEnterName,Enter name,Ingrese su nombre,أدخل الاسم,Entrez le nom
+appLEnterCardNumber,Enter card number,Ingrese el número de tarjeta,أدخل رقم البطاقة,Entrez le numéro de carte
+appLEnterEmailAddress,Enter email address,Introducir la dirección de correo electrónico,أدخل عنوان البريد الالكتروني,Entrer l'adresse e-mail
+appLCreatePin,Create Pin,Crear pin,إنشاء دبوس,Créer une épingle
+appLAddMoney,Add Money,Agregar dinero,إضافة المال,Ajouter de l'argent
+appLMakePayment,Make Payment,Hacer el pago,قم بالدفع,Effectuer le paiement
+appLBillPay,Bill Pay,Pago de facturas,دفع الفاتورة,Payement de facture
+appLPayLink,Pay Link,Enlace de pago,رابط الدفع,Lien de rémunération
+appLReceiveMoney,Receive Money,Recibir dinero,إستلم نقود,Recevoir de l'argent
+appLVirtualCard,Virtual Card,Tarjeta virtual,بطاقة افتراضية,Carte virtuelle
+appLPaymentGateway,Payment Gateway,Pasarela,بوابة الدفع,Passerelle de paiement
+appLLimit,Limit,Límite,حد,Limite
+appLCharge,Charge,Cargar,تكلفة,Charge
+appLEnteredAmount,Entered Amount,Cantidad ingresada,تم إدخال المبلغ,Montant entré
+appLTransferFee,Transfer Fee,Tarifa de transferencia,رسوم التحويل,Frais de transfert
+appLRecipientReceived,Recipient Received,Receptor recibido,تلقى المستلم,Receveur reçu
+appLTotalPayable,Total Payable,Total a pagar,إجمالي الدفع,Total à payer
+appLWillGet,Will Get,Obtendrá,سوف تحصل,Aura
+appLTotalFeesAndCharges,Total Fees And Charges,Tarifas y cargos totales,إجمالي الرسوم والرسوم,Total des frais et charges
+appLConversionAmount,Conversion Amount,Cantidad de conversión,مبلغ التحويل,Montant de la conversion
+appLTotalFees,Total Fees,Tarifas totales,الرسوم الكلية,Total des frais
+appLBillNumber,Bill Number,Número de factura,رقم الفاتوره,Numéro de facture
+appLTotalCharges,Total Charges,Cargos totales,الكلفة الاجماليه,Charges totales
+appLTopUpType,Top Up Type,Tipo de recarga,أعلى النوع,Type d'allumage
+appLMobileNumber,Mobile Number,Número de teléfono móvil,رقم الهاتف المحمول,Numéro de portable
+appLWithdrawNote,How do you want to withdraw,¿Cómo quieres retirarte?,كيف تريد الانسحاب,Comment voulez-vous vous retirer
+appLShare,Share,Compartir,يشارك,Partager
+appLQrCodeAddress,QRCode Address,Dirección de código QR,عنوان QRCode,Adresse QRCODE
+appLRequestMoney,Request Money,Pedir dinero,طلب المال,Demande de l'argent
+appLEnterBillNumber,Enter Bill Number,Ingrese el número de factura,أدخل رقم الفاتورة,Entrez le numéro de facture
+appLEnterMobileNumber,Enter Mobile Number,Ingrese el número de móvil,أدخل رقم الهاتف المحمول,Entrez le numéro de mobile
+appLRemark,Explain Transaction Purposes Here..,Explique los propósitos de transacción aquí.,شرح أغراض المعاملة هنا ..,Expliquez les objectifs de la transaction ici.
+appLOften,:+1: Often,: +1: a menudo,: +1: في كثير من الأحيان,: +1: souvent
+appLScanQR,Scan Qr Code,Escanear código QR,مسح رمز الاستجابة السريعة,Scanner le code QR
+appLSpending,Spending,Gasto,الإنفاق,Dépenses
+appLPleaseEnterAnAmount,Please enter an amount,Ingrese una cantidad,الرجاء إدخال مبلغ,Veuillez saisir un montant
+appLReceipientFieldRequired,The recipient field is required,Se requiere el campo del destinatario,حقل المتلقي مطلوب,Le champ destinataire est requis
+appLEmailFieldRequired,The email field is required,Se requiere el campo de correo electrónico,حقل البريد الإلكتروني مطلوب,Le champ de messagerie est requis
+appLNumFieldRequired,The mobile number field is required,Se requiere el campo Número de móvil,حقل رقم الهاتف المحمول مطلوب,Le champ du numéro de mobile est requis
+appLAddMoneySubTitle,How much you want to deposit?,¿Cuánto quieres depositar?,كم تريد الإيداع؟,Combien voulez-vous déposer?
+appLReceiveMoneySubTitle,Please scan this qrcode for receive.,Escanee este código QR para recibir.,يرجى مسح هذا QRCode لتلقي.,Veuillez analyser ce QRCODE pour recevoir.
+appLRequestMoneySubTitle,Where do you want to borrow money from?,¿De dónde quieres pedir dinero prestado?,من أين تريد اقتراض المال؟,Où voulez-vous emprunter de l'argent?
+appLWithdrawSubTitle,How much you want to withdraw?,¿Cuánto quieres retirar?,كم تريد الانسحاب؟,Combien vous voulez retirer?
+appLMakePaymentSubTitle,Where do you want to pay?,¿Dónde quieres pagar?,أين تريد أن تدفع؟,Où voulez-vous payer?
+appLBillPaySubTitle,How much you want to pay?,¿Cuánto quieres pagar?,كم تريد أن تدفع؟,Combien tu veux payer?
+appLMobileTopUpSubTitle,How much do you want top up your mobile?,¿Cuánto quieres recargar tu móvil?,كم تريد تزيين هاتفك المحمول؟,Combien voulez-vous recharger votre mobile?
+appLBillNumberField,The bill number field is required,Se requiere el campo Número de factura,حقل رقم الفاتورة مطلوب,Le champ Numéro de facture est requis
+appLPleaseEnterYour,Please Enter Your,Por favor introduzca su,من فضلك أدخل,S'il vous plait entrez votre
+appLPleaseAcceptOur,Please accept our terms and condition,Acepte nuestros términos y condición,يرجى قبول شروطنا وشرطنا,Veuillez accepter nos termes et condition
+appLUserInfo,User Information,informacion del usuario,معلومات المستخدم,informations de l'utilisateur
+appLUserInfoDetails,User Info Details,Detalles de la información del usuario,تفاصيل معلومات المستخدم,Détails des informations de l'utilisateur

@@ -1,9 +1,7 @@
 <?php
-
 namespace App\Http\Middleware;
-
+use App\Constants\PaymentGatewayConst;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as Middleware;
-
 class VerifyCsrfToken extends Middleware
 {
     /**
@@ -18,9 +16,11 @@ class VerifyCsrfToken extends Middleware
         '/add-money/sslcommerz/cancel',
         '/add-money/sslcommerz/fail',
         '/add-money/sslcommerz/ipn',
-        '/api-add-money/sslcommerz/success',
-        '/api-add-money/sslcommerz/cancel',
-        '/api-add-money/sslcommerz/fail',
-        '/api-add-money/sslcommerz/ipn'
+        '/api/add-money/sslcommerz/success',
+        '/api/add-money/sslcommerz/cancel',
+        '/api/add-money/sslcommerz/fail',
+        '/api/add-money/sslcommerz/ipn',
+        'user/add-money/success/response/' . PaymentGatewayConst::RAZORPAY,
+        'user/add-money/cancel/response/' . PaymentGatewayConst::RAZORPAY,
     ];
 }
